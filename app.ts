@@ -3,7 +3,6 @@
  */
 import dotenv from 'dotenv';
 import express from 'express';
-import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import {productRouter} from './routes/productRouter';
 import {adminRouter} from './routes/adminRouter';
@@ -20,7 +19,6 @@ const app = express();
  *  App Configuration
  */
 dotenv.config();
-app.use(cors());
 app.use(express.json());
 app.set('view engine', 'ejs');
 app.set('views', 'views');
