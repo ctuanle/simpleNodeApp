@@ -1,0 +1,32 @@
+POST http://localhost:3000/products/
+content-type: application/json
+
+{
+    "name": "AnotherBook2",
+    "price": 27,
+    "category": "book"
+}
+
+###
+GET http://localhost:3000/products/12
+
+###
+GET http://localhost:3000/products/category/laptop
+
+###
+PUT http://localhost:3000/products/12
+content-type: application/json
+
+{
+    "name": "AnotherBook2",
+    "price": 37,
+    "category": "book"
+}
+
+### 
+DELETE http://localhost:3000/products
+content-type: application/json
+
+{
+    "productId": 8
+}

@@ -1,0 +1,80 @@
+<%- include('head.ejs') %>
+  <h2 class="text-center">Product Details</h2>
+
+  <main>
+    <section class="products"">
+        <% if (product) { %>
+            <div class=" row">
+              <div class="col"></br></div>
+              <div class="col-8"></br>
+                  <div class="form-group row">
+                    <label for="name" class="col-sm-2 col-form-label">Name</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="name" name="name" value="<%= product.name %>">
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label for="price" class="col-sm-2 col-form-label">Price</label>
+                    <div class="col-sm-10">
+                      <input type="number" class="form-control" id="price" name="price" value="<%= product.price %>">
+                    </div>
+                  </div>
+
+                  <fieldset class="form-group">
+                    <div class="row">
+                      <legend class="col-form-label col-sm-2 pt-0">Category</legend>
+                      <div class="col-sm-10">
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="category" id="book" value="book" <% if (product.category === 'book') { %>checked<% } %> >
+                          <label class="form-check-label" for="book">Book</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="category" id="phone" value="phone" <% if (product.category === 'phone') { %>checked<% } %>>
+                          <label class="form-check-label" for="phone">Phone</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="category" id="laptop" value="laptop" <% if (product.category === 'laptop') { %>checked<% } %>>
+                          <label class="form-check-label" for="laptop">
+                            Laptop
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </fieldset>
+
+                  <div class="form-group row">
+                    <div class="col-sm-10">
+                      <button class="btn btn-primary" onclick="updateProduct('<%= product.id %>')">Save</button>
+                    </div>
+                  </div>
+              </div>
+              <div class="col"></br></div>
+            </div>
+      <% } else { %>
+        <h1>No product</h1>
+        <% } %>
+    </section>
+    <script>
+      const updateProduct = async (id) => {
+        const pid = Number(id);
+        const newName = document.getElementById('name').value;
+        const newPrice = document.getElementById('price').value;
+        const radios = document.getElementsByName('category');
+        var newCategory;
+        for (let i = 0; i < radios.length; i++) {
+          if (radios[i].checked){
+            newCategory = radios[i].value;
+          }
+        }
+        const response = await fetch('/products/'+pid, {
+            method: 'PUT',
+            body: JSON.stringify({ name: newName, price: newPrice, category: newCategory}),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+      }
+    </script>
+  </main>
+  <%- include('end.ejs') %>
