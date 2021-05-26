@@ -1,6 +1,7 @@
 import express from 'express';
 import * as productModel from '../models/product';
 import {Product} from '../types/product';
+import {verifyToken} from '../middlewares/auth';
 
 const productRouter = express.Router();
 
@@ -14,7 +15,7 @@ productRouter.get('/', async (req, res) => {
         }
         res.render('products', {
             title: 'Products',
-            products: products
+            products: products,
         });
     })
 })
@@ -22,7 +23,7 @@ productRouter.get('/', async (req, res) => {
 /**
  * Add a new product
  */
-productRouter.post('/', async (req, res) => {
+productRouter.post('/', verifyToken, async (req, res) => {
     const name = req.body.name;
     const price = req.body.price;
     const category = req.body.category;
@@ -30,7 +31,8 @@ productRouter.post('/', async (req, res) => {
         if (err) {
             return res.status(500).json({'errorMessage': err.message});
         }
-        res.status(200).json({"message": "Product created successfully", "productId": productId});
+        //res.status(200).json({"message": "Product created successfully", "productId": productId});
+        res.redirect('/admin');
     });
 })
 
@@ -54,7 +56,7 @@ productRouter.get('/:id', async (req, res) => {
 /**
  * Update a product
  */
-productRouter.put('/:id', async (req, res) => {
+productRouter.put('/:id', verifyToken, async (req, res) => {
     const product: Product = req.body;
     product.id = Number(req.params.id);
     productModel.update(product, (err: Error) => {
@@ -68,7 +70,7 @@ productRouter.put('/:id', async (req, res) => {
 /**
  * Delete a product
  */
-productRouter.delete('/', async (req, res) => {
+productRouter.delete('/', verifyToken, async (req, res) => {
     const productId = req.body.productId;
     productModel.deleteOne(productId, (err: Error) => {
         if (err) {

@@ -1,4 +1,9 @@
 <%- include('head.ejs') %>
+<script>
+  if (!(sessionStorage.getItem('user__data'))) {
+          window.location.href = '/auth/login';
+  }
+</script>
   <h2 class="text-center">Product Details</h2>
 
   <main>
@@ -67,11 +72,13 @@
             newCategory = radios[i].value;
           }
         }
+        const token = JSON.parse(sessionStorage.getItem('user__data')).token;
         const response = await fetch('/products/'+pid, {
             method: 'PUT',
             body: JSON.stringify({ name: newName, price: newPrice, category: newCategory}),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'authorization': 'Bearer ' + token
             }
         });
       }

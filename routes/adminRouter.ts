@@ -1,6 +1,7 @@
 import express from 'express';
 import * as productModel from '../models/product';
 import {Product} from '../types/product';
+import {verifyToken} from '../middlewares/auth';
 
 const adminRouter = express.Router();
 
