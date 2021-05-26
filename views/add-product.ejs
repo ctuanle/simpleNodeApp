@@ -69,11 +69,13 @@
           }
         }
         if (name && price && category){
+            const token = JSON.parse(sessionStorage.getItem('user__data')).token;
             const response = await fetch('/products/', {
             method: 'POST',
             body: JSON.stringify({ name: name, price: price, category: category}),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'authorization': 'Bearer ' + token
                 }
             });
             if (response.ok){
