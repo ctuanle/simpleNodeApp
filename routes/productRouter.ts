@@ -14,7 +14,7 @@ productRouter.get('/', async (req, res) => {
         }
         res.render('products', {
             title: 'Products',
-            products: products
+            products: products,
         });
     })
 })
@@ -30,7 +30,8 @@ productRouter.post('/', async (req, res) => {
         if (err) {
             return res.status(500).json({'errorMessage': err.message});
         }
-        res.status(200).json({"message": "Product created successfully", "productId": productId});
+        //res.status(200).json({"message": "Product created successfully", "productId": productId});
+        res.redirect('/admin');
     });
 })
 
