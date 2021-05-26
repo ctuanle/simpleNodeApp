@@ -12,22 +12,23 @@
 - name
 - price
 - category 
+##### User
+- id
+- username
+- password
 
 #### RestAPI
-* GET => /products
-    Get all the products
+##### Public API
+* GET => /products *Get all the products*
 
-* GET => /products/:id
-    Get product by id
+* GET => /products/:id *Get product by id*
 
-* POST => /products
-    Add a new product
+* GET => /categories/:category *Get all the products of a category*
 
-* PUT => /products/id
-    Update a product
+##### Protected API
+* POST => /products *Add a new product*
 
-* DELETE => /products
-    Delete a product
+* PUT => /products/id *Update a product*
 
-* GET => /categories/:category
-    Get all the products of a category
+* DELETE => /products *Delete a product*
+
