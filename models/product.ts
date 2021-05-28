@@ -1,13 +1,13 @@
-import { Product } from '../types/product';
+import { BasicProduct, Product } from '../types/product';
 import { db } from '../db';
 import { OkPacket, RowDataPacket } from 'mysql2';
 
-export const create = (name: string, price: number, category: string, callback: Function) => {
-    const query = "INSERT INTO products (name, price, category) VALUES (?, ?, ?)";
+export const create = (product: BasicProduct, callback: Function) => {
+    const query = "INSERT INTO products (name, price, category, images) VALUES (?, ?, ?, ?)";
 
     db.query(
         query,
-        [name, price, category],
+        [product.name, product.price, product.category, product.images],
         (err, result) => {
             if (err) {
                 callback(err);
@@ -35,6 +35,7 @@ export const findOne = (productId: number, callback: Function) => {
                     name: row.name,
                     price: row.price,
                     category: row.category,
+                    images: row.images
                 }
                 return callback(null, product);
             }
@@ -60,7 +61,8 @@ export const findAll = (callback: Function) => {
                 id: row.id,
                 name: row.name,
                 price: row.price,
-                category: row.category
+                category: row.category,
+                images: row.images
             }
             products.push(product);
         });
@@ -75,10 +77,10 @@ export const update = (product: Product, callback: Function) => {
         }
         const row = <RowDataPacket>result;
         if (row.length > 0) {
-            const query = "UPDATE products SET name=?, price=?, category=? WHERE id=?";
+            const query = "UPDATE products SET name=?, price=?, category=?, images=? WHERE id=?";
             db.query(
                 query,
-                [product.name, product.price, product.category, product.id],
+                [product.name, product.price, product.category,product.images, product.id],
                 (err, result) => {
                     if (err) {
                         return callback(err);
@@ -143,7 +145,8 @@ export const findByCategory = (category: string, callback: Function) => {
                     id: row.id,
                     name: row.name,
                     price: row.price,
-                    category: row.category
+                    category: row.category,
+                    images: row.images
                 }
                 products.push(product);
             })

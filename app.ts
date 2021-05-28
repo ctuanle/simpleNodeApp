@@ -3,7 +3,6 @@
  */
 import dotenv from 'dotenv';
 import express from 'express';
-import * as bodyParser from 'body-parser';
 import {productRouter} from './routes/productRouter';
 import {adminRouter} from './routes/adminRouter';
 import {categoryRouter} from './routes/categoryRouter';
@@ -24,7 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.set('view engine', 'ejs');
 app.set('views', 'views');
-app.use(express.static('./public'));
+app.use(express.static('public'));
 
 app.use("/products", productRouter);
 app.use("/admin", adminRouter);

@@ -1,7 +1,17 @@
 import express from 'express';
 import * as productModel from '../models/product';
-import {Product} from '../types/product';
+import {BasicProduct, Product} from '../types/product';
 import {requireLogin} from '../middlewares/auth';
+import multer from 'multer';
+
+const storage = multer.diskStorage({
+    destination : 'public/images/',
+    filename : function(req, file, cb) {
+        cb(null, Date.now() +'-'+ file.originalname);
+    }
+})
+
+const upload = multer({storage: storage});
 
 const adminRouter = express.Router();
 
@@ -47,11 +57,14 @@ adminRouter.get('/add', async (req, res) => {
 /**
  * Add a new product
  */
- adminRouter.post('/add', requireLogin, async (req, res) => {
-    const name = req.body.name;
-    const price = req.body.price;
-    const category = req.body.category;
-    productModel.create(name, price, category, (err: Error, productId: number) => {
+ adminRouter.post('/add', upload.single('files'), requireLogin, async (req, res) => {
+    const newProduct: BasicProduct = req.body;
+
+    if (req.file){
+        newProduct.images = req.file.path;
+    }
+    
+    productModel.create(newProduct, (err: Error, productId: number) => {
         if (err) {
             return res.status(500).json({'errorMessage': err.message});
         }
@@ -63,9 +76,13 @@ adminRouter.get('/add', async (req, res) => {
 /**
  * Update a product
  */
- adminRouter.put('/edit/:id', requireLogin, async (req, res) => {
+ adminRouter.put('/edit/:id', upload.single('files'), requireLogin, async (req, res) => {
     const product: Product = req.body;
     product.id = Number(req.params.id);
+    if (req.file){
+        product.images = req.file.path;
+    }
+    console.log(product);
     productModel.update(product, (err: Error) => {
         if (err) {
             return res.status(500).json({'errorMessage': err.message});

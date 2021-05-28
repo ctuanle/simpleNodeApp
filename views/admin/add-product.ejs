@@ -11,78 +11,97 @@
         <div class=" row">
             <div class="col"></br></div>
             <div class="col-8"></br>
-                <form>
+                <form id='add-product-form'>
                     <div class="form-group row">
                         <label for="name" class="col-sm-2 col-form-label">Name</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" id="name" name="name" placeholder="Name">
                         </div>
-                        </div>
+                    </div>
         
-                        <div class="form-group row">
+                    <div class="form-group row">
                         <label for="price" class="col-sm-2 col-form-label">Price</label>
                         <div class="col-sm-10">
                             <input type="number" class="form-control" id="price" name="price" placeholder="Price">
                         </div>
-                        </div>
-        
-                        <fieldset class="form-group">
-                            <div class="row">
-                                <legend class="col-form-label col-sm-2 pt-0">Category</legend>
-                                <div class="col-sm-10">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="category" id="book" value="book">
-                                    <label class="form-check-label" for="book">Book</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="category" id="phone" value="phone">
-                                    <label class="form-check-label" for="phone">Phone</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="category" id="laptop" value="laptop">
-                                    <label class="form-check-label" for="laptop">
-                                    Laptop
-                                    </label>
-                                </div>
-                                </div>
-                            </div>
-                        </fieldset>
-                </form>
-                <div class="form-group row">
-                    <div class="col-sm-10">
-                        <button class="btn btn-primary" onclick="addProduct()">Save</button>
                     </div>
-                </div>
+        
+                    <fieldset class="form-group">
+                        <div class="row">
+                            <legend class="col-form-label col-sm-2 pt-0">Category</legend>
+                            <div class="col-sm-10">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="category" id="book" value="book">
+                                <label class="form-check-label" for="book">Book</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="category" id="phone" value="phone">
+                                <label class="form-check-label" for="phone">Phone</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="category" id="laptop" value="laptop">
+                                <label class="form-check-label" for="laptop">
+                                Laptop
+                                </label>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <div class="form-group row">
+                        <label for="price" class="col-sm-2 col-form-label">Images</label>
+                        <div class="col-sm-10">
+                            <input type="file" class="form-control" id="files" name="files" accept="image/png, image/jpeg">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </form>
+                
             </div>
             <div class="col"></br></div>
         </div>
     </section>
     <script>
-      const addProduct = async () => {
-        const name = document.getElementById('name').value;
-        const price = document.getElementById('price').value;
-        const radios = document.getElementsByName('category');
-        var category;
-        for (let i = 0; i < radios.length; i++) {
-          if (radios[i].checked){
-            category = radios[i].value;
-          }
-        }
-        if (name && price && category){
-            const token = JSON.parse(sessionStorage.getItem('user__data')).token;
-            const response = await fetch('/admin/add', {
-            method: 'POST',
-            body: JSON.stringify({ name: name, price: price, category: category}),
-            headers: {
-                'Content-Type': 'application/json',
-                'authorization': 'Bearer ' + token
+        const form = document.querySelector('#add-product-form');
+        form.addEventListener('submit', addProduct);
+
+        function addProduct (e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const price = document.getElementById('price').value;
+            const radios = document.getElementsByName('category');
+            const files = document.getElementById('files');
+            var category;
+            for (let i = 0; i < radios.length; i++) {
+                if (radios[i].checked){
+                    category = radios[i].value;
                 }
-            });
-            if (response.ok){
-                window.location.href = '/admin/';
             }
+            if (name && price && category){
+                const formData = new FormData();
+                formData.append('name', name);
+                formData.append('price', price);
+                formData.append('category', category);
+                formData.append('files', files.files[0]);
+                const token = JSON.parse(sessionStorage.getItem('user__data')).token;
+                fetch('/admin/add', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'authorization': 'Bearer ' + token
+                    },
+                }, (error, response) => {
+                    if (response.ok){
+                    window.location.href = '/admin/';
+                }
+                });
+                
+            } 
         }
-    }
     </script>
   </main>
   <%- include('../includes/end.ejs') %>
