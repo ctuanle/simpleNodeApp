@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import * as jwt from "jsonwebtoken";
 require('dotenv').config();
 
-export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
+export const requireLogin = (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers['authorization'];
     if (authHeader){
         const token:string = authHeader.split(' ')[1];

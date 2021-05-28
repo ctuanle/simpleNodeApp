@@ -1,4 +1,4 @@
-<%- include('head.ejs') %>
+<%- include('../includes/head.ejs') %>
 <script>
   if (!(sessionStorage.getItem('user__data'))) {
           window.location.href = '/auth/login';
@@ -73,7 +73,7 @@
           }
         }
         const token = JSON.parse(sessionStorage.getItem('user__data')).token;
-        const response = await fetch('/products/'+pid, {
+        const response = await fetch('/admin/edit/'+pid, {
             method: 'PUT',
             body: JSON.stringify({ name: newName, price: newPrice, category: newCategory}),
             headers: {
@@ -84,4 +84,4 @@
       }
     </script>
   </main>
-  <%- include('end.ejs') %>
+  <%- include('../includes/end.ejs') %>

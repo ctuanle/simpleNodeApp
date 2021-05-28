@@ -1,4 +1,4 @@
-<%- include('head.ejs') %>
+<%- include('../includes/head.ejs') %>
     <script>
         if (!(sessionStorage.getItem('user__data'))) {
                 window.location.href = '/auth/login';
@@ -58,7 +58,7 @@
                 const pid = Number(id);
                 if (ok) {
                     const token = JSON.parse(sessionStorage.getItem('user__data')).token;
-                    const response = await fetch('/products/', {
+                    const response = await fetch('/admin/delete', {
                         method: 'DELETE',
                         body: JSON.stringify({ productId: pid}),
                         headers: {
@@ -71,4 +71,4 @@
                 }
         </script>
     </main>
-    <%- include('end.ejs') %>
+    <%- include('../includes/end.ejs') %>

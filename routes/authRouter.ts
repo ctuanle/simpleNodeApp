@@ -8,7 +8,7 @@ const authRouter = express.Router();
  * GET login page
  */
 authRouter.get('/login', (req, res) => {
-    res.render('login', {
+    res.render('user/login', {
         title: 'Login'
     })
 })
@@ -17,7 +17,7 @@ authRouter.get('/login', (req, res) => {
  * GET signup page
  */
  authRouter.get('/signup', (req, res) => {
-    res.render('signup', {
+    res.render('user/signup', {
         title: 'Signup'
     })
 })

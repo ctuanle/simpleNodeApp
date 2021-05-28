@@ -9,7 +9,7 @@ categoryRouter.get('/', (req, res) => {
         if (err) {
             return res.status(500).json({'errorMessage': err.message});
         }
-        res.render('categories', {
+        res.render('product/categories', {
             'title' : 'Categories',
             'categories' : cats,
             'products' : []
@@ -26,7 +26,7 @@ categoryRouter.get('/:cat', (req, res) => {
             if (err) {
                 return res.status(500).json({'errorMessage': err.message});
             }
-            res.render('categories', {
+            res.render('product/categories', {
                 'title' : 'Categories',
                 'categories' : cats,
                 'products' : products

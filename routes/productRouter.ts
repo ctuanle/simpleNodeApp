@@ -1,7 +1,6 @@
 import express from 'express';
 import * as productModel from '../models/product';
 import {Product} from '../types/product';
-import {verifyToken} from '../middlewares/auth';
 
 const productRouter = express.Router();
 
@@ -13,27 +12,11 @@ productRouter.get('/', async (req, res) => {
         if (err) {
             return res.status(500).json({'errorMessage': err.message});
         }
-        res.render('products', {
+        res.render('product/products', {
             title: 'Products',
             products: products,
         });
     })
-})
-
-/**
- * Add a new product
- */
-productRouter.post('/', verifyToken, async (req, res) => {
-    const name = req.body.name;
-    const price = req.body.price;
-    const category = req.body.category;
-    productModel.create(name, price, category, (err: Error, productId: number) => {
-        if (err) {
-            return res.status(500).json({'errorMessage': err.message});
-        }
-        //res.status(200).json({"message": "Product created successfully", "productId": productId});
-        res.redirect('/admin');
-    });
 })
 
 /**
@@ -45,7 +28,7 @@ productRouter.get('/:id', async (req, res) => {
         if (err) {
             return res.status(500).json({'errorMessage': err.message});
         }
-        res.render('productDetail', {
+        res.render('product/productDetail', {
             title: product.name,
             product: product
         })
@@ -53,33 +36,6 @@ productRouter.get('/:id', async (req, res) => {
     })
 })
 
-/**
- * Update a product
- */
-productRouter.put('/:id', verifyToken, async (req, res) => {
-    const product: Product = req.body;
-    product.id = Number(req.params.id);
-    productModel.update(product, (err: Error) => {
-        if (err) {
-            return res.status(500).json({'errorMessage': err.message});
-        }
-        res.status(200).json({'message' : 'Product updated successfully!', 'productId': product.id});
-    })
-})
-
-/**
- * Delete a product
- */
-productRouter.delete('/', verifyToken, async (req, res) => {
-    const productId = req.body.productId;
-    productModel.deleteOne(productId, (err: Error) => {
-        if (err) {
-            return res.status(500).json({'errorMessage': err.message})
-        }
-        //res.status(200).json({'message' : 'Product deleted successfully!'});
-        res.redirect('/admin/');
-    })
-})
 
 /**
  * Get all products of a category
