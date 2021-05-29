@@ -1,31 +1,20 @@
-import express from 'express';
 import * as userModal from '../models/user';
-import {BasicUser, User} from '../types/user';
+import {BasicUser} from '../types/user';
+import {Request, Response} from 'express';
 
-const authRouter = express.Router();
-
-/**
- * GET login page
- */
-authRouter.get('/login', (req, res) => {
+export const getLogin = async (req: Request, res: Response) => {
     res.render('user/login', {
         title: 'Login'
     })
-})
+}
 
-/**
- * GET signup page
- */
- authRouter.get('/signup', (req, res) => {
+export const getSignup = async (req: Request, res: Response) => {
     res.render('user/signup', {
         title: 'Signup'
     })
-})
+}
 
-/**
- * POST /auth/sigup : signup
- */
-authRouter.post('/signup', (req, res) => {
+export const postSignup = async (req: Request, res: Response) => {
     const newuser: BasicUser = {
         username : req.body.username,
         password : req.body.password
@@ -36,12 +25,9 @@ authRouter.post('/signup', (req, res) => {
         }
         res.status(200).json({"message": "User account successfully created.", "uid": uid});
     })
-})
+}
 
-/**
- * POST /auth/login : login
- */
-authRouter.post('/login', (req, res) => {
+export const postLogin = async (req: Request, res: Response) => {
     const user: BasicUser = {
         username : req.body.username,
         password : req.body.password
@@ -52,6 +38,4 @@ authRouter.post('/login', (req, res) => {
         }
         res.status(200).json({"uid": data.uid, "token": data.token});
     })
-})
-
-export {authRouter};
+}

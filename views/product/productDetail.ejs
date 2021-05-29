@@ -1,31 +1,34 @@
 <%- include('../includes/head.ejs') %>
-  <h2 class="text-center">Product Details</h2>
+<h2 class="text-center">Product Details</h2>
 
-  <main>
+<main>
     <section class="products"">
         <% if (product) { %>
             <div class=" row">
-              <div class="col"></br></div>
-              <div class="col-8"></br>
-                <div class="card text-center">
-                    <div class="card-header">
-                      No.<%= product.id %>
+                <div class="col"></br></div>
+
+                <div class="col-8"></br>
+                    <div class="card text-center">
+                        <div class="card-header">
+                            No.<%= product.id %>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title"><%= product.name %></h5>
+                            <p class="card-text">This line is for nothing.</p>
+                            <p class="btn btn-primary"><%= product.price %>$</p>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <a href="/categories/<%= product.category %>">Category: <%= product.category %></a> 
+                        </div>
                     </div>
-                    <div class="card-body">
-                      <h5 class="card-title"><%= product.name %></h5>
-                      <p class="card-text">This line is for nothing.</p>
-                      <p class="btn btn-primary"><%= product.price %>$</p>
-                    </div>
-                    <div class="card-footer text-muted">
-                      <a href="/categories/<%= product.category %>">Category: <%= product.category %></a> 
-                    </div>
-                  </div>
-              </div>
-              <div class="col"></br></div>
+                    <img src="/resources/<%= product.images %>" alt="">
+                </div>
+
+                <div class="col"></br></div>
             </div>
-      <% } else { %>
-        <h1>No product</h1>
+        <% } else { %>
+            <h1>No product</h1>
         <% } %>
     </section>
-  </main>
-  <%- include('../includes/end.ejs') %>
+</main>
+<%- include('../includes/end.ejs') %>

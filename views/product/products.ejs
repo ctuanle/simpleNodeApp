@@ -13,9 +13,9 @@
                         prodId="<%= prod.id %>"
                     >
                         <div class="card-body">
-                          <h5 class="card-title"><%= prod.name %></h5>
-                          <p><%= prod.price %>$</p>
-                          <p><i><%= prod.category %></i></p>
+                            <h5 class="card-title"><%= prod.name %></h5>
+                            <p><%= prod.price %>$</p>
+                            <p><i><%= prod.category %></i></p>
                         </div>
                     </div>
                 <% } %>
@@ -24,14 +24,6 @@
             <h1>No product</h1>
         <% } %>
     </section>
+    <script src="/js/product.js"></script>
 </main>
-
-<script>
-    function product__click(event) {
-        event = event || window.event;
-        const src = event.currentTarget;
-        const prodId = src.getAttribute('prodId');
-        window.location.href = "/products/"+prodId;
-    }
-    </script>
 <%- include('../includes/end.ejs') %>

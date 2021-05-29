@@ -30,13 +30,6 @@
             <% } %>
         <% }  %>
     </section>
-    <script>
-        function product__click(event) {
-            event = event || window.event;
-            const src = event.currentTarget;
-            const prodId = src.getAttribute('prodId');
-            window.location.href = "/products/"+prodId;
-        }
-        </script>
+    <script src="/js/product.js"></script>
   </main>
   <%- include('../includes/end.ejs') %>

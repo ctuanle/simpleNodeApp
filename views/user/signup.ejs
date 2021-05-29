@@ -28,23 +28,5 @@
         <button class="btn btn-primary" onclick="function__signup()">Sign Up</button>
         <div><i>Already have an account? <a href="/auth/login">Log In</a> here.</i></div>
     </div>
-    <script>
-      const function__signup = async () => {
-          const username = document.getElementById('username').value;
-          const password = document.getElementById('password').value;
-
-          if (username && password) {
-            const response = await fetch('/auth/signup', {
-              method: 'POST',
-              body: JSON.stringify({ username : username, password : password}),
-              headers: {
-                  'Content-Type': 'application/json'
-              }
-          });
-          if (response.ok){
-            window.location.href = '/auth/login';
-          }
-        }   
-    }
-  </script>
+    <script src="/js/user.js"></script>
 </html>

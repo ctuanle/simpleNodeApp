@@ -3,10 +3,12 @@
  */
 import dotenv from 'dotenv';
 import express from 'express';
-import {productRouter} from './routes/productRouter';
-import {adminRouter} from './routes/adminRouter';
-import {categoryRouter} from './routes/categoryRouter';
-import {authRouter} from './routes/authRouter';
+import path from 'path';
+import productRouter from './routes/product';
+import adminRouter from './routes/admin';
+import categoryRouter from './routes/category';
+import authRouter from './routes/auth';
+
 
 
 /**
@@ -23,12 +25,13 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.set('view engine', 'ejs');
 app.set('views', 'views');
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/public'));
 
 app.use("/products", productRouter);
 app.use("/admin", adminRouter);
 app.use("/categories", categoryRouter);
 app.use("/auth", authRouter);
+app.use('/resources', express.static(__dirname + '/data'))
 
 app.get('/', (req, res) => {
     res.render('index', {
