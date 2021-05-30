@@ -48,3 +48,11 @@ content-type: application/json
     "username" : "ctle",
     "password" : "azerty"
 }
+
+###
+POST http://localhost:3000/admin/check
+content-type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjIsImlhdCI6MTYyMjM2NjAyMSwiZXhwIjoxNjIyMzY2OTIxfQ.bqBgYV8FPCjjgz-6cUzbOd9Of7hSCs4Q_UF6yHJZ7Uw"
+}

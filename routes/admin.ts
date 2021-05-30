@@ -10,6 +10,11 @@ import * as adminController from '../controllers/admin';
 const adminRouter = express.Router();
 
 /**
+ * POST check if token is valid
+ * /admin/check
+ */
+adminRouter.post('/check', adminController.checkValidToken);
+/**
  * GET all products page for admin
  * /admin
  */
