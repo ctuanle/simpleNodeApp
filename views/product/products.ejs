@@ -1,0 +1,45 @@
+<%- include('../includes/head.ejs') %>
+<h1 class="text-center">Product Page</h1>
+
+<main>
+    <section class="products" style="display: flex;">
+        <% if (products.length > 0) { %>
+            <div>
+                <% for (let prod of products) { %>
+                    <div
+                        class="card"
+                        style="width: 15rem; float: left; margin: 1rem; border: 1px solid rgb(0, 98, 128); cursor: pointer;"
+                        onclick="product__click()"
+                        prodId="<%= prod.id %>"
+                    >
+                        <div class="card-body">
+                            <h5 class="card-title"><%= prod.name %></h5>
+                            <p><%= prod.price %>$</p>
+                            <p><i><%= prod.category %></i></p>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+            
+        <% } else { %>
+            <h1>No product</h1>
+        <% } %>
+    </section>
+    <section class="pagination">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <input type="hidden" id="numpage" value="<%= numpage %> ">
+                <li class="page-item"><a class="page-link" id='prev_link'>Previous</a></li>
+                <% if (numpage) { %>
+                    <% for (let i = 1; i <= numpage; i++) { %>
+                        <li class="page-item"><a class="page-link" href="/products/page/<%= i %>"><%= i %></a></li>
+                    <% } %> 
+                <% } %>
+                <li class="page-item"><a class="page-link" id='next_link'>Next</a></li>
+            </ul>
+        </nav>
+    </section>
+    
+    <script src="/js/product.js"></script>
+</main>
+<%- include('../includes/end.ejs') %>

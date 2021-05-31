@@ -13,42 +13,25 @@
     <title><%= title %></title>
   </head>
   <body>
+    <div id="flash__signup" role="alert" hidden></div>
     <div class="container" style="width: 400px; margin-top: 50px; border: 1px solid black; padding: 30px; border-radius: 5px">
-        <h3 class="text-center">Connection</h3>
+        <h3 class="text-center">Registration</h3>
         <form>
             <div class="form-group">
               <label for="username">Username</label>
               <input type="text" class="form-control" id="username" placeholder="Enter username" name="username">
             </div>
             <div class="form-group">
+              <label for="username">Your email</label>
+              <input type="email" class="form-control" id="email" placeholder="Your email" name="email">
+            </div>
+            <div class="form-group">
               <label for="exampleInputPassword1">Password</label>
               <input type="password" class="form-control" id="password" placeholder="Password" name="password">
             </div>
         </form>
-        <button class="btn btn-primary" onclick="function__login()">Log In</button>
-        <div><i>Don't have an account? <a href="/auth/signup">Sign Up</a> here.</i></div>
-        
+        <button class="btn btn-primary" onclick="function__signup()">Sign Up</button>
+        <div><i>Already have an account? <a href="/auth/login">Log In</a> here.</i></div>
     </div>
-    <script>
-        const function__login = async () => {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            if (username && password) {
-              const response = await fetch('/auth/login', {
-                method: 'POST',
-                body: JSON.stringify({ username : username, password : password}),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            if (response.ok) {
-              window.location.href = '/';
-            }
-            const data = await response.json();
-            // data : {uid : number, token : string}
-            sessionStorage.setItem('user__data', JSON.stringify(data));
-            }   
-      }
-    </script>
+    <script src="/js/user.js"></script>
 </html>

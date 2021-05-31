@@ -1,4 +1,4 @@
-<%- include('head.ejs') %>
+<%- include('../includes/head.ejs') %>
 <script>
   if (!(sessionStorage.getItem('user__data'))) {
           window.location.href = '/auth/login';
@@ -8,10 +8,12 @@
 
   <main>
     <section class="products"">
+      <div id="flash__edited" role="alert" hidden></div>
         <% if (product) { %>
             <div class=" row">
               <div class="col"></br></div>
               <div class="col-8"></br>
+                <form id='update-product-form'>
                   <div class="form-group row">
                     <label for="name" class="col-sm-2 col-form-label">Name</label>
                     <div class="col-sm-10">
@@ -25,6 +27,7 @@
                       <input type="number" class="form-control" id="price" name="price" value="<%= product.price %>">
                     </div>
                   </div>
+                  <input type="hidden" id='pid' name="id" value="<%= product.id %>">
 
                   <fieldset class="form-group">
                     <div class="row">
@@ -49,10 +52,18 @@
                   </fieldset>
 
                   <div class="form-group row">
+                    <label for="price" class="col-sm-2 col-form-label">Images</label>
                     <div class="col-sm-10">
-                      <button class="btn btn-primary" onclick="updateProduct('<%= product.id %>')">Save</button>
+                        <input type="file" class="form-control" id="files" name="files" accept="image/png, image/jpeg">
                     </div>
                   </div>
+
+                  <div class="form-group row">
+                    <div class="col-sm-10">
+                      <button class="btn btn-primary" type="submit">Save</button>
+                    </div>
+                  </div>
+                </form>
               </div>
               <div class="col"></br></div>
             </div>
@@ -60,28 +71,6 @@
         <h1>No product</h1>
         <% } %>
     </section>
-    <script>
-      const updateProduct = async (id) => {
-        const pid = Number(id);
-        const newName = document.getElementById('name').value;
-        const newPrice = document.getElementById('price').value;
-        const radios = document.getElementsByName('category');
-        var newCategory;
-        for (let i = 0; i < radios.length; i++) {
-          if (radios[i].checked){
-            newCategory = radios[i].value;
-          }
-        }
-        const token = JSON.parse(sessionStorage.getItem('user__data')).token;
-        const response = await fetch('/products/'+pid, {
-            method: 'PUT',
-            body: JSON.stringify({ name: newName, price: newPrice, category: newCategory}),
-            headers: {
-                'Content-Type': 'application/json',
-                'authorization': 'Bearer ' + token
-            }
-        });
-      }
-    </script>
+    <script src="/js/admin.js"></script>
   </main>
-  <%- include('end.ejs') %>
+  <%- include('../includes/end.ejs') %>

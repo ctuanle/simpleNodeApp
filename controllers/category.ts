@@ -1,38 +1,34 @@
-import express from 'express';
 import * as productModel from '../models/product';
 import {Product} from '../types/product';
+import {Request, Response} from 'express';
 
-const categoryRouter = express.Router();
-
-categoryRouter.get('/', (req, res) => {
+export const getAllCategories = async (req: Request, res: Response) => {
     productModel.findAllCategories((err: Error, cats: string[]) => {
         if (err) {
-            return res.status(500).json({'errorMessage': err.message});
+            return res.status(500).json({'message': err.message});
         }
-        res.render('categories', {
+        res.render('product/categories', {
             'title' : 'Categories',
             'categories' : cats,
             'products' : []
         })
     })
-})
+}
 
-categoryRouter.get('/:cat', (req, res) => {
+export const getProductsByCategory = async (req: Request, res: Response) => {
     productModel.findAllCategories((err: Error, cats: string[]) => {
         if (err) {
-            return res.status(500).json({'errorMessage': err.message});
+            return res.status(500).json({'message': err.message});
         }
         productModel.findByCategory(req.params.cat, (err: Error, products: Product[]) => {
             if (err) {
-                return res.status(500).json({'errorMessage': err.message});
+                return res.status(500).json({'message': err.message});
             }
-            res.render('categories', {
+            res.render('product/categories', {
                 'title' : 'Categories',
                 'categories' : cats,
                 'products' : products
             })
         })
     })
-})
-
-export {categoryRouter};
+}
