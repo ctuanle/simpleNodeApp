@@ -21,12 +21,13 @@ const function__login = async () => {
 
 const function__signup = async () => {
     const username = document.getElementById('username').value;
+    const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
     if (username && password) {
       const response = await fetch('/auth/signup', {
         method: 'POST',
-        body: JSON.stringify({ username : username, password : password}),
+        body: JSON.stringify({ username : username, password : password, email : email}),
         headers: {
             'Content-Type': 'application/json'
         }

@@ -17,7 +17,8 @@ export const getSignup = async (req: Request, res: Response) => {
 export const postSignup = async (req: Request, res: Response) => {
     const newuser: BasicUser = {
         username : req.body.username,
-        password : req.body.password
+        password : req.body.password,
+        email: req.body.email
     }
     userModal.signup(newuser, (err: Error, uid: string) => {
         if (err) {

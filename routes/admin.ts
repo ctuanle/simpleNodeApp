@@ -5,8 +5,6 @@ import {requireLogin} from '../middlewares/auth';
 import * as adminController from '../controllers/admin';
 
 
-
-
 const adminRouter = express.Router();
 
 /**

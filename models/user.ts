@@ -19,7 +19,8 @@ const findOneByUsername = (username: string, callback: Function) =>{
         const user: User = {
             uid : row.uid,
             username: row.username,
-            password: row.password
+            password: row.password,
+            email: row.email
         };
         callback(null, user);
     })
@@ -42,8 +43,8 @@ export const signup = (user: BasicUser, callback: Function) => {
             if (err) {
                 return callback(err);
             }
-            const query = "INSERT INTO users(username, password) VALUES (?, ?)";
-            db.query(query, [user.username, hash], (err, result) => {
+            const query = "INSERT INTO users(username, password, email) VALUES (?, ?, ?)";
+            db.query(query, [user.username, hash, user.email], (err, result) => {
                 if (err) {
                     return callback(err);
                 }

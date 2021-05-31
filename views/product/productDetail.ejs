@@ -21,7 +21,11 @@
                             <a href="/categories/<%= product.category %>">Category: <%= product.category %></a> 
                         </div>
                     </div>
-                    <img src="/resources/<%= product.images %>" alt="">
+                    <% if (product.images) { %> 
+                        <img src="/resources/<%= product.images %>" alt="<%= product.name %>"> 
+                    <% } else  { %>
+                        <img src="/images/product-default.png" alt="<%= product.name %>">
+                    <% } %> 
                 </div>
 
                 <div class="col"></br></div>

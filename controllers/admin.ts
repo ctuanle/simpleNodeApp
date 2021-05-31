@@ -1,7 +1,6 @@
 import * as productModel from '../models/product';
 import {BasicProduct, Product} from '../types/product';
 import {Request, Response} from 'express';
-import fs from 'fs';
 import * as jwt from "jsonwebtoken";
 
 
@@ -39,7 +38,7 @@ export const postAddProduct = async (req: Request, res: Response) => {
     const newProduct: BasicProduct = req.body;
 
     if (req.file){
-        newProduct.images = req.file.path.slice(7);
+        newProduct.images = req.file.path.slice(5);
     }
     
     productModel.create(newProduct, (err: Error, productId: number) => {
@@ -55,10 +54,7 @@ export const putUpdateProduct = async (req: Request, res: Response) => {
     const product: Product = req.body;
     product.id = Number(req.params.id);
     if (req.file){
-        product.images = req.file.path.slice(7);
-        fs.unlink(req.file.path, (err) => {
-            if (err) throw err;
-        })
+        product.images = req.file.path.slice(5);
     }
     productModel.update(product, (err: Error) => {
         if (err) {

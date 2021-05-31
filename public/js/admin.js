@@ -23,7 +23,7 @@ if (addForm) {
     addForm.addEventListener('submit', addProduct);
 }
 
-function addProduct (e) {
+async function addProduct (e) {
     e.preventDefault();
     const name = document.getElementById('name').value;
     const price = document.getElementById('price').value;
@@ -41,17 +41,16 @@ function addProduct (e) {
         formData.append('price', price);
         formData.append('category', category);
         formData.append('files', files.files[0]);
-        fetch('/admin/add', {
+        const response = await fetch('/admin/add', {
             method: 'POST',
             body: formData,
             headers: {
                 'authorization': 'Bearer ' + token
             },
-        }, (response) => {
-            if (response.ok){
+        });
+        if (response.ok) {
             window.location.href = '/admin/';
         }
-        });
         
     } 
 }
@@ -61,7 +60,7 @@ if (updateForm){
     updateForm.addEventListener('submit', updateProduct);
 }
 
-function updateProduct (e) {
+async function updateProduct (e) {
     e.preventDefault();
     const name = document.getElementById('name').value;
     const price = document.getElementById('price').value;
@@ -80,13 +79,16 @@ function updateProduct (e) {
         formData.append('price', price);
         formData.append('category', category);
         formData.append('files', files.files[0]);
-        fetch('/admin/edit/'+pid, {
+        const response = await fetch('/admin/edit/'+pid, {
             method: 'PUT',
             body: formData,
             headers: {
                 'authorization': 'Bearer ' + token
             },
         });
+        if (response.ok) {
+            window.location.href = '/admin/';
+        }
         
     }
 } 
