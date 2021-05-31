@@ -16,4 +16,10 @@ productRouter.get('/', productController.getAllProduct);
 productRouter.get('/:id', productController.getProductById);
 
 
+/**
+ * Get N products
+ * /products/page/:page
+ */
+productRouter.get('/page/:page', productController.getNProducts);
+
 export default productRouter;

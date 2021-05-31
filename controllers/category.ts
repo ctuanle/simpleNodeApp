@@ -5,7 +5,7 @@ import {Request, Response} from 'express';
 export const getAllCategories = async (req: Request, res: Response) => {
     productModel.findAllCategories((err: Error, cats: string[]) => {
         if (err) {
-            return res.status(500).json({'errorMessage': err.message});
+            return res.status(500).json({'message': err.message});
         }
         res.render('product/categories', {
             'title' : 'Categories',
@@ -18,11 +18,11 @@ export const getAllCategories = async (req: Request, res: Response) => {
 export const getProductsByCategory = async (req: Request, res: Response) => {
     productModel.findAllCategories((err: Error, cats: string[]) => {
         if (err) {
-            return res.status(500).json({'errorMessage': err.message});
+            return res.status(500).json({'message': err.message});
         }
         productModel.findByCategory(req.params.cat, (err: Error, products: Product[]) => {
             if (err) {
-                return res.status(500).json({'errorMessage': err.message});
+                return res.status(500).json({'message': err.message});
             }
             res.render('product/categories', {
                 'title' : 'Categories',

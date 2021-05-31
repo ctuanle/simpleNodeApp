@@ -41,7 +41,7 @@ export const postSignup = async (req: Request, res: Response) => {
     }
     userModal.signup(newuser, (err: Error, uid: string) => {
         if (err) {
-            return res.status(500).json({'errorMessage': err.message});
+            return res.status(500).json({'message': err.message});
         }
         res.status(200).json({"message": "User account successfully created.", "uid": uid});
     })
@@ -54,7 +54,7 @@ export const postLogin = async (req: Request, res: Response) => {
     }
     userModal.login(user, (err: Error, data:{uid: string; token: string}) => {
         if (err) {
-            return res.status(500).json({'errorMessage': err.message});
+            return res.status(500).json({'message': err.message});
         }
         res.status(200).json({"uid": data.uid, "token": data.token});
     })
@@ -63,12 +63,12 @@ export const postLogin = async (req: Request, res: Response) => {
 export const postForgotPassword = async (req: Request, res: Response) => {
     const email: string = req.body.email;
     if (!email){
-        return res.status(500).json({'errorMessage': 'Invalid email!'});
+        return res.status(500).json({'message': 'Invalid email!'});
     }
     var message = {};
     userModal.forgotPassword(email, (err: Error, result: string) => {
         if (err) {
-            return res.status(500).json({'errorMessage': err.message});
+            return res.status(500).json({'message': err.message});
         }
         message = {
             from: 'ctle@node.io',
@@ -79,10 +79,10 @@ export const postForgotPassword = async (req: Request, res: Response) => {
         }
         sendmail(message, (err: Error, info: SentMessageInfo) => {
             if (err) {
-                return res.status(500).json({'errorMessage': err.message});
+                return res.status(500).json({'message': err.message});
             }
             else {
-                return res.status(200).json({'info': info});
+                return res.status(200).json({'message': 'Reset password link has been sent successfully. Please reset your password within 15min!'});
             }
         })
     })
@@ -96,8 +96,8 @@ export const postResetPassword = async (req: Request, res: Response) => {
     const newPwd = req.body.password;
     userModal.resetPassword(uid, token, newPwd, (err: Error, result: string) => {
         if (err) {
-            return res.status(500).json({'errorMessage': err.message});
+            return res.status(500).json({'message': err.message});
         }
-        res.status(200).json({'message': result});
+        res.status(200).json({'message': 'Password updated successfully! You can log in now!'});
     })
 }

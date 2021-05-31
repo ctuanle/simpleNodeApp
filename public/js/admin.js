@@ -1,18 +1,38 @@
+const handleFlash = (id, response, timer) => {
+    const flash_item = document.getElementById(id);
+    if (flash_item){
+        if (response.ok){
+            flash_item.setAttribute('class', 'alert alert-success');
+        }
+        else {
+            flash_item.setAttribute('class', 'alert alert-danger');
+        }
+        response.json().then(data => {
+            const textnode = document.createTextNode(data.message);
+            flash_item.appendChild(textnode);
+            flash_item.hidden = false;
+        })
+        if (response.ok && timer) {
+            setInterval(() => {
+                window.location.href = '/admin/';
+            }, timer);
+        } 
+    }
+}
+
 const deleteProduct = async (id) => {
     const ok = confirm('Are you sure you want to delete this product?');
     const pid = Number(id);
     if (ok && token) {
-        fetch('/admin/delete', {
+        const response = await fetch('/admin/delete', {
             method: 'DELETE',
             body: JSON.stringify({ productId: pid}),
             headers: {
                 'Content-Type': 'application/json',
                 'authorization' : 'Bearer ' + token
             }
-        }, (response) => {
-            if (response.ok) ;
         });
-        window.location.reload()
+        handleFlash('flash__deleted', response, 1500);
     }
     
 }
@@ -48,10 +68,7 @@ async function addProduct (e) {
                 'authorization': 'Bearer ' + token
             },
         });
-        if (response.ok) {
-            window.location.href = '/admin/';
-        }
-        
+        handleFlash('flash__added', response, 2000);
     } 
 }
 
@@ -86,9 +103,6 @@ async function updateProduct (e) {
                 'authorization': 'Bearer ' + token
             },
         });
-        if (response.ok) {
-            window.location.href = '/admin/';
-        }
-        
+        handleFlash('flash__edited', response, 2000);
     }
 } 

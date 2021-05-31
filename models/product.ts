@@ -157,3 +157,42 @@ export const findByCategory = (category: string, callback: Function) => {
         }
     })
 }
+
+export const findNProducts = (quantity: number, from: number, callback: Function) => {
+    const count_query = 'SELECT COUNT(*) as total FROM products';
+    db.query(count_query, (err, result) => {
+        if (err) {
+            return callback(err);
+        }
+        if (result){
+            const row = (<RowDataPacket[]>result)[0];
+            if (row){
+                const total = row.total;
+                const query = "SELECT * FROM products LIMIT ? OFFSET ?";
+                db.query(query,[quantity, from], (err, result) => {
+                    if (err) {
+                        return callback(err);
+                    }
+                    if (result){
+                        const rows = <RowDataPacket[]>result;
+                        if (rows && rows.length > 0){
+                            const products: Product[] = [];
+                            rows.forEach((row) => {
+                                const product: Product = {
+                                    id: row.id,
+                                    name: row.name,
+                                    price: row.price,
+                                    category: row.category,
+                                    images: row.images
+                                }
+                                products.push(product);
+                            })
+                            return callback(null, total, products);
+                        }
+                    }
+                    callback(null, total, []);
+                })
+            }
+        }
+    })
+}

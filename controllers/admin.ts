@@ -7,7 +7,7 @@ import * as jwt from "jsonwebtoken";
 export const getAllProducts = async (req: Request, res: Response) => {
     productModel.findAll((err:Error, products: Product[]) => {
         if (err) {
-            return res.status(500).json({'errorMessage': err.message});
+            return res.status(500).json({'message': err.message});
         }
         res.render('admin/admin', {
             title: 'Products',
@@ -19,7 +19,7 @@ export const getAllProducts = async (req: Request, res: Response) => {
 export const getEditProduct = async (req: Request, res: Response) => {
     productModel.findOne(Number(req.params.id), (err:Error, product: Product) => {
         if (err) {
-            return res.status(500).json({'errorMessage': err.message});
+            return res.status(500).json({'message': err.message});
         }
         res.render('admin/edit-product', {
             title: 'Edit Product',
@@ -43,10 +43,9 @@ export const postAddProduct = async (req: Request, res: Response) => {
     
     productModel.create(newProduct, (err: Error, productId: number) => {
         if (err) {
-            return res.status(500).json({'errorMessage': err.message});
+            return res.status(500).json({'message': err.message});
         }
-        //res.status(200).json({"message": "Product created successfully", "productId": productId});
-        res.redirect('/admin');
+        res.status(200).json({"message": "Product created successfully", "productId": productId});
     });
 }
 
@@ -58,7 +57,7 @@ export const putUpdateProduct = async (req: Request, res: Response) => {
     }
     productModel.update(product, (err: Error) => {
         if (err) {
-            return res.status(500).json({'errorMessage': err.message});
+            return res.status(500).json({'message': err.message});
         }
         res.status(200).json({'message' : 'Product updated successfully!', 'productId': product.id});
     })
@@ -68,10 +67,9 @@ export const deleteProduct = async (req: Request, res: Response) => {
     const productId = req.body.productId;
     productModel.deleteOne(productId, (err: Error) => {
         if (err) {
-            return res.status(500).json({'errorMessage': err.message})
+            return res.status(500).json({'message': err.message})
         }
-        //res.status(200).json({'message' : 'Product deleted successfully!'});
-        res.redirect('/admin/');
+        res.status(200).json({'message' : 'Product deleted successfully!'});
     })
 }
 
@@ -83,7 +81,7 @@ export const checkValidToken = async (req: Request, res: Response) => {
             <jwt.Secret>process.env.TOKEN_SECRET_KEY,
             (err: jwt.VerifyErrors | null) => {
                 if (err){
-                    return res.status(401).json({'errorMessage' : err.message});
+                    return res.status(401).json({'message' : err.message});
                 }
                 return res.status(200).send();
             }

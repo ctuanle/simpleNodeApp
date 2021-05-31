@@ -1,3 +1,25 @@
+const handleFlash = (id, response, timer) => {
+    const flash_item = document.getElementById(id);
+    if (flash_item){
+        if (response.ok){
+            flash_item.setAttribute('class', 'alert alert-success');
+        }
+        else {
+            flash_item.setAttribute('class', 'alert alert-danger');
+        }
+        response.json().then(data => {
+            const textnode = document.createTextNode(data.message);
+            flash_item.appendChild(textnode);
+            flash_item.hidden = false;
+        });
+        if (response.ok && timer) {
+            setInterval(() => {
+                window.location.href = '/auth/login';
+            }, timer);
+        }   
+    }
+}
+
 const function__login = async () => {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
@@ -30,19 +52,10 @@ const function__signup = async () => {
             body: JSON.stringify({ username : username, password : password, email : email}),
             headers: {
                 'Content-Type': 'application/json'
-        }
-    });
-    const flash__signup = document.getElementById('flash__signup');
-    if (response.ok){
-        if  (flash__signup){
-            flash__signup.hidden = false;
-        }
-        setInterval(
-            () => {window.location.href = '/auth/login'},
-            3000
-        )
-        
-    }
+            }
+
+        });
+        handleFlash('flash__signup', response, 3000);
   }   
 }
 
@@ -57,10 +70,7 @@ const function__forgot__password = async () => {
                 'Content-Type': 'application/json'
             }
         });
-        const flash__sent = document.getElementById('flash__sent');
-        if (flash__sent && response.ok) {
-            flash__sent.hidden = false;
-        }
+        handleFlash('flash__sent', response);
     }
 }
 
@@ -74,13 +84,6 @@ const function__reset__password = async () => {
             body: JSON.stringify({uid: uid, token: token, password: password}),
             headers: {'Content-Type': 'application/json'}
         });
-        const flash__changed = document.getElementById('flash__changed');
-        if (flash__changed && response.ok) {
-            flash__changed.hidden = false;
-        }
-        setInterval(
-            () => {window.location.href = '/auth/login'},
-            3000
-        )
+        handleFlash('flash__changed', response, 3000);
     }
 }
