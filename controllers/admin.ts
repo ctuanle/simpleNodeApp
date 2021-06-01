@@ -1,8 +1,6 @@
 import * as productModel from '../models/product';
 import {BasicProduct, Product} from '../types/product';
 import {Request, Response} from 'express';
-import * as jwt from "jsonwebtoken";
-
 
 export const getAllProducts = async (req: Request, res: Response) => {
     productModel.findAll((err:Error, products: Product[]) => {
@@ -71,20 +69,4 @@ export const deleteProduct = async (req: Request, res: Response) => {
         }
         res.status(200).json({'message' : 'Product deleted successfully!'});
     })
-}
-
-export const checkValidToken = async (req: Request, res: Response) => {
-    const token = req.body.token;
-    if (token){
-        jwt.verify(
-            token,
-            <jwt.Secret>process.env.TOKEN_SECRET_KEY,
-            (err: jwt.VerifyErrors | null) => {
-                if (err){
-                    return res.status(401).json({'message' : err.message});
-                }
-                return res.status(200).send();
-            }
-            )
-    }
 }

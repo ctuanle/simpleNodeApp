@@ -1,9 +1,11 @@
-import * as userModal from '../models/user';
+import * as userModel from '../models/user';
 import {BasicUser} from '../types/user';
 import {Request, Response} from 'express';
 import {sendmail} from './sendmail';
 require('dotenv').config();
 import {SentMessageInfo} from 'nodemailer';
+
+import * as jwt from "jsonwebtoken";
 
 export const getLogin = async (req: Request, res: Response) => {
     res.render('user/login', {
@@ -39,11 +41,11 @@ export const postSignup = async (req: Request, res: Response) => {
         password : req.body.password,
         email: req.body.email
     }
-    userModal.signup(newuser, (err: Error, uid: string) => {
+    userModel.signup(newuser, (err: Error, uid: string) => {
         if (err) {
             return res.status(500).json({'message': err.message});
         }
-        res.status(200).json({"message": "User account successfully created.", "uid": uid});
+        res.status(201).json({"message": "User account successfully created.", "uid": uid});
     })
 }
 
@@ -52,12 +54,41 @@ export const postLogin = async (req: Request, res: Response) => {
         username : req.body.username,
         password : req.body.password
     }
-    userModal.login(user, (err: Error, data:{uid: string; token: string}) => {
+    userModel.login(user, (err: Error, data:{uid: string; token: string}) => {
         if (err) {
             return res.status(500).json({'message': err.message});
         }
-        res.status(200).json({"uid": data.uid, "token": data.token});
+        res.writeHead(200, {
+            'Set-Cookie': 'ctle_user_token=' + data.token +'; HttpOnly; SameSite=Strict; max-age=840; path=/',
+            'Access-Control-Allow-Credentials': 'true'
+        }).send();
     })
+}
+
+export const postLogout = async (req: Request, res: Response) => {
+    res.writeHead(200, {
+        'Set-Cookie': 'ctle_user_token=; HttpOnly; SameSite=Strict; max-age=0; path=/',
+        'Access-Control-Allow-Credentials': 'true'
+    }).send();
+}
+
+export const checkIsLogin = async (req: Request, res: Response) => {
+    if (req.cookies.ctle_user_token){
+        const token: string = req.cookies.ctle_user_token;
+        jwt.verify(
+            token,
+            <jwt.Secret>process.env.TOKEN_SECRET_KEY,
+            (err) => {
+                if (err) {
+                    return res.status(500).json({'errorMessage': err.message});
+                }
+                res.status(200).send();
+            }
+        )
+    }
+    else {
+        res.status(202).send();
+    }
 }
 
 export const postForgotPassword = async (req: Request, res: Response) => {
@@ -66,7 +97,7 @@ export const postForgotPassword = async (req: Request, res: Response) => {
         return res.status(500).json({'message': 'Invalid email!'});
     }
     var message = {};
-    userModal.forgotPassword(email, (err: Error, result: string) => {
+    userModel.forgotPassword(email, (err: Error, result: string) => {
         if (err) {
             return res.status(500).json({'message': err.message});
         }
@@ -94,7 +125,7 @@ export const postResetPassword = async (req: Request, res: Response) => {
     const uid = req.body.uid;
     const token = req.body.token;
     const newPwd = req.body.password;
-    userModal.resetPassword(uid, token, newPwd, (err: Error, result: string) => {
+    userModel.resetPassword(uid, token, newPwd, (err: Error, result: string) => {
         if (err) {
             return res.status(500).json({'message': err.message});
         }

@@ -1,52 +1,47 @@
 import express from 'express';
 
 import upload from '../middlewares/multer';
-import {requireLogin} from '../middlewares/auth';
+import {requireCookie} from '../middlewares/auth';
 import * as adminController from '../controllers/admin';
 
 
 const adminRouter = express.Router();
 
 /**
- * POST check if token is valid
- * /admin/check
- */
-adminRouter.post('/check', adminController.checkValidToken);
-/**
  * GET all products page for admin
  * /admin
  */
-adminRouter.get('/', adminController.getAllProducts);
+adminRouter.get('/', requireCookie, adminController.getAllProducts);
 
 /**
  * GET edit product page
  * /admin/edit/:id
  */
-adminRouter.get('/edit/:id', adminController.getEditProduct);
+adminRouter.get('/edit/:id', requireCookie, adminController.getEditProduct);
 
 /**
  * GET add product page
  * /admin/add
  */
-adminRouter.get('/add', adminController.getAddProduct);
+adminRouter.get('/add', requireCookie, adminController.getAddProduct);
 
 /**
  * POST add a new product
  * /admin/add
  */
- adminRouter.post('/add', upload.single('files'), requireLogin, adminController.postAddProduct);
+ adminRouter.post('/add', upload.single('files'), requireCookie, adminController.postAddProduct);
 
 /**
  * PUT update a product
  * /admin/edit/:id
  */
- adminRouter.put('/edit/:id', upload.single('files'), requireLogin, adminController.putUpdateProduct);
+ adminRouter.put('/edit/:id', upload.single('files'), requireCookie, adminController.putUpdateProduct);
 
 
 /**
  * DELETE a product
  * /admin/delete
  */
- adminRouter.delete('/delete', requireLogin, adminController.deleteProduct);
+ adminRouter.delete('/delete', requireCookie, adminController.deleteProduct);
  
 export default adminRouter;
