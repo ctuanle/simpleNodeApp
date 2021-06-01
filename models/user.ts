@@ -64,28 +64,27 @@ export const login = (user: BasicUser, callback: Function) => {
         /**
          * Hash the input password and compare it against the user's password'
          */
-        bcrypt.compare(user.password, userdata.password)
-        .then((valid) => {
-            if (!valid) {
-                return callback(new Error("Incorrect password!"));
+        bcrypt.compare(user.password, userdata.password, (err, same) => {
+            if (err) {
+                return callback(err);
             }
+            if (same) {
+                const token: string = jwt.sign(
+                    {uid : userdata.uid},
+                    <jwt.Secret>process.env.TOKEN_SECRET_KEY,
+                    {expiresIn: '15m'}
+                );
+        
+                const data = {
+                    uid : userdata.uid,
+                    token : token
+                }
+                callback(null, data);
+            }
+            else {
+                return callback(new Error("Incorrect password!"));
+            }  
         })
-        .catch((err) => callback(err));
-
-        /**
-         * Sign a new token and send return it
-         */
-        const token: string = jwt.sign(
-            {uid : userdata.uid},
-            <jwt.Secret>process.env.TOKEN_SECRET_KEY,
-            {expiresIn: '15m'}
-        );
-
-        const data = {
-            uid : userdata.uid,
-            token : token
-        }
-        callback(null, data);
     })
 }
 

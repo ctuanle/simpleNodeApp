@@ -3,7 +3,7 @@
  */
 import dotenv from 'dotenv';
 import express from 'express';
-import path from 'path';
+import cookieParser from 'cookie-parser';
 import productRouter from './routes/product';
 import adminRouter from './routes/admin';
 import categoryRouter from './routes/category';
@@ -22,6 +22,7 @@ const app = express();
  */
 dotenv.config();
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({extended: false}));
 app.set('view engine', 'ejs');
 app.set('views', 'views');

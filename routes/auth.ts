@@ -39,6 +39,16 @@ authRouter.post('/signup', authController.postSignup);
  */
 authRouter.post('/login', authController.postLogin);
 
+/**
+ * POST a log out request
+ * /auth/logout
+ */
+authRouter.post('/logout', authController.postLogout);
+/**
+ * POST check if token is valid
+ * /admin/check
+ */
+ authRouter.post('/check', authController.checkIsLogin);
 
 /**
  * POST forgot password request

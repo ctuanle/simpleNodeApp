@@ -30,14 +30,12 @@ const function__login = async () => {
             body: JSON.stringify({ username : username, password : password}),
             headers: {
                 'Content-Type': 'application/json'
+            }
+        });
+        if (response.ok) {
+            window.location.href = '/';
         }
-    });
-    if (response.ok) {
-        window.location.href = '/';
-    }
-    const data = await response.json();
-    // data : {uid : number, token : string}
-    sessionStorage.setItem('user__data', JSON.stringify(data));
+        handleFlash('flash__login', response, 3000);
     }   
 }
 

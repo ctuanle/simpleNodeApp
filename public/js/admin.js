@@ -23,13 +23,12 @@ const handleFlash = (id, response, timer) => {
 const deleteProduct = async (id) => {
     const ok = confirm('Are you sure you want to delete this product?');
     const pid = Number(id);
-    if (ok && token) {
+    if (ok) {
         const response = await fetch('/admin/delete', {
             method: 'DELETE',
             body: JSON.stringify({ productId: pid}),
             headers: {
                 'Content-Type': 'application/json',
-                'authorization' : 'Bearer ' + token
             }
         });
         handleFlash('flash__deleted', response, 1500);
@@ -55,7 +54,7 @@ async function addProduct (e) {
             category = radios[i].value;
         }
     }
-    if (name && price && category && token){
+    if (name && price && category){
         const formData = new FormData();
         formData.append('name', name);
         formData.append('price', price);
@@ -64,9 +63,7 @@ async function addProduct (e) {
         const response = await fetch('/admin/add', {
             method: 'POST',
             body: formData,
-            headers: {
-                'authorization': 'Bearer ' + token
-            },
+            headers: {},
         });
         handleFlash('flash__added', response, 2000);
     } 
@@ -90,7 +87,7 @@ async function updateProduct (e) {
             category = radios[i].value;
         }
     }
-    if (name && price && category && token){
+    if (name && price && category){
         const formData = new FormData();
         formData.append('name', name);
         formData.append('price', price);
@@ -99,9 +96,7 @@ async function updateProduct (e) {
         const response = await fetch('/admin/edit/'+pid, {
             method: 'PUT',
             body: formData,
-            headers: {
-                'authorization': 'Bearer ' + token
-            },
+            headers: {},
         });
         handleFlash('flash__edited', response, 2000);
     }

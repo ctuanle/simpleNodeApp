@@ -10,6 +10,7 @@ const numpage_item = document.querySelector('#numpage');
 const prev_link = document.querySelector('#prev_link');
 const next_link = document.querySelector('#next_link');
 var numpage = null;
+
 if (numpage_item){
     numpage = numpage_item.value;
 }
