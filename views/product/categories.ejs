@@ -21,10 +21,10 @@
                     onclick="product__click()"
                     prodId="<%= prod.id %>"
                 >
+                    <img class="card-img-top" src="/resources/<%= prod.images %>" alt="" style="max-height: 150px;">
                     <div class="card-body">
                         <h5 class="card-title"><%= prod.name %></h5>
-                        <p><%= prod.price %>$</p>
-                        <p><i><%= prod.category %></i></p>
+                        <p class="card-text"><%= prod.price %>$</p>
                     </div>
                 </div>
             <% } %>
