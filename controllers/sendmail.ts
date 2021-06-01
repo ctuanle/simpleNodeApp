@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 require('dotenv').config();
 
-export const sendmail = async (message: nodemailer.SendMailOptions, callback: Function) => {
+export const sendmail = (message: nodemailer.SendMailOptions, callback: Function) => {
     const transporter = nodemailer.createTransport({
         host: process.env.ETHEREAL_HOST,
         port: Number(process.env.ETHEREAL_PORT),

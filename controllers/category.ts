@@ -2,7 +2,7 @@ import * as productModel from '../models/product';
 import {Product} from '../types/product';
 import {Request, Response} from 'express';
 
-export const getAllCategories = async (req: Request, res: Response) => {
+export const getAllCategories = (req: Request, res: Response) => {
     productModel.findAllCategories((err: Error, cats: string[]) => {
         if (err) {
             return res.status(500).json({'message': err.message});
@@ -15,7 +15,7 @@ export const getAllCategories = async (req: Request, res: Response) => {
     })
 }
 
-export const getProductsByCategory = async (req: Request, res: Response) => {
+export const getProductsByCategory = (req: Request, res: Response) => {
     productModel.findAllCategories((err: Error, cats: string[]) => {
         if (err) {
             return res.status(500).json({'message': err.message});

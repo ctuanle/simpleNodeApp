@@ -7,25 +7,25 @@ import {SentMessageInfo} from 'nodemailer';
 
 import * as jwt from "jsonwebtoken";
 
-export const getLogin = async (req: Request, res: Response) => {
+export const getLogin = (req: Request, res: Response) => {
     res.render('user/login', {
         title: 'Login'
     })
 }
 
-export const getSignup = async (req: Request, res: Response) => {
+export const getSignup = (req: Request, res: Response) => {
     res.render('user/signup', {
         title: 'Signup'
     })
 }
 
-export const getForgotPassword = async (req: Request, res: Response) => {
+export const getForgotPassword = (req: Request, res: Response) => {
     res.render('user/forgot-password', {
         title: 'Reset Password'
     })
 }
 
-export const getResetPassword = async (req: Request, res: Response) => {
+export const getResetPassword = (req: Request, res: Response) => {
     const uid = req.params.uid;
     const token = req.params.token;
     res.render('user/reset-password', {
@@ -35,7 +35,7 @@ export const getResetPassword = async (req: Request, res: Response) => {
     })
 }
 
-export const postSignup = async (req: Request, res: Response) => {
+export const postSignup = (req: Request, res: Response) => {
     const newuser: BasicUser = {
         username : req.body.username,
         password : req.body.password,
@@ -49,7 +49,7 @@ export const postSignup = async (req: Request, res: Response) => {
     })
 }
 
-export const postLogin = async (req: Request, res: Response) => {
+export const postLogin = (req: Request, res: Response) => {
     const user: BasicUser = {
         username : req.body.username,
         password : req.body.password
@@ -65,14 +65,14 @@ export const postLogin = async (req: Request, res: Response) => {
     })
 }
 
-export const postLogout = async (req: Request, res: Response) => {
+export const postLogout = (req: Request, res: Response) => {
     res.writeHead(200, {
         'Set-Cookie': 'ctle_user_token=; HttpOnly; SameSite=Strict; max-age=0; path=/',
         'Access-Control-Allow-Credentials': 'true'
     }).send();
 }
 
-export const checkIsLogin = async (req: Request, res: Response) => {
+export const checkIsLogin = (req: Request, res: Response) => {
     if (req.cookies.ctle_user_token){
         const token: string = req.cookies.ctle_user_token;
         jwt.verify(
@@ -91,7 +91,7 @@ export const checkIsLogin = async (req: Request, res: Response) => {
     }
 }
 
-export const postForgotPassword = async (req: Request, res: Response) => {
+export const postForgotPassword = (req: Request, res: Response) => {
     const email: string = req.body.email;
     if (!email){
         return res.status(500).json({'message': 'Invalid email!'});
@@ -121,7 +121,7 @@ export const postForgotPassword = async (req: Request, res: Response) => {
 }
 
 
-export const postResetPassword = async (req: Request, res: Response) => {
+export const postResetPassword = (req: Request, res: Response) => {
     const uid = req.body.uid;
     const token = req.body.token;
     const newPwd = req.body.password;

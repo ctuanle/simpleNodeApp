@@ -2,7 +2,7 @@ import * as productModel from '../models/product';
 import {Product} from '../types/product';
 import {Request, Response} from 'express';
 
-export const getAllProduct = async (req: Request, res: Response) => {
+export const getAllProduct = (req: Request, res: Response) => {
     productModel.findAll((err:Error, products: Product[]) => {
         if (err) {
             return res.status(500).json({'message': err.message});
@@ -14,7 +14,7 @@ export const getAllProduct = async (req: Request, res: Response) => {
     })
 }
 
-export const getProductById = async (req: Request, res: Response) => {
+export const getProductById = (req: Request, res: Response) => {
     const productId:number = Number(req.params.id);
     productModel.findOne(productId, (err: Error, product: Product) => {
         if (err) {
@@ -28,7 +28,7 @@ export const getProductById = async (req: Request, res: Response) => {
     })
 }
 
-export const getNProducts = async (req: Request, res: Response) => {
+export const getNProducts = (req: Request, res: Response) => {
     const quantity = Number(req.params.quantity) || 12;
     const page = Number(req.params.page);
     const from = (page-1) * quantity;

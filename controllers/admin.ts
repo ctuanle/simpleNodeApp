@@ -2,7 +2,7 @@ import * as productModel from '../models/product';
 import {BasicProduct, Product} from '../types/product';
 import {Request, Response} from 'express';
 
-export const getAllProducts = async (req: Request, res: Response) => {
+export const getAllProducts = (req: Request, res: Response) => {
     productModel.findAll((err:Error, products: Product[]) => {
         if (err) {
             return res.status(500).json({'message': err.message});
@@ -14,7 +14,7 @@ export const getAllProducts = async (req: Request, res: Response) => {
     })
 }
 
-export const getEditProduct = async (req: Request, res: Response) => {
+export const getEditProduct = (req: Request, res: Response) => {
     productModel.findOne(Number(req.params.id), (err:Error, product: Product) => {
         if (err) {
             return res.status(500).json({'message': err.message});
@@ -26,13 +26,13 @@ export const getEditProduct = async (req: Request, res: Response) => {
     })
 }
 
-export const getAddProduct = async (req: Request, res: Response) => {
+export const getAddProduct = (req: Request, res: Response) => {
     res.render('admin/add-product', {
         title: 'Add Product',
     })
 }
 
-export const postAddProduct = async (req: Request, res: Response) => {
+export const postAddProduct = (req: Request, res: Response) => {
     const newProduct: BasicProduct = req.body;
 
     if (req.file){
@@ -47,7 +47,7 @@ export const postAddProduct = async (req: Request, res: Response) => {
     });
 }
 
-export const putUpdateProduct = async (req: Request, res: Response) => {
+export const putUpdateProduct = (req: Request, res: Response) => {
     const product: Product = req.body;
     product.id = Number(req.params.id);
     if (req.file){
@@ -61,7 +61,7 @@ export const putUpdateProduct = async (req: Request, res: Response) => {
     })
 }
 
-export const deleteProduct = async (req: Request, res: Response) => {
+export const deleteProduct = (req: Request, res: Response) => {
     const productId = req.body.productId;
     productModel.deleteOne(productId, (err: Error) => {
         if (err) {
