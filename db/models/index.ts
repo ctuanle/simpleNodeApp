@@ -17,12 +17,18 @@ export const sequelize = new Sequelize(
         dialect: 'mysql',
         logging : false
     }
-)
+);
 
-sequelize.authenticate()
-    .then(() => {
-        console.log('Connection to database has been established successfully.')
-    })
-    .catch((error) => {
-        console.error('Unable to connect to the database:', error);
-    })
+
+const main = async  () => {
+    try {
+        await sequelize.authenticate();
+        console.log('Authenticated');
+        await sequelize.sync({alter: true});
+        console.log('Sync done')
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
+main();

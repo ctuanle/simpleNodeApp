@@ -1,8 +1,5 @@
-// import * as productModel from '../models/product';
-// import {BasicProduct, Product} from '../types/product';
 import {Request, Response} from 'express';
 
-import {User} from '../db/models/user';
 import {Product} from '../db/models/product';
 
 export const getAllProducts = async (req: Request, res: Response) => {
