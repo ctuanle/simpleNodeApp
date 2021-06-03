@@ -11,7 +11,8 @@ And create the database if it doesn't exist
     npm run dev
 
 #### Database
-Populate your database if you want:
+Populate your database if you want:  
+
     npx sequelize-cli db:seed:all
 ##### Product 
 - id
