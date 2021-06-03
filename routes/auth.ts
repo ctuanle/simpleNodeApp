@@ -27,6 +27,7 @@ authRouter.get('/forgot', authController.getForgotPassword);
  * /auth/reset
  */
 authRouter.get('/reset/:uid/:token', authController.getResetPassword);
+
 /**
  * POST a sign up request
  * /auth/signup
@@ -44,9 +45,10 @@ authRouter.post('/login', authController.postLogin);
  * /auth/logout
  */
 authRouter.post('/logout', authController.postLogout);
+
 /**
- * POST check if token is valid
- * /admin/check
+ * POST check if user is log in
+ * /auth/check
  */
  authRouter.post('/check', authController.checkIsLogin);
 

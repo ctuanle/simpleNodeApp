@@ -7,7 +7,7 @@ const productRouter = express.Router();
  * Get all products
  * /products/
  */
-productRouter.get('/', productController.getAllProduct);
+productRouter.get('/', productController.getAllProducts);
 
 /**
  * Get infos of a specific product
