@@ -3,10 +3,16 @@
 #### Installation
     npm install
 
+#### Config your .env
+There is a sample at sample.env
+And create the database if it doesn't exist
+
 #### Deploy on localhost:3000
     npm run dev
 
 #### Database
+Populate your database if you want:
+    npx sequelize-cli db:seed:all
 ##### Product 
 - id
 - name
