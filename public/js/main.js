@@ -1,4 +1,4 @@
-const admin__node = document.getElementById('admin__node');
+const user__node = document.getElementById('user__node');
 const log__node = document.getElementById('log__node');
 
 
@@ -8,9 +8,10 @@ const checkIsLogin = async () => {
         headers: {}
     });
     if (response.status === 200) {
-        return true;
+        const data = await response.json();
+        return data;
     }
-    return false;
+    return null;
 }
 
 const logout_request = async () => {
@@ -21,10 +22,18 @@ const logout_request = async () => {
 }
 
 const handleHeader = async () => {
-    const isLogin = await checkIsLogin();
-    if (isLogin) {
-        admin__node.setAttribute('href', '/admin');
-        admin__node.hidden = false;
+    const login_data = await checkIsLogin();
+    if (login_data) {
+        if (login_data.isAdmin) {
+            user__node.setAttribute('href', '/admin');
+        }
+        else {
+            user__node.setAttribute('href', '/user/'+login_data.uid);
+        }
+        const username_node = document.createTextNode(login_data.username);
+        user__node.appendChild(username_node);
+        user__node.hidden = false;
+
         const logoutTextNode = document.createTextNode('Logout');
         log__node.appendChild(logoutTextNode);
         log__node.setAttribute('onclick', 'logout_request()');

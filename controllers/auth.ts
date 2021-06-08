@@ -60,7 +60,6 @@ export const getResetPassword = (req: Request, res: Response) => {
 
 export const postSignup = async (req: Request, res: Response) => {
     try {
-        await User.sync({alter:true})
         const userWithUsername = await User.findOne({
             attributes: ['username'],
             where: {
@@ -84,7 +83,8 @@ export const postSignup = async (req: Request, res: Response) => {
             const user = await User.create({
                 username: req.body.username,
                 password: hash,
-                email: req.body.email
+                email: req.body.email,
+                isAdmin : false
             });
             if (user) {
                 res.status(201).json({"message": "User account successfully created."});
@@ -112,8 +112,13 @@ export const postLogin = async (req: Request, res: Response) => {
                         res.status(500).json({'message' : err.message});
                     }
                     else if (same) {
+                        const payload = {
+                            uid: user.getDataValue('uid'),
+                            username: user.getDataValue('username'),
+                            isAdmin : user.getDataValue('isAdmin')
+                        }
                         const token: string = jwt.sign(
-                            {uid : user.getDataValue('uid')},
+                            payload,
                             <jwt.Secret>process.env.TOKEN_SECRET_KEY,
                             {expiresIn: '15m'}
                         );
@@ -149,20 +154,13 @@ export const postLogout = (req: Request, res: Response) => {
     }
 }
 
-export const checkIsLogin = (req: Request, res: Response) => {
+export const checkIsLogin = async (req: Request, res: Response) => {
     try {
         if (req.cookies.ctle_user_token){
             const token: string = req.cookies.ctle_user_token;
-            jwt.verify(
-                token,
-                <jwt.Secret>process.env.TOKEN_SECRET_KEY,
-                (err) => {
-                    if (err) {
-                        return res.status(500).json({'errorMessage': err.message});
-                    }
-                    res.status(200).send();
-                }
-            )
+            const decodedToken = await jwt.verify(token, <jwt.Secret>process.env.TOKEN_SECRET_KEY);
+            const payload = <{uid: number, username: string, isAdmin: boolean, iat: number, exp: number}>decodedToken
+            res.status(200).send({'uid' : payload.uid, 'username': payload.username, 'isAdmin' : payload.isAdmin});
         }
         else {
             res.status(202).send();

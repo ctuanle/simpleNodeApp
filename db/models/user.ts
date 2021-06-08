@@ -5,7 +5,8 @@ interface User {
     uid: number,
     username: string,
     password: string,
-    email?: string
+    email?: string,
+    isAdmin: false
 }
 
 interface BasicUser extends Optional<User, 'uid'>{}
@@ -30,6 +31,11 @@ export const User = sequelize.define<UserInstance>('User', {
     email: {
         type: DataTypes.STRING,
         allowNull: true
+    },
+    isAdmin : {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
     }
 },  {
     tableName: 'users'
