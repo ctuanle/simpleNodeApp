@@ -13,7 +13,7 @@ const handleFlash = (id, response, timer) => {
             flash_item.hidden = false;
         });
         if (response.ok && timer) {
-            setInterval(() => {
+            setTimeout(() => {
                 window.location.href = '/auth/login';
             }, timer);
         }   
