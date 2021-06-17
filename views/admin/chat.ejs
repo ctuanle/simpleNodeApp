@@ -1,0 +1,25 @@
+<%- include('../includes/head.ejs') %>
+    <h1 class="text-center">Admin Page</h1>
+
+    <main>
+        <div style="margin: 10px; border: 1px solid; border-radius: 5px; padding: 10px; min-height:600px;">
+            <div class='messages' >
+                <ul id='messages'>
+                    <% if (messages.length > 0) { %>
+                        <% for (let msg of messages) { %>
+                            <li><%= msg.message %></li>
+                        <% } %>  
+                    <% } else { %>
+                        <% } %>  
+                </ul>
+            </div>
+            <div>
+                <form id="form" action="" style="position: fixed;bottom: 50px;">
+                    <input id='input' autocomplete="off" style="width: 400px">
+                    <button class='btn btn-primary'>Send</button>
+                </form>
+            </div>
+        </div>
+        <script src="/js/admin.js"></script>
+    </main>
+<%- include('../includes/end.ejs') %>

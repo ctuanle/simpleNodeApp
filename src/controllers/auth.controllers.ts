@@ -5,8 +5,7 @@ import * as jwt from "jsonwebtoken";
 import {Request, Response} from 'express';
 import {sendmail} from './sendmail';
 import {SentMessageInfo} from 'nodemailer';
-import {User} from '../db/models/user';
-
+import {UserModel} from '../db/models/user.model';
 
 export const getLogin = (req: Request, res: Response) => {
     try {
@@ -60,36 +59,33 @@ export const getResetPassword = (req: Request, res: Response) => {
 
 export const postSignup = async (req: Request, res: Response) => {
     try {
-        const userWithUsername = await User.findOne({
+        const userWithUsername = await UserModel.findOne({
             attributes: ['username'],
             where: {
                 username: req.body.username
             }
-        })
-        const userWithEmail = await User.findOne({
+        });
+        if (userWithUsername) {
+            return res.status(500).json({'message' : 'Username is already taken!'});
+        }
+        const userWithEmail = await UserModel.findOne({
             attributes: ['email'],
             where: {
                 email: req.body.email
             }
         })
-        if (userWithUsername) {
-            res.status(500).json({'message' : 'Username is already taken!'});
+        if (userWithEmail) {
+            return res.status(500).json({'message' : 'Email is already taken!'});
         }
-        else if (userWithEmail) {
-            res.status(500).json({'message' : 'Email is already taken!'});
-        }
-        else {
-            const hash = await bcrypt.hash(req.body.password, 10);
-            const user = await User.create({
-                username: req.body.username,
-                password: hash,
-                email: req.body.email,
-                isAdmin : false
-            });
-            if (user) {
-                res.status(201).json({"message": "User account successfully created."});
-            }
-        }
+
+        const hash = await bcrypt.hash(req.body.password, 10);
+        const user = await UserModel.create({
+            username: req.body.username,
+            password: hash,
+            email: req.body.email
+        });
+
+        res.status(201).json({"message": "User account successfully created."});
     }
     catch (err) {
         res.status(500).json({'message' : err.message});
@@ -98,7 +94,7 @@ export const postSignup = async (req: Request, res: Response) => {
 
 export const postLogin = async (req: Request, res: Response) => {
     try {
-        const user = await User.findOne({
+        const user = await UserModel.findOne({
             where: {
                 username: req.body.username
             }
@@ -114,8 +110,7 @@ export const postLogin = async (req: Request, res: Response) => {
                     else if (same) {
                         const payload = {
                             uid: user.getDataValue('uid'),
-                            username: user.getDataValue('username'),
-                            isAdmin : user.getDataValue('isAdmin')
+                            username: user.getDataValue('username')
                         }
                         const token: string = jwt.sign(
                             payload,
@@ -142,29 +137,30 @@ export const postLogin = async (req: Request, res: Response) => {
     }
 }
 
-export const postLogout = (req: Request, res: Response) => {
-    try {
-        res.writeHead(200, {
-            'Set-Cookie': 'ctle_user_token=; HttpOnly; SameSite=Strict; max-age=0; path=/',
-            'Access-Control-Allow-Credentials': 'true'
-        }).send();
-    }
-    catch (err) {
-        res.status(500).json({'message' : err.message});
-    }
-}
 
 export const checkIsLogin = async (req: Request, res: Response) => {
     try {
         if (req.cookies.ctle_user_token){
             const token: string = req.cookies.ctle_user_token;
             const decodedToken = await jwt.verify(token, <jwt.Secret>process.env.TOKEN_SECRET_KEY);
-            const payload = <{uid: number, username: string, isAdmin: boolean, iat: number, exp: number}>decodedToken
-            res.status(200).send({'uid' : payload.uid, 'username': payload.username, 'isAdmin' : payload.isAdmin});
+            const payload = <{uid: number, username: string, iat: number, exp: number}>decodedToken
+            res.status(200).json({'uid' : payload.uid, 'username': payload.username});
         }
         else {
             res.status(202).send();
         }
+    }
+    catch (err) {
+        res.status(500).json({'message' : err.message});
+    }
+}
+
+export const postLogout = (req: Request, res: Response) => {
+    try {
+        res.writeHead(200, {
+            'Set-Cookie': 'ctle_user_token=; HttpOnly; SameSite=Strict; max-age=0; path=/',
+            'Access-Control-Allow-Credentials': 'true'
+        }).send();
     }
     catch (err) {
         res.status(500).json({'message' : err.message});
@@ -178,7 +174,7 @@ export const postForgotPassword = async (req: Request, res: Response) => {
             return res.status(400).json({'message': 'No email provided!'});
         }
         
-        const user = await User.findOne({
+        const user = await UserModel.findOne({
             where: {
                 email: email
             }
@@ -222,13 +218,14 @@ export const postForgotPassword = async (req: Request, res: Response) => {
     }
 }
 
+
 export const postResetPassword = async (req: Request, res: Response) => {
     try {
         const uid: number =Number( req.body.uid);
         const token: string = req.body.token;
         const newPwd: string = req.body.password;
         
-        const user = await User.findOne({where: {uid: uid}});
+        const user = await UserModel.findOne({where: {uid: uid}});
         if (!user) {
             return res.status(500).json({'message': 'User not found!'});
         }

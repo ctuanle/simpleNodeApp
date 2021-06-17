@@ -1,18 +1,12 @@
 import express from 'express';
-import * as categoryController from '../controllers/category';
+import * as categoryController from '../controllers/category.controllers';
 
 const categoryRouter = express.Router();
 
-/**
- * get all the categories
- * /categories/
- */
+// GET /category : get all the categories
 categoryRouter.get('/', categoryController.getAllCategories);
 
-/**
- * get all the products of a category
- * /categories/:cat
- */
+// GET /category/:cat : get all products of (:cat)
 categoryRouter.get('/:cat', categoryController.getProductsByCategory);
 
 export default categoryRouter;

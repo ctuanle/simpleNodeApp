@@ -1,29 +1,11 @@
 import {Request, Response} from 'express';
 import {Product} from '../db/models/product';
 
-export const getAllProducts = async (req: Request, res: Response) => {
-    try {
-        const products = await Product.findAll({
-            attributes: ['id', 'name', 'price', 'category', 'images'],
-            raw : true
-        });
-        res.render('product/products', {
-            title : 'Products',
-            products : products,
-            numpage : 2
-        })
-    }
-    catch (err) {
-        res.status(500).json({'message' : err.message});
-    }
-    
-}
-
 export const getProductById = async (req: Request, res: Response) => {
     try {
         const product = await Product.findOne({
             attributes: ['id', 'name', 'price', 'category', 'images'],
-            where: {id : req.params.id},
+            where: {id : req.params.pid},
         });
         if (product) {
             res.render('product/productDetail', {
@@ -75,3 +57,22 @@ export const getNProducts = async (req: Request, res: Response) => {
         res.status(500).json({'message': err.message});
     }
 }
+
+// export const getAllProducts = async (req: Request, res: Response) => {
+//     try {
+//         const products = await Product.findAll({
+//             attributes: ['id', 'name', 'price', 'category', 'images'],
+//             raw : true
+//         });
+//         console.log('im here')
+//         res.render('product/products', {
+//             title : 'Products',
+//             products : products,
+//             numpage : 2
+//         })
+//     }
+//     catch (err) {
+//         res.status(500).json({'message' : err.message});
+//     }
+    
+// }

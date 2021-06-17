@@ -1,19 +1,18 @@
 import {Model, DataTypes, Optional} from 'sequelize';
 import {sequelize} from '.';
 
-interface User {
+interface UserAttributes {
     uid: number,
     username: string,
     password: string,
-    email?: string,
-    isAdmin: false
+    email: string | null
 }
 
-interface BasicUser extends Optional<User, 'uid'>{}
+interface UserCreationAttributes extends Optional<UserAttributes, 'uid'>{}
 
-interface UserInstance extends Model<User, BasicUser> {}
+interface AdminInstance extends Model<UserAttributes, UserCreationAttributes>, UserAttributes {}
 
-export const User = sequelize.define<UserInstance>('User', {
+export const UserModel = sequelize.define<AdminInstance>('User', {
     uid: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -31,11 +30,6 @@ export const User = sequelize.define<UserInstance>('User', {
     email: {
         type: DataTypes.STRING,
         allowNull: true
-    },
-    isAdmin : {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false
     }
 },  {
     tableName: 'users'

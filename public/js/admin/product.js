@@ -1,45 +1,6 @@
-const handleFlash = (id, response, timer) => {
-    const flash_item = document.getElementById(id);
-    if (flash_item){
-        if (response.ok){
-            flash_item.setAttribute('class', 'alert alert-success');
-        }
-        else {
-            flash_item.setAttribute('class', 'alert alert-danger');
-        }
-        response.json().then(data => {
-            const textnode = document.createTextNode(data.message);
-            flash_item.appendChild(textnode);
-            flash_item.hidden = false;
-        })
-        if (response.ok && timer) {
-            setTimeout(() => {
-                window.location.href = '/admin/';
-            }, timer);
-        } 
-    }
-}
-
-const deleteProduct = async (id) => {
-    const ok = confirm('Are you sure you want to delete this product?');
-    const pid = Number(id);
-    if (ok) {
-        const response = await fetch('/admin/delete', {
-            method: 'DELETE',
-            body: JSON.stringify({ productId: pid}),
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-        handleFlash('flash__deleted', response, 1500);
-    }
-    
-}
-
-
-const addForm = document.querySelector('#add-product-form');
-if (addForm) {
-    addForm.addEventListener('submit', addProduct);
+const ad_product_form = document.querySelector('#add-product-form');
+if (ad_product_form) {
+    ad_product_form.addEventListener('submit', addProduct);
 }
 
 async function addProduct (e) {
@@ -60,7 +21,7 @@ async function addProduct (e) {
         formData.append('price', price);
         formData.append('category', category);
         formData.append('files', files.files[0]);
-        const response = await fetch('/admin/add', {
+        const response = await fetch('/admin/product/add', {
             method: 'POST',
             body: formData,
             headers: {},
@@ -93,7 +54,7 @@ async function updateProduct (e) {
         formData.append('price', price);
         formData.append('category', category);
         formData.append('files', files.files[0]);
-        const response = await fetch('/admin/edit/'+pid, {
+        const response = await fetch('/admin/product/'+pid, {
             method: 'PUT',
             body: formData,
             headers: {},
@@ -101,3 +62,19 @@ async function updateProduct (e) {
         handleFlash('flash__edited', response, 2000);
     }
 } 
+
+const deleteProduct = async (id) => {
+    const ok = confirm('Are you sure you want to delete this product?');
+    const pid = Number(id);
+    if (ok) {
+        const response = await fetch('/admin/product/'+id, {
+            method: 'DELETE',
+            body: JSON.stringify({ pid: pid}),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        handleFlash('flash__deleted', response, 1500);
+    }
+    
+}

@@ -1,4 +1,16 @@
 <%- include('../includes/head.ejs') %>
 <h1 class="text-center">Welcome, <%= username %>!</h1>
+<button onClick="sendMsg()">Hit Me</button>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io("http://localhost:3000");
+    
+    socket.on('message', function(msg) {
+        console.log(msg);
+    })
 
+    function sendMsg() {
+        socket.emit("message", "HELLO WORLD");
+    }
+</script>
 <%- include('../includes/end.ejs') %>

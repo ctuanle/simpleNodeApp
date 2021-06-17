@@ -1,4 +1,4 @@
-<%- include('../includes/head.ejs') %>
+<%- include('./ad_head.ejs') %>
   <h2 class="text-center">Product Details</h2>
 
   <main>
@@ -63,9 +63,9 @@
               <div class="col"></br></div>
             </div>
       <% } else { %>
-        <h1>No product</h1>
+        <h1>Product not found!</h1>
         <% } %>
     </section>
-    <script src="/js/admin.js"></script>
+    <script src="/js/admin/product.js"></script>
   </main>
-  <%- include('../includes/end.ejs') %>
+  <%- include('./ad_end.ejs') %>

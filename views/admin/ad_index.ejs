@@ -1,0 +1,87 @@
+<%- include('./ad_head.ejs') %>
+<h1 class="text-center">Admin Page</h1>
+    <main>
+        <div id="flash__deleted" role="alert" hidden></div>
+        <div style="margin: 10px; border: 1px solid; border-radius: 5px; padding: 10px">
+            <section class="add__product">
+                <a href="/admin/product/add" class="btn btn-primary">Add Product</a>
+            </section>
+            <section class="products">
+                <% if (products.length> 0) { %>
+                    <div>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#id</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% for (let prod of products) { %>
+                                    <tr>
+                                        <th scope="row">
+                                            <%= prod.id %>
+                                        </th>
+                                        <td>
+                                            <%= prod.name %>
+                                        </td>
+                                        <td>
+                                            <%= prod.price %>$
+                                        </td>
+                                        <td>
+                                            <%= prod.category %>
+                                        </td>
+                                        <td>
+                                            <a href="/admin/product/<%= prod.id %>" class="btn btn-primary btn-sm">Edit</a>
+                                            <button class="btn btn-danger btn-sm"
+                                                onclick="deleteProduct('<%= prod.id %>')">Delete</button>
+                                        </td>
+                                    </tr>
+                                    <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <% } else { %>
+                        <h1>No product</h1>
+                        <% } %>
+            </section>
+        </div>
+        <div style="margin: 10px; border: 1px solid; border-radius: 5px; padding: 10px">
+            <section class="users">
+                <% if (users.length> 0) { %>
+                    <div style="margin: 10px;">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#id</th>
+                                    <th scope="col">Username</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% for (let user of users) { %>
+                                    <tr>
+                                        <th scope="row">
+                                            <%= user.uid %>
+                                        </th>
+                                        <td>
+                                            <%= user.username %>
+                                        </td>
+                                        <td>
+                                            <a href="/admin/chat/<%= user.uid %>" class="btn btn-primary btn-sm">Message</a>
+                                        </td>
+                                    </tr>
+                                    <% } %>
+                            </tbody>
+                    </div>
+                    <% } else { %>
+                        <h1>No user</h1>
+                        <% } %>
+            </section>
+        </div>
+        <script src="/js/admin/product.js"></script>
+    </main>
+<%- include('./ad_end.ejs') %>

@@ -20,7 +20,8 @@ const handleFlash = (id, response, timer) => {
     }
 }
 
-const function__login = async () => {
+const function__login = async (e) => {
+    e.preventDefault();
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
@@ -39,7 +40,13 @@ const function__login = async () => {
     }   
 }
 
-const function__signup = async () => {
+const login_form = document.getElementById('user_login_form');
+if (login_form) {
+    login_form.addEventListener('submit', function__login);
+}
+
+const function__signup = async (e) => {
+    e.preventDefault();
     const username = document.getElementById('username').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
@@ -57,8 +64,14 @@ const function__signup = async () => {
   }   
 }
 
+const signup_form = document.getElementById('user_signup_form');
+if (signup_form) {
+    signup_form.addEventListener('submit', function__signup);
+}
 
-const function__forgot__password = async () => {
+
+const function__forgot__password = async (e) => {
+    e.preventDefault();
     const email = document.getElementById('email').value;
     if (email){
         const response = await fetch('/auth/forgot', {
@@ -72,7 +85,13 @@ const function__forgot__password = async () => {
     }
 }
 
-const function__reset__password = async () => {
+const forgot_form = document.getElementById('user_forgot_form');
+if (forgot_form) {
+    forgot_form.addEventListener('submit', function__forgot__password);
+}
+
+const function__reset__password = async (e) => {
+    e.preventDefault();
     const uid = document.getElementById('uid').value;
     const token = document.getElementById('token').value;
     const password = document.getElementById('password').value;
@@ -84,4 +103,8 @@ const function__reset__password = async () => {
         });
         handleFlash('flash__changed', response, 3000);
     }
+}
+const reset_form = document.getElementById('user_reset_form');
+if (reset_form) {
+    reset_form.addEventListener('submit', function__reset__password);
 }
