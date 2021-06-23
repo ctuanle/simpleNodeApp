@@ -40,4 +40,7 @@ adminRouter.put('/product/:pid', requireAdmin, upload.single('files'), adminCont
 // DELETE /admin/product/:pid : delete a product
 adminRouter.delete('/product/:pid', requireAdmin, adminController.deleteProduct);
 
+//GET /admin/chat/:uid : get chat page with user (:uid)
+adminRouter.get('/chat/:uid', requireAdmin, adminController.getChatPage);
+
 export default adminRouter;

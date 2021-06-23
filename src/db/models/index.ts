@@ -7,6 +7,7 @@ const db_user = process.env.DB_USER || '';
 const db_pwd = process.env.DB_PWD   || '';
 const db_host = process.env.DB_HOST || 'localhost';
 
+
 export const sequelize = new Sequelize(
     db_name,
     db_user,
@@ -25,7 +26,7 @@ const main = async  () => {
         await sequelize.authenticate();
         console.log('Authenticated');
         await sequelize.sync({alter: true});
-        console.log('Sync done')
+        console.log('Sync done');
     }
     catch (err) {
         console.log(err);

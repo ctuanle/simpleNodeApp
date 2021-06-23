@@ -1,5 +1,6 @@
 const user__node = document.getElementById('user__node');
 const log__out__node = document.getElementById('log__out__node');
+var user_data;
 
 const getInfoAdmin = async () => {
     const response = await fetch('/admin/info', {
@@ -8,6 +9,7 @@ const getInfoAdmin = async () => {
     });
     if (response.status === 200) {
         const data = await response.json();
+        user_data = data;
         return data;
     }
     return null;
@@ -26,7 +28,7 @@ const logout_request = async () => {
 const handleHeader = async () => {
     const ad_data = await getInfoAdmin();
     if (ad_data) {
-
+        //TODO : find something to do
     }
     else {
         window.location.href = '/admin/login';

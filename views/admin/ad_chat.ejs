@@ -1,5 +1,6 @@
-<%- include('../includes/head.ejs') %>
-    <h1 class="text-center">Welcome!</h1>
+<%- include('./ad_head.ejs') %>
+    <h1 class="text-center">Chat Page</h1>
+
     <main>
         <div style="margin: 10px; border: 1px solid; border-radius: 5px; padding: 10px; min-height:600px;">
             <div>
@@ -7,9 +8,9 @@
                     <% if (messages.length > 0) { %>
                         <% for (let msg of messages) { %>
                             <% if (msg.sid == uid) { %>
-                                <li>[You]: <%= msg.message %></li>
+                                <li>[User <%= uid %>]: <%= msg.message %></li>
                             <% } else { %>
-                                <li>[Admin]: <%= msg.message %></li>
+                                <li>[You]: <%= msg.message %></li>
                             <% } %>
                         <% } %>
                     <% } %>
@@ -22,7 +23,7 @@
                 </form>
             </div>
         </div>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/js/admin/chat.js"></script>
     </main>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/js/chat.js"></script>
-<%- include('../includes/end.ejs') %>
+<%- include('./ad_end.ejs') %>

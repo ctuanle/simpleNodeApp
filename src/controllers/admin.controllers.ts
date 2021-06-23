@@ -2,12 +2,11 @@ require('dotenv').config();
 import bcrypt from 'bcrypt';
 import * as jwt from "jsonwebtoken";
 
+import {Op} from 'sequelize';
 import {Request, Response} from 'express';
+
 import {Product} from '../db/models/product';
-
-
-// import { Message } from '../db/models/message';
-// import { Room } from '../db/models/room';
+import { MessageModel } from '../db/models/message.model';
 import {UserModel} from '../db/models/user.model';
 import { AdminModel } from '../db/models/admin.model';
 
@@ -17,7 +16,7 @@ export const getInfoAdmin = async (req: Request, res: Response) => {
         if (req.cookies.ctle_cookie_ad){
             const token: string = req.cookies.ctle_cookie_ad;
             const decodedToken = await jwt.verify(token, <jwt.Secret>process.env.TK_SK_AD);
-            const payload = <{aid: number, username: string, iat: number, exp: number}>decodedToken
+            const payload = <{aid: string, username: string, iat: number, exp: number}>decodedToken
             res.status(200).send({'aid' : payload.aid, 'username': payload.username});
         }
         else {
@@ -196,28 +195,25 @@ export const deleteProduct = async (req: Request, res: Response) => {
 }
 
 
-// export const getChatPage = async (req: Request, res: Response) => {
-//     try {
-//         const rid = await Room.findOne({where: {uid: req.params.uid}});
-//         const messages = await Message.findAll({
-//             attributes: ['mid', 'rid', 'suid', 'message'],
-//             where: {rid : rid?.getDataValue('rid')},
-//             raw : true
-//         });
-//         console.log(messages);
-//         //res.status(200).json({messages: messages});
-//         res.render('admin/chat', {
-//             title: 'Message',
-//             messages: messages
-//         })
-//     }  
-//     catch (err) {
-//         res.status(500).json({'message': err.message});
-//     }
-// }
+export const getChatPage = async (req: Request, res: Response) => {
+    try {
+        const messages = await MessageModel.findAll({
+            where: {
+                [Op.or]: [
+                    {rid : req.params.uid},
+                    {sid : req.params.uid}
+                ]
+                }, raw:true
+            }
+        );
 
-
-
-
-
-
+        res.render('admin/ad_chat', {
+            title: 'Message',
+            messages: messages,
+            uid : req.params.uid
+        });
+    }  
+    catch (err) {
+        res.status(500).json({'message': err.message});
+    }
+}

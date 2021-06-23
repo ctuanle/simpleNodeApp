@@ -2,7 +2,7 @@ import {Model, DataTypes, Optional} from 'sequelize';
 import {sequelize} from '.';
 
 interface AdminAttributes {
-    aid: number,
+    aid: string,
     username: string,
     password: string,
     email: string | null
@@ -14,8 +14,8 @@ interface AdminInstance extends Model<AdminAttributes, AdminCreationAttributes>,
 
 export const AdminModel = sequelize.define<AdminInstance>('Admin', {
     aid: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
+        type: DataTypes.UUID,
+        defaultValue : DataTypes.UUIDV4,
         primaryKey: true,
         allowNull: false
     },

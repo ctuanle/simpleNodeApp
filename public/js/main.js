@@ -36,9 +36,8 @@ const handleHeader = async () => {
     }
     else {
         log__node.innerHTML = 'Login';
-        
     }
-    // log__node.setAttribute('href', '/auth/login');
+    log__node.setAttribute('href', '/auth/login');
     log__node.hidden = false;
 }
 handleHeader();
