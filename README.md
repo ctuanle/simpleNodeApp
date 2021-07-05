@@ -11,18 +11,15 @@ And create the database if it doesn't exist
     npm run dev
 
 #### Database
-Populate your database if you want:  
-
-    npx sequelize-cli db:seed:all
-##### Product 
-- id
-- name
-- price
-- category 
+##### Product
 ##### User
-- id
-- username
-- password
+
+#### Login
+##### As User
+    http://locahost:3000/auth/login
+
+##### As Admin
+    http://locahost:3000/admin/login
 
 #### RestAPI
 ##### Public Routes

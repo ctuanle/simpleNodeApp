@@ -19,33 +19,27 @@ const logout_request = async () => {
         method: 'POST',
         headers: {}
     });
+    if (response.status === 200) {
+        window.location.href = '/auth/login';
+    }
 }
 
 const handleHeader = async () => {
     const login_data = await checkIsLogin();
     if (login_data) {
-        if (login_data.isAdmin) {
-            user__node.setAttribute('href', '/admin');
-        }
-        else {
-            user__node.setAttribute('href', '/user/'+login_data.uid);
-        }
-        const username_node = document.createTextNode(login_data.username);
-        user__node.appendChild(username_node);
+        user__node.setAttribute('href', '/user/'+login_data.uid);
+        user__node.innerHTML = login_data.username;
         user__node.hidden = false;
 
-        const logoutTextNode = document.createTextNode('Logout');
-        log__node.appendChild(logoutTextNode);
+        log__node.innerHTML = 'Logout';
         log__node.setAttribute('onclick', 'logout_request()');
     }
     else {
-        const logoutTextNode = document.createTextNode('Login');
-        log__node.appendChild(logoutTextNode);
-        
+        log__node.innerHTML = 'Login';
     }
     log__node.setAttribute('href', '/auth/login');
     log__node.hidden = false;
 }
-
 handleHeader();
+setInterval(handleHeader, 15000);
 

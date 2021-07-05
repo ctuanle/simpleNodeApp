@@ -56,3 +56,21 @@ content-type: application/json
 {
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjIsImlhdCI6MTYyMjM2NjAyMSwiZXhwIjoxNjIyMzY2OTIxfQ.bqBgYV8FPCjjgz-6cUzbOd9Of7hSCs4Q_UF6yHJZ7Uw"
 }
+
+###
+POST http://localhost:3000/room/add
+content-type: application/json
+
+{
+    "uid": 1
+}
+
+###
+POST http://localhost:3000/msg/add
+content-type: application/json
+
+{
+    "rid": 2,
+    "suid": 1,
+    "text": "Hello"
+}
