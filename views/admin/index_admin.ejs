@@ -151,10 +151,12 @@
                                 <div class="customer">
                                     <div class="info">
                                         <img src="/images/photo.png" width="40px" height="40px" alt="">
-                                        <div>
-                                            <h4><%= room.uid %></h4>
-                                            <small class="<% if (!room.read) { %>unread<% } %>"><%= room.lastMsg %></small>
-                                        </div>
+                                        <a href="/admin/messages/<%= room.uid %>">
+                                            <div>
+                                                <h4><%= room.username %></h4>
+                                                <small class="<% if (!room.read) { %>unread<% } %>"><%= room.lastMsg %></small>
+                                            </div>
+                                        </a>
                                     </div>
                                     <div class="contact">
                                         <a href="#link_to_rep"><span class="las la-reply"></span></a>
@@ -162,42 +164,6 @@
                                 </div>
                         <% } %>
                     <% } %>
-                    <!-- <div class="customer">
-                        <div class="info">
-                            <img src="/images/photo.png" width="40px" height="40px" alt="">
-                            <div>
-                                <h4>alibaba</h4>
-                                <small>TODO</small>
-                            </div>
-                        </div>
-                        <div class="contact">
-                            <a href="#link_to_rep"><span class="las la-reply"></span></a>
-                        </div>
-                    </div>
-                    <div class="customer">
-                        <div class="info">
-                            <img src="/images/photo.png" width="40px" height="40px" alt="">
-                            <div>
-                                <h4>user1</h4>
-                                <small>Good evening.</small>
-                            </div>
-                        </div>
-                        <div class="contact">
-                            <a href="#link_to_rep"><span class="las la-reply"></span></a>
-                        </div>
-                    </div>
-                    <div class="customer">
-                        <div class="info">
-                            <img src="/images/photo.png" width="40px" height="40px" alt="">
-                            <div>
-                                <h4>cole</h4>
-                                <small>Need refund!</small>
-                            </div>
-                        </div>
-                        <div class="contact">
-                            <a href="#link_to_rep"><span class="las la-reply"></span></a>
-                        </div>
-                    </div> -->
                 </div>
             </div>
         </div>

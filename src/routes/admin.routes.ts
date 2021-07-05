@@ -52,7 +52,7 @@ adminRouter.get('/messages', requireAdmin, adminController.getRoomsPage);
 // GET /messages/:uid get messages page
 adminRouter.get('/messages/:uid', requireAdmin, adminController.getMessagesPage);
 
-//GET /admin/chat/:uid : get chat page with user (:uid)
-adminRouter.get('/chat/:uid', requireAdmin, adminController.getChatPage);
+// GET /messages/:uid/:offset get next 15 message
+adminRouter.get('/messages/:uid/:offset', requireAdmin, adminController.getNextMessages);
 
 export default adminRouter;

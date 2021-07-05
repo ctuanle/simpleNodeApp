@@ -5,6 +5,7 @@ interface RoomAttributes {
     rid: number,
     aid: string,
     uid: string,
+    username: string,
     lastMsg: string,
     read: boolean
 }
@@ -27,6 +28,10 @@ export const RoomModel = sequelize.define<RoomInstance>('Room', {
     uid: {
         type: DataTypes.UUID,
         allowNull: false
+    },
+    username: {
+        type: DataTypes.STRING,
+        allowNull: true
     },
     lastMsg: {
         type: DataTypes.STRING(1000),

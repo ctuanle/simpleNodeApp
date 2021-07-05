@@ -335,8 +335,8 @@ export const getMessagesPage = async (req:Request, res:Response) => {
             const messages = await MessageModel.findAll({
                 where: {roomId: room.getDataValue('rid')},
                 order: [['createdAt', 'DESC']],
-                // offset: 0,
-                // limit: 15,
+                offset: 0,
+                limit: 15,
                 raw: true
             });
 
@@ -360,26 +360,28 @@ export const getMessagesPage = async (req:Request, res:Response) => {
     }
 }
 
-
-export const getChatPage = async (req: Request, res: Response) => {
+export const getNextMessages = async (req: Request, res: Response) => {
     try {
-        const messages = await MessageModel.findAll({
-            where: {
-                [Op.or]: [
-                    {rid : req.params.uid},
-                    {sid : req.params.uid}
-                ]
-                }, raw:true
-            }
-        );
+        const room = await RoomModel.findOne({where: {uid: req.params.uid}});
 
-        res.render('admin/ad_chat', {
-            title: 'Message',
-            messages: messages,
-            uid : req.params.uid
-        });
-    }  
-    catch (err) {
+        if (room) {
+            const messages = await MessageModel.findAll({
+                where: {roomId: room.getDataValue('rid')},
+                order: [['createdAt', 'DESC']],
+                offset: Number(req.params.offset)*15,
+                limit: 15,
+                raw: true
+            });
+
+            await room.update({read: true});
+
+            res.status(200).json({messages : messages});
+        }
+        else {
+            res.status(404).json({message: 'todo'});
+        }
+    }
+    catch(err) {
         res.status(500).json({'message': err.message});
     }
 }
