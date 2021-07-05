@@ -1,6 +1,7 @@
 import { Server, Socket } from "socket.io";
 
 import {MessageModel} from '../db/models/message.model';
+import { RoomModel } from "../db/models/room.model";
 import {AdminModel} from '../db/models/admin.model';
 
 let adSocket:string;
@@ -23,11 +24,34 @@ export const socketHandler = (io:Server, socket:Socket) => {
 
     socket.on('admin:send_msg', async (data) => {
         if (socket.handshake.auth.aid === data.sid) {
-            // console.log('[Admin '+data.sid+' to User '+data.rid+'] :'+data.msg);
+            
+            //Check if is there already any room for this receiver (user)
+            const isRoomExisted = await RoomModel.findOne({
+                where: {uid : data.rid}
+            });
+
+            let roomId:number;
+            if (!isRoomExisted) {
+                const newRoom = await RoomModel.create({
+                    aid: data.sid,
+                    uid: data.rid,
+                    lastMsg: data.msg,
+                    read: false
+                });
+                roomId = newRoom.getDataValue('rid');
+            }
+            else {
+                roomId = isRoomExisted.getDataValue('rid');
+                //await RoomModel.update({lastMsg: data.msg, read: false}, {where: {rid: roomId}})
+            }
+
+            // Push a new message to DB
             await MessageModel.create({
                 sid: data.sid,
                 rid: data.rid,
-                message: data.msg
+                message: data.msg,
+                roomId: roomId,
+                read: false
             });
             socket.to(usSockets[data.rid]).emit('user:receive_msg', {...data});
         }
@@ -43,10 +67,33 @@ export const socketHandler = (io:Server, socket:Socket) => {
             });
             //TODO : handle this after when having many admins
             const aid = admin[0].aid;
+
+            // Check if is there already any room for this sender (user)
+            const isRoomExisted = await RoomModel.findOne({
+                where: {uid: data.sid}
+            });
+
+            let roomId:number;
+            if (!isRoomExisted) {
+                const newRoom = await RoomModel.create({
+                    aid: aid,
+                    uid: data.sid,
+                    lastMsg: data.msg,
+                    read: false
+                });
+                roomId = newRoom.getDataValue('rid');
+            }
+            else{
+                roomId = isRoomExisted.getDataValue('rid');
+                await RoomModel.update({lastMsg: data.msg, read: false}, {where: {rid: roomId}})
+            }
+
             await MessageModel.create({
                 sid: data.sid,
                 rid: aid,
-                message: data.msg
+                message: data.msg,
+                roomId: roomId,
+                read: false
             });
             socket.to(adSocket).emit('admin:receive_msg', {...data})
         }

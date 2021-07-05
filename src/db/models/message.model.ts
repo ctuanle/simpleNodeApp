@@ -5,7 +5,9 @@ interface MessageAttributes {
     mid: number,
     sid: string,
     rid: string,
-    message: string
+    message: string,
+    roomId: number,
+    read: boolean
 }
 
 interface MessageCreationAttributes extends Optional<MessageAttributes, 'mid'>{}
@@ -28,8 +30,17 @@ export const MessageModel = sequelize.define<MessageInstance>('Message', {
         allowNull: false
     },
     message: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(1000),
         allowNull: false
+    },
+    roomId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    read: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
     }
 },  {
     tableName: 'messages'

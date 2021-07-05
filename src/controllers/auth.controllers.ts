@@ -68,18 +68,20 @@ export const postSignup = async (req: Request, res: Response) => {
         if (userWithUsername) {
             return res.status(500).json({'message' : 'Username is already taken!'});
         }
-        const userWithEmail = await UserModel.findOne({
-            attributes: ['email'],
-            where: {
-                email: req.body.email
+        if (req.body.email !== '') {
+            const userWithEmail = await UserModel.findOne({
+                attributes: ['email'],
+                where: {
+                    email: req.body.email
+                }
+            })
+            if (userWithEmail) {
+                return res.status(500).json({'message' : 'Email is already taken!'});
             }
-        })
-        if (userWithEmail) {
-            return res.status(500).json({'message' : 'Email is already taken!'});
         }
 
         const hash = await bcrypt.hash(req.body.password, 10);
-        const user = await UserModel.create({
+        await UserModel.create({
             username: req.body.username,
             password: hash,
             email: req.body.email
@@ -115,10 +117,10 @@ export const postLogin = async (req: Request, res: Response) => {
                         const token: string = jwt.sign(
                             payload,
                             <jwt.Secret>process.env.TOKEN_SECRET_KEY,
-                            {expiresIn: '15m'}
+                            {expiresIn: '1h'}
                         );
                         res.writeHead(200, {
-                            'Set-Cookie': 'ctle_user_token=' + token +'; HttpOnly; SameSite=Strict; max-age=840; path=/',
+                            'Set-Cookie': 'ctle_user_token=' + token +'; HttpOnly; SameSite=Strict; max-age=3570; path=/',
                             'Access-Control-Allow-Credentials': 'true'
                         }).send();
                     }

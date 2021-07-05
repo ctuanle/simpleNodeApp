@@ -26,7 +26,7 @@ async function addProduct (e) {
             body: formData,
             headers: {},
         });
-        handleFlash('flash__added', response, 2000);
+        handleFlash('flash__added', response, 1500, '/admin/product/add');
     } 
 }
 
@@ -59,22 +59,6 @@ async function updateProduct (e) {
             body: formData,
             headers: {},
         });
-        handleFlash('flash__edited', response, 2000);
+        handleFlash('flash__edited', response);
     }
 } 
-
-const deleteProduct = async (id) => {
-    const ok = confirm('Are you sure you want to delete this product?');
-    const pid = Number(id);
-    if (ok) {
-        const response = await fetch('/admin/product/'+id, {
-            method: 'DELETE',
-            body: JSON.stringify({ pid: pid}),
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-        handleFlash('flash__deleted', response, 1500);
-    }
-    
-}

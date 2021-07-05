@@ -40,6 +40,18 @@ adminRouter.put('/product/:pid', requireAdmin, upload.single('files'), adminCont
 // DELETE /admin/product/:pid : delete a product
 adminRouter.delete('/product/:pid', requireAdmin, adminController.deleteProduct);
 
+// GET /admin/products : get all-products-page
+adminRouter.get('/products/:page', requireAdmin, adminController.getAllProductsPage);
+
+// GET /admin/users : get all-users page
+adminRouter.get('/users/:page', requireAdmin, adminController.getAllUsersPage);
+
+// GET /messages : get rooms page 
+adminRouter.get('/messages', requireAdmin, adminController.getRoomsPage);
+
+// GET /messages/:uid get messages page
+adminRouter.get('/messages/:uid', requireAdmin, adminController.getMessagesPage);
+
 //GET /admin/chat/:uid : get chat page with user (:uid)
 adminRouter.get('/chat/:uid', requireAdmin, adminController.getChatPage);
 

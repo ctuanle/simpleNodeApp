@@ -1,26 +1,9 @@
-const socket = io("http://localhost:3000", {autoConnect : false});
-
 let ad_info;
-const form = document.getElementById('form');
-const input = document.getElementById('input');
-const messages = document.getElementById('messages');
-
-(async () => {
-    const res = await fetch('/admin/info', {
-        method: 'GET',
-        headers: {}
-    });
-    if (res.status === 200) {
-        ad_info = await res.json();
-        socket.auth = ad_info;
-        socket.connect();
-        input.disabled = false;
-    }
-    else {
-        window.location.href = '/admin/login';
-    }
-})();
-
+const form = document.getElementById('form_msg');
+const input = document.getElementById('form_msg_input');
+const messages = document.getElementById('msg_list');
+const scrollElem = document.getElementById('scrollThing');
+const arrowTop = document.getElementById('arrowTop_msg');
 
 form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -38,9 +21,10 @@ form.addEventListener('submit', (e) => {
         });
 
         const item = document.createElement('li');
-        item.textContent = '[You]: '+input.value;
+        item.setAttribute('class', 'msg_right');
+        item.textContent = input.value;
         messages.appendChild(item);
-        window.scrollTo(0, document.body.scrollHeight);
+        scrollElem.scrollIntoView();
         input.value = '';
     }
 });
@@ -48,10 +32,9 @@ form.addEventListener('submit', (e) => {
 socket.on('admin:receive_msg', (data) => {
     if (data.sid === window.location.href.split('/').pop()){
         const item = document.createElement('li');
-        item.textContent = '[User '+data.sid+']: '+data.msg;
+        item.setAttribute('class', 'msg_left');
+        item.textContent = data.msg;
         messages.appendChild(item);
-        window.scrollTo(0, document.body.scrollHeight);
+        scrollElem.scrollIntoView();
     }
 });
-
-

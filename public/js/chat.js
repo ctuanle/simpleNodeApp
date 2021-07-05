@@ -56,6 +56,6 @@ setInterval(async () => {
         headers: {}
     });
     if (response.status !== 200) {
-        window.location.href = '/';
+        window.location.href = '/products/page/1';
     }
 }, 15000);
