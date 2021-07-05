@@ -14,11 +14,10 @@ And create the database if it doesn't exist
 ##### Product
 ##### User
 
-#### Login
-##### As User
+##### Login As User
     http://locahost:3000/auth/login
 
-##### As Admin
+##### Login As Admin
     http://locahost:3000/admin/login
 
 #### RestAPI
