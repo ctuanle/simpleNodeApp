@@ -1,3 +1,4 @@
+import * as jwt from 'jsonwebtoken';
 import { Server, Socket } from "socket.io";
 
 import {MessageModel} from '../db/models/message.model';
@@ -19,24 +20,35 @@ export const socketHandler = (io:Server, socket:Socket) => {
 
     socket.on('admin:send_msg', async (data) => {
         if (socket.handshake.auth.uid === data.sdid) {
-            
-            // Find the room with the given data
-            const room = await RoomModel.findOne({where: {rid: data.rid}});
-            const user = await UserModel.findOne({where: {uid: data.rcid}});
-            if (room && user && room.get('aid') == data.sdid) {
-                await MessageModel.create({
-                    sid: room.getDataValue('aid'),
-                    rid: room.getDataValue('uid'),
-                    message: data.msg,
-                    roomId: room.getDataValue('rid'),
-                    read: false
-                });
-                await room.update({
-                    lastMsg: data.msg,
-                    read: false
-                });
-                socket.to(usSockets[data.rcid]).emit('user:receive_msg', {...data});
-            }            
+            try {
+                //verify the validation of given token
+                jwt.verify(
+                    socket.handshake.auth.token,
+                    <jwt.Secret>process.env.TOKEN_SECRET_KEY
+                );
+
+                // Find the room with the given data
+                const room = await RoomModel.findOne({where: {rid: data.rid}});
+                const user = await UserModel.findOne({where: {uid: data.rcid}});
+                if (room && user && room.get('aid') == data.sdid) {
+                    await MessageModel.create({
+                        sid: room.getDataValue('aid'),
+                        rid: room.getDataValue('uid'),
+                        message: data.msg,
+                        roomId: room.getDataValue('rid'),
+                        read: false
+                    });
+                    await room.update({
+                        lastMsg: data.msg,
+                        read: false
+                    });
+                    socket.to(usSockets[data.rcid]).emit('user:receive_msg', {...data});
+                } 
+            }
+            catch (err) {
+                console.log(err.name, err.message);
+            }
+                       
         }
         
     });

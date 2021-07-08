@@ -24,7 +24,7 @@ function verifyToken(req: Request, res: Response, next: NextFunction, role:strin
             if (!role) {
                 return next();
             }
-            res.status(401).json({message: 'No cookie provided.'});
+            res.status(401).json({message: 'Unauthorized'});
         }
     }
     catch(err) {
