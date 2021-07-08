@@ -5,7 +5,8 @@ interface UserAttributes {
     uid: string,
     username: string,
     password: string,
-    email: string | null
+    email: string,
+    role: string
 }
 
 interface UserCreationAttributes extends Optional<UserAttributes, 'uid'>{}
@@ -15,7 +16,7 @@ interface AdminInstance extends Model<UserAttributes, UserCreationAttributes>, U
 export const UserModel = sequelize.define<AdminInstance>('User', {
     uid: {
         type: DataTypes.UUID,
-        defaultValue : DataTypes.UUIDV4,
+        defaultValue : DataTypes.UUIDV1,
         primaryKey: true,
         allowNull: false
     },
@@ -30,6 +31,12 @@ export const UserModel = sequelize.define<AdminInstance>('User', {
     email: {
         type: DataTypes.STRING,
         allowNull: true
+    },
+    role : {
+        type: DataTypes.ENUM,
+        values: ['NORMAL_USER', 'ADMIN'],
+        defaultValue: 'NORMAL_USER',
+        allowNull: false
     }
 },  {
     tableName: 'users'

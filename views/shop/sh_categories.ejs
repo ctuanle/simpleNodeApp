@@ -1,0 +1,34 @@
+<%- include('../includes/_header.ejs') %>
+  <h2 class="text-center">Categories Page</h2>
+
+  <main>
+    <section class="category">
+        <% if (categories && categories.length > 0) { %>
+            <% for (let cat of categories) { %>
+                <a href="/category/<%= cat %>" class="btn btn-primary"><%= cat %></a>
+            <% } %>
+            
+        <% } else { %>
+        <h1>No category!!</h1>
+        <% } %>
+    </section>
+    <section class="products">
+        <% if (products && products.length > 0) { %>
+            <% for (let prod of products) { %>
+                <div
+                    class="card"
+                    style="width: 15rem; float: left; margin: 1rem; border: 1px solid rgb(0, 98, 128); cursor: pointer;"
+                    onclick="product__click()"
+                    prodId="<%= prod.id %>"
+                >
+                    <img class="card-img-top" src="/resources/<%= prod.images %>" alt="" style="max-height: 150px;">
+                    <div class="card-body">
+                        <h5 class="card-title"><%= prod.name %></h5>
+                        <p class="card-text"><%= prod.price %>$</p>
+                    </div>
+                </div>
+            <% } %>
+        <% }  %>
+    </section>
+  </main>
+  <%- include('../includes/_footer.ejs') %>

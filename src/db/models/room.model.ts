@@ -27,7 +27,8 @@ export const RoomModel = sequelize.define<RoomInstance>('Room', {
     },
     uid: {
         type: DataTypes.UUID,
-        allowNull: false
+        allowNull: false,
+        unique: true
     },
     username: {
         type: DataTypes.STRING,

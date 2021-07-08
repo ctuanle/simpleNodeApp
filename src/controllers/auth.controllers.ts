@@ -7,21 +7,33 @@ import {sendmail} from './sendmail';
 import {SentMessageInfo} from 'nodemailer';
 import {UserModel} from '../db/models/user.model';
 
+
+//--THESE ARE FOR RENDERING HTML PAGE
+
+/**
+ * GET Login Page
+ * @param req 
+ * @param res 
+ */
 export const getLogin = (req: Request, res: Response) => {
     try {
-        res.render('user/login', {
+        res.render('auth/login', {
             title: 'Login'
         })
     }
     catch (err) {
         res.status(500).send({'message': err.message});
     }
-    
 }
 
+/**
+ * GET Sign up Page
+ * @param req 
+ * @param res 
+ */
 export const getSignup = (req: Request, res: Response) => {
     try {
-        res.render('user/signup', {
+        res.render('auth/signup', {
             title: 'Signup'
         })
     }
@@ -30,9 +42,14 @@ export const getSignup = (req: Request, res: Response) => {
     }
 }
 
+/**
+ * GET forgot password page
+ * @param req 
+ * @param res 
+ */
 export const getForgotPassword = (req: Request, res: Response) => {
     try {
-        res.render('user/forgot-password', {
+        res.render('auth/forgot-password', {
             title: 'Reset Password'
         })
     }
@@ -41,11 +58,16 @@ export const getForgotPassword = (req: Request, res: Response) => {
     }
 }
 
+/**
+ * GET reset password page
+ * @param req 
+ * @param res 
+ */
 export const getResetPassword = (req: Request, res: Response) => {
     try {
         const uid = req.params.uid;
         const token = req.params.token;
-        res.render('user/reset-password', {
+        res.render('auth/reset-password', {
             title: 'Reset Password',
             uid: uid,
             token: token
@@ -57,10 +79,19 @@ export const getResetPassword = (req: Request, res: Response) => {
     
 }
 
+// THESE ARE FOR POSTING REQUESTS
+
+
+/**
+ * POST a sign up request
+ * @param req 
+ * @param res 
+ */
 export const postSignup = async (req: Request, res: Response) => {
     try {
+
+        // Check if username is already taken
         const userWithUsername = await UserModel.findOne({
-            attributes: ['username'],
             where: {
                 username: req.body.username
             }
@@ -68,9 +99,10 @@ export const postSignup = async (req: Request, res: Response) => {
         if (userWithUsername) {
             return res.status(500).json({'message' : 'Username is already taken!'});
         }
+
+        // Check if email is already taken
         if (req.body.email !== '') {
             const userWithEmail = await UserModel.findOne({
-                attributes: ['email'],
                 where: {
                     email: req.body.email
                 }
@@ -80,13 +112,17 @@ export const postSignup = async (req: Request, res: Response) => {
             }
         }
 
+        // Hash the password and save the record to database
         const hash = await bcrypt.hash(req.body.password, 10);
+
         await UserModel.create({
             username: req.body.username,
             password: hash,
-            email: req.body.email
+            email: req.body.email,
+            role: 'NORMAL_USER'
         });
 
+        // Response with success.
         res.status(201).json({"message": "User account successfully created."});
     }
     catch (err) {
@@ -94,45 +130,62 @@ export const postSignup = async (req: Request, res: Response) => {
     }
 }
 
+/**
+ * POST a login request
+ * @param req 
+ * @param res 
+ */
 export const postLogin = async (req: Request, res: Response) => {
     try {
+        // Find the user with username
         const user = await UserModel.findOne({
             where: {
                 username: req.body.username
             }
         });
-        if (user) {
-            bcrypt.compare(
-                req.body.password,
-                user.getDataValue('password'),
-                (err, same) => {
-                    if (err) {
-                        res.status(500).json({'message' : err.message});
-                    }
-                    else if (same) {
-                        const payload = {
-                            uid: user.getDataValue('uid'),
-                            username: user.getDataValue('username')
-                        }
-                        const token: string = jwt.sign(
-                            payload,
-                            <jwt.Secret>process.env.TOKEN_SECRET_KEY,
-                            {expiresIn: '1h'}
-                        );
-                        res.writeHead(200, {
-                            'Set-Cookie': 'ctle_user_token=' + token +'; HttpOnly; SameSite=Strict; max-age=3570; path=/',
-                            'Access-Control-Allow-Credentials': 'true'
-                        }).send();
-                    }
-                    else {
-                        res.status(500).json({'message' : 'Incorrect password!'});
-                    }
+
+        // If there is no user with the username received => return
+        if (!user) {
+            return res.status(401).json({'message' : 'Username not found!'});
+        }
+
+        // Compare the passwords
+        const match = await bcrypt.compare(req.body.password, user.get('password'));
+
+        if (!match) {
+            // Case: incorrect password => return
+            return res.status(401).json({'message' : 'Incorrect password!'});
+        }
+
+        // Create a payload for token's creation
+        const payload = {
+            uid: user.get('uid'),
+            username: user.get('username'),
+            role: user.get('role')
+        };
+        
+        // GET the link to redirect after login
+        const URL = user.get('role') === 'ADMIN' ? '/admin' : '/';
+       
+        // Create a token
+        const token = jwt.sign(
+            payload,
+            <jwt.Secret>process.env.TOKEN_SECRET_KEY,
+            {'expiresIn': '1h'}
+        );
+
+        // Login succesfully: set the cookie with the token created
+        res.status(200)
+            .cookie(
+                'ctle_user_token',
+                token, {
+                    httpOnly: true, 
+                    maxAge: 3599000,
+                    path: '/',
+                    sameSite: 'strict'
                 }
             )
-        }
-        else {
-            res.status(500).json({'message' : 'Username not found!'});
-        }
+            .send({ newURL : URL});
     }
     catch (err) {
         res.status(500).json({'message' : err.message});
@@ -140,13 +193,13 @@ export const postLogin = async (req: Request, res: Response) => {
 }
 
 
-export const checkIsLogin = async (req: Request, res: Response) => {
+export const checkInfo = (req: Request, res: Response) => {
     try {
         if (req.cookies.ctle_user_token){
             const token: string = req.cookies.ctle_user_token;
-            const decodedToken = await jwt.verify(token, <jwt.Secret>process.env.TOKEN_SECRET_KEY);
-            const payload = <{uid: number, username: string, iat: number, exp: number}>decodedToken
-            res.status(200).json({'uid' : payload.uid, 'username': payload.username});
+            const decodedToken = jwt.verify(token, <jwt.Secret>process.env.TOKEN_SECRET_KEY);
+            const payload = <{uid: number, role:string}>decodedToken
+            res.status(200).json({uid: payload.uid, role: payload.role, token: token});
         }
         else {
             res.status(202).send();
@@ -159,10 +212,8 @@ export const checkIsLogin = async (req: Request, res: Response) => {
 
 export const postLogout = (req: Request, res: Response) => {
     try {
-        res.writeHead(200, {
-            'Set-Cookie': 'ctle_user_token=; HttpOnly; SameSite=Strict; max-age=0; path=/',
-            'Access-Control-Allow-Credentials': 'true'
-        }).send();
+        // remove the cookie on browser
+        res.clearCookie('ctle_user_token', { httpOnly: true, path: '/', sameSite: 'strict' }).send();
     }
     catch (err) {
         res.status(500).json({'message' : err.message});
@@ -223,7 +274,7 @@ export const postForgotPassword = async (req: Request, res: Response) => {
 
 export const postResetPassword = async (req: Request, res: Response) => {
     try {
-        const uid: number =Number( req.body.uid);
+        const uid: string = req.body.uid;
         const token: string = req.body.token;
         const newPwd: string = req.body.password;
         
@@ -235,7 +286,7 @@ export const postResetPassword = async (req: Request, res: Response) => {
         const oldPassword = user.getDataValue('password');
 
         if (token){
-            const decodedToken = await jwt.verify(
+            jwt.verify(
                 token,
                 <jwt.Secret>oldPassword
             )

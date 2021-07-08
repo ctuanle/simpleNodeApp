@@ -1,0 +1,199 @@
+<%- include('../includes/_header.ejs') %>
+
+<main>
+    <div id="flash__deleted" role="alert" hidden></div>
+
+    <div class="cards">
+        <div class="card-single">
+            <div>
+                <h1><%= stats.numProds %></h1>
+                <span>Products</span>
+            </div>
+            <div>
+                <span class="las la-shopping-bag"></span>
+            </div>
+        </div>
+
+        <div class="card-single">
+            <div>
+                <h1>3</h1>
+                <span>Categories (todo)</span>
+            </div>
+            <div>
+                <span class="las la-tags"></span>
+            </div>
+        </div>
+
+        <div class="card-single">
+            <div>
+                <h1><%= stats.numUsers %></h1>
+                <span>Users</span>
+            </div>
+            <div>
+                <span class="las la-user-circle"></span>
+            </div>
+        </div>
+
+        <div class="card-single">
+            <div>
+                <h1><%= stats.numMsgs %></h1>
+                <span>Messages</span>
+            </div>
+            <div>
+                <span class="las la-sms"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="recent-grid">
+        <div class="products">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Products</h3>
+                    <a href="/admin/products/1">See all <span class="las la-arrow-right"></span></a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table width="100%">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Category</td>
+                                    <td>Price</td>
+                                    <td>Status</td>
+                                    <td>Actions</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (products.length > 0) { %>
+                                    <% for (let prod of products) { %>
+                                        <tr>
+                                            <td>
+                                                <%= prod.name %>
+                                            </td>
+                                            <td>
+                                                <%= prod.category %>
+                                            </td>
+                                            <td>
+                                                <%= prod.price %>$
+                                            </td>
+                                            <td>
+                                                <span class="status orange"></span>in comming
+                                            </td>
+                                            <td>
+                                                <a href="/admin/product/<%= prod.id %>" title="Edit"><span class="las la-edit"></span></a>
+                                                <a onclick="deleteProduct('<%= prod.id %>')"><span class="las la-trash"></span></a>
+                                            </td>
+                                        </tr>
+                                    <% } %>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="categories">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Categories</h3>
+                    <a href="">See all <span class="las la-arrow-right"></span></a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table width="100%">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Numer</td>
+                                    <td>Status</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>TODO</td>
+                                    <td>10</td>
+                                    <td>
+                                        <span class="status purple"></span>ic
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Phone</td>
+                                    <td>20</td>
+                                    <td>
+                                        <span class="status pink"></span>ic
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Laptop</td>
+                                    <td>15</td>
+                                    <td>
+                                        <span class="status orange"></span>ic
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="messages">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Messages</h3>
+                    <a href="/admin/messages">See all <span class="las la-arrow-right"></span></a>
+                </div>
+                <div class="card-body">
+                    <% if (rooms.length > 0) { %> 
+                        <% for (let room of rooms) { %>
+                                <div class="customer">
+                                    <div class="info">
+                                        <img src="/images/photo.png" width="40px" height="40px" alt="">
+                                        <a href="/admin/messages/<%= room.uid %>">
+                                            <div>
+                                                <h4><%= room.username %></h4>
+                                                <small class="<% if (!room.read) { %>unread<% } %>"><%= room.lastMsg %></small>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="contact">
+                                        <a href="/admin/messages/<%= room.uid %>"><span class="las la-reply"></span></a>
+                                    </div>
+                                </div>
+                        <% } %>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+
+        <div class="users">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Users</h3>
+                    <a href="/admin/users/1">See all <span class="las la-arrow-right"></span></a>
+                </div>
+                <div class="card-body">
+                    <% if (users.length > 0) { %>
+                        <% for (let user of users) { %>
+                            <div class="customer">
+                                <div class="info">
+                                    <img src="/images/photo.png" width="30px" height="30px" alt="">
+                                    <div>
+                                        <h4><%= user.username %></h4>
+                                        <small>#<%= user.uid %></small>
+                                    </div>
+                                </div>
+                                <div class="contact">
+                                    <a href="/admin/messages/<%= user.uid %>"><span class="las la-comment"></span></a>
+                                </div>
+                            </div>
+                        <% } %>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<%- include('../includes/_footer.ejs') %> 
