@@ -1,17 +1,17 @@
 require('dotenv').config();
 import {Request, Response} from 'express';
 
-import {Product} from '../db/models/product';
+import {ProductModel} from '../db/models/product.model';
 import { MessageModel } from '../db/models/message.model';
 import {UserModel} from '../db/models/user.model';
 import { RoomModel } from '../db/models/room.model';
 
 export const getHomepageForAdmin = async (req: Request, res: Response) => {
     try {
-        const products = await Product.findAll({
+        const products = await ProductModel.findAll({
             offset: 0,
             limit: 5,
-            attributes: ['id', 'name', 'price', 'category', 'images'],
+            attributes: ['pid', 'name', 'price', 'category', 'images'],
             raw : true
         })
         const users = await UserModel.findAll({
@@ -20,7 +20,7 @@ export const getHomepageForAdmin = async (req: Request, res: Response) => {
             attributes: ['uid', 'username'],
             raw : true
         })
-        const numProds = await Product.count();
+        const numProds = await ProductModel.count();
         const numUsers = await UserModel.count();
         const numMsgs = await MessageModel.count();
 
@@ -49,8 +49,11 @@ export const getHomepageForAdmin = async (req: Request, res: Response) => {
 
 export const getAddProduct = (req: Request, res: Response) => {
     try {
+        const cats = JSON.parse(JSON.stringify(ProductModel.rawAttributes.category.type));
+        
         res.render('admin/ad_product-add', {
             title: 'Add Product',
+            cats: cats.values,
             user_info: res.locals.payload
         })
     }
@@ -65,7 +68,7 @@ export const postAddProduct = async (req: Request, res: Response) => {
         if (req.file){
             path = req.file.path.slice(5);
         }
-        await Product.create({
+        await ProductModel.create({
             name: req.body.name,
             price: req.body.price,
             category: req.body.category,
@@ -81,11 +84,13 @@ export const postAddProduct = async (req: Request, res: Response) => {
 
 export const getEditProduct = async (req: Request, res: Response) => {
     try {
-        const product = await Product.findOne({where: {id: req.params.pid}});
+        const cats = JSON.parse(JSON.stringify(ProductModel.rawAttributes.category.type));
+        const product = await ProductModel.findOne({where: {pid: req.params.pid}});
         if (product){
             res.render('admin/ad_product-edit', {
                 title: 'Edit Product',
                 product : product,
+                cats: cats.values,
                 user_info: res.locals.payload
             });
         }
@@ -106,22 +111,22 @@ export const putEditProduct = async (req: Request, res: Response) => {
             path = req.file.path.slice(5)
         }
         if (path) {
-            await Product.update({
+            await ProductModel.update({
                 name: req.body.name,
                 price: req.body.price,
                 category: req.body.category,
                 images: path
             }, {
-                where: {id: req.params.pid}
+                where: {pid: req.params.pid}
             })
         }
         else {
-            await Product.update({
+            await ProductModel.update({
                 name: req.body.name,
                 price: req.body.price,
                 category: req.body.category
             }, {
-                where: {id: req.params.pid}
+                where: {pid: req.params.pid}
             })
         }
         
@@ -135,7 +140,7 @@ export const putEditProduct = async (req: Request, res: Response) => {
 
 export const deleteProduct = async (req: Request, res: Response) => {
     try {
-        await Product.destroy({where: {id: req.body.pid}});
+        await ProductModel.destroy({where: {pid: req.body.pid}});
         res.status(200).json({'message' : 'Product deleted successfully!'});
     }
     catch (err) {
@@ -153,9 +158,9 @@ export const getAllProductsPage = async (req:Request, res:Response) => {
         
         const offset:number = (Number(req.params.page) - 1) * 12;
 
-        const total = await Product.count();
+        const total = await ProductModel.count();
 
-        const products = await Product.findAndCountAll({
+        const products = await ProductModel.findAndCountAll({
             offset : offset,
             limit : limit,
             raw: true

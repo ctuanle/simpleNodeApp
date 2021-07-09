@@ -1,6 +1,6 @@
 import {Sequelize, Op} from 'sequelize';
 import {Request, Response} from 'express';
-import {Product} from '../db/models/product';
+import {ProductModel} from '../db/models/product.model';
 import { MessageModel } from '../db/models/message.model';
 import { RoomModel } from '../db/models/room.model';
 import { UserModel } from '../db/models/user.model';
@@ -19,9 +19,9 @@ export const getHomePage = (req:Request, res:Response) => {
 
 export const getProductById = async (req: Request, res: Response) => {
     try {
-        const product = await Product.findOne({
-            attributes: ['id', 'name', 'price', 'category', 'images'],
-            where: {id : req.params.pid},
+        const product = await ProductModel.findOne({
+            attributes: ['pid', 'name', 'price', 'category', 'images'],
+            where: {pid : req.params.pid},
         });
         
         if (product) {
@@ -50,10 +50,10 @@ export const getNProducts = async (req: Request, res: Response) => {
         
         const offset:number = (Number(req.params.page) - 1) * 12;
 
-        const total = await Product.count();
+        const total = await ProductModel.count();
 
-        const products = await Product.findAndCountAll({
-            attributes: ['id', 'name', 'price', 'category', 'images'],
+        const products = await ProductModel.findAndCountAll({
+            attributes: ['pid', 'name', 'price', 'category', 'images'],
             offset : offset,
             limit : limit,
             raw: true
@@ -78,15 +78,12 @@ export const getNProducts = async (req: Request, res: Response) => {
 
 export const getAllCategories = async (req: Request, res: Response) => {
     try {
-        const cats = await Product.findAll({
-            attributes: [
-                [Sequelize.fn('DISTINCT', Sequelize.col('category')), 'category']
-            ]
-        });
-        if (cats.length > 0) {
+        const cats = JSON.parse(JSON.stringify(ProductModel.rawAttributes.category.type));
+
+        if (cats.values.length > 0) {
             res.render('shop/sh_categories', {
                 title : 'Categories',
-                categories : cats.map(cat => cat.get('category')),
+                categories : cats.values,
                 products : [],
                 user_info: res.locals.payload || null
             });
@@ -103,23 +100,26 @@ export const getAllCategories = async (req: Request, res: Response) => {
 
 export const getProductsByCategory = async (req: Request, res: Response) => {
     try {
-        const cats = await Product.findAll({
-            attributes: [
-                [Sequelize.fn('DISTINCT', Sequelize.col('category')), 'category']
-            ]
-        });
+        const cats = JSON.parse(JSON.stringify(ProductModel.rawAttributes.category.type));
 
-        const products = await Product.findAll({
+        const products = await ProductModel.findAll({
             where: {
                 category: req.params.cat
             }
         });
-        res.render('shop/sh_categories', {
-            title : 'Categories',
-            categories : cats.map(cat => cat.get('category')),
-            products : products,
-            user_info: res.locals.payload || null
-        });
+
+        if (cats.values.length > 0) {
+            res.render('shop/sh_categories', {
+                title : 'Categories',
+                categories : cats.values,
+                products : products,
+                user_info: res.locals.payload || null
+            });
+        }
+        else {
+            return res.status(404).json({'message': 'No category!'});
+        }
+        
     }
     catch (err) {
         res.status(500).json({'message': err.message});

@@ -11,9 +11,9 @@ interface UserAttributes {
 
 interface UserCreationAttributes extends Optional<UserAttributes, 'uid'>{}
 
-interface AdminInstance extends Model<UserAttributes, UserCreationAttributes>, UserAttributes {}
+interface UserInstance extends Model<UserAttributes, UserCreationAttributes>, UserAttributes {}
 
-export const UserModel = sequelize.define<AdminInstance>('User', {
+export const UserModel = sequelize.define<UserInstance>('User', {
     uid: {
         type: DataTypes.UUID,
         defaultValue : DataTypes.UUIDV1,

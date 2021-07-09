@@ -19,7 +19,7 @@
                     class="card"
                     style="width: 15rem; float: left; margin: 1rem; border: 1px solid rgb(0, 98, 128); cursor: pointer;"
                     onclick="product__click()"
-                    prodId="<%= prod.id %>"
+                    prodId="<%= prod.pid %>"
                 >
                     <img class="card-img-top" src="/resources/<%= prod.images %>" alt="" style="max-height: 150px;">
                     <div class="card-body">
@@ -30,5 +30,13 @@
             <% } %>
         <% }  %>
     </section>
+    <script>
+        function product__click(event) {
+            event = event || window.event;
+            const src = event.currentTarget;
+            const prodId = src.getAttribute('prodId');
+            window.location.href = "/product/"+prodId;
+        }
+    </script>
   </main>
   <%- include('../includes/_footer.ejs') %>
