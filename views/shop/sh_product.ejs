@@ -1,0 +1,37 @@
+<%- include('../includes/_header.ejs') %>
+
+<main>
+    <section class="products"">
+        <% if (product) { %>
+            <div class=" row">
+                <div class="col"></br></div>
+
+                <div class="col-8"></br>
+                    <div class="card text-center">
+                        <div class="card-header">
+                            No.<%= product.pid %>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title"><%= product.name %></h5>
+                            <% if (product.images) { %> 
+                                <img src="/resources/<%= product.images %>" alt="<%= product.name %>" class="mx-auto" style="display: block; max-height:300px; margin:10px;"> 
+                            <% } else  { %>
+                                <img src="/images/product-default.png" alt="<%= product.name %>">
+                            <% } %> 
+                            <p class="btn btn-primary"><%= product.price %>$</p>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <a href="/category/<%= product.category %>">Category: <%= product.category %></a> 
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div class="col"></br></div>
+            </div>
+        <% } else { %>
+            <h1>No product</h1>
+        <% } %>
+    </section>
+</main>
+<%- include('../includes/_footer.ejs') %>

@@ -1,0 +1,31 @@
+<%- include('../includes/_header.ejs') %>
+    <h1 class="text-center">Welcome!</h1>
+    <main>
+        <% if (user_info) { %>
+            <div style="margin: 10px; border: 1px solid; border-radius: 5px; padding: 10px; min-height:600px;">
+                <div>
+                    <div id="roomId" hidden><%= roomId %></div>
+                    <ul id='messages'>
+                        <% if (messages.length > 0) { %>
+                            <% for (let msg of messages) { %>
+                                <% if (msg.sid == user_info.uid) { %>
+                                    <li>[You]: <%= msg.message %></li>
+                                <% } else { %>
+                                    <li>[Admin]: <%= msg.message %></li>
+                                <% } %>
+                            <% } %>
+                        <% } %>
+                    </ul>
+                </div>
+                <div>
+                    <form id="form" action="" style="position: fixed;bottom: 50px;">
+                        <input id='input' autocomplete="off" style="width: 400px" disabled>
+                        <button class='btn btn-primary'>Send</button>
+                    </form>
+                </div>
+            </div>
+        <% } %>
+    </main>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/shop-chat.js"></script>
+<%- include('../includes/_footer.ejs') %>

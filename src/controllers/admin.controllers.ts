@@ -1,42 +1,17 @@
 require('dotenv').config();
-import bcrypt from 'bcrypt';
-import * as jwt from "jsonwebtoken";
-import {Sequelize} from 'sequelize';
-
-import {Op} from 'sequelize';
 import {Request, Response} from 'express';
 
-import {Product} from '../db/models/product';
+import {ProductModel} from '../db/models/product.model';
 import { MessageModel } from '../db/models/message.model';
 import {UserModel} from '../db/models/user.model';
-import { AdminModel } from '../db/models/admin.model';
 import { RoomModel } from '../db/models/room.model';
-import { where } from 'sequelize';
-
-
-export const getInfoAdmin = async (req: Request, res: Response) => {
-    try {
-        if (req.cookies.ctle_cookie_ad){
-            const token: string = req.cookies.ctle_cookie_ad;
-            const decodedToken = await jwt.verify(token, <jwt.Secret>process.env.TK_SK_AD);
-            const payload = <{aid: string, username: string, iat: number, exp: number}>decodedToken
-            res.status(200).send({'aid' : payload.aid, 'username': payload.username});
-        }
-        else {
-            res.status(202).send();
-        }
-    }
-    catch (err) {
-        res.status(500).json({'message' : err.message});
-    }
-}
 
 export const getHomepageForAdmin = async (req: Request, res: Response) => {
     try {
-        const products = await Product.findAll({
+        const products = await ProductModel.findAll({
             offset: 0,
             limit: 5,
-            attributes: ['id', 'name', 'price', 'category', 'images'],
+            attributes: ['pid', 'name', 'price', 'category', 'images'],
             raw : true
         })
         const users = await UserModel.findAll({
@@ -45,7 +20,7 @@ export const getHomepageForAdmin = async (req: Request, res: Response) => {
             attributes: ['uid', 'username'],
             raw : true
         })
-        const numProds = await Product.count();
+        const numProds = await ProductModel.count();
         const numUsers = await UserModel.count();
         const numMsgs = await MessageModel.count();
 
@@ -58,97 +33,28 @@ export const getHomepageForAdmin = async (req: Request, res: Response) => {
             raw: true
         });
     
-        res.render('admin/index_admin', {
+        res.render('admin/ad_index', {
             title: 'Admin Board',
             products : products,
             users : users,
             stats: stats,
-            rooms: rooms
+            rooms: rooms,
+            user_info: res.locals.payload
         });
     }
     catch(err) {
         res.status(500).json({'message': err.message});
-    }
-}
-
-
-export const getLoginForAdmin = async (req: Request, res: Response) => {
-    try {
-        /**
-         * Uncomment the following code and go to the /admin/login page
-         * to manual create an admin
-         * username : admin
-         * password : azerty
-         */
-        // await AdminModel.create({
-        //     username: 'admin',
-        //     password : '$2b$10$7PrTqZuLv5LI0fCEQ4lo4OJd4ycn.LW8kPekjdqIbJqRvGrdrSpE.',
-        //     email: ''
-        // });
-        res.render('admin/ad_login');
-    }
-    catch(err) {
-        res.status(500).json({'message': err.message});
-    }
-}
-
-export const postLoginForAdmin = async (req: Request, res: Response) => {
-    try {
-        const adminInstance = await AdminModel.findOne({
-            where: {username : req.body.username}
-        });
-        if (adminInstance) {
-            const isCorrectPassword = await bcrypt.compare(
-                req.body.password,
-                adminInstance.getDataValue('password')
-            )
-            if (isCorrectPassword) {
-                const payload = {
-                    aid: adminInstance.getDataValue('aid'),
-                    username: adminInstance.getDataValue('username')
-                }
-
-                const token: string = jwt.sign(
-                    payload,
-                    <jwt.Secret>process.env.TK_SK_AD,
-                    {expiresIn: '1h'}
-                );
-                res.writeHead(200, {
-                    'Set-Cookie' : 'ctle_cookie_ad='+token+';SameSite=Strict; max-age=3570; path=/',
-                    'Access-Control-Allow-Credentials': 'true'
-                });
-                res.end();
-            }
-            else {
-                res.status(401).send({'message' : 'Incorrect password!'});
-            }
-        }
-        else {
-            res.status(404).send({'message' : 'Username not found!'});
-        }
-    }
-    catch(err) {
-        res.status(500).json({'message': err.message});
-    }
-}
-
-
-export const postLogoutForAdmin = (req: Request, res: Response) => {
-    try {
-        res.writeHead(200, {
-            'Set-Cookie': 'ctle_cookie_ad=; HttpOnly; SameSite=Strict; max-age=0; path=/',
-            'Access-Control-Allow-Credentials': 'true'
-        }).send();
-    }
-    catch (err) {
-        res.status(500).json({'message' : err.message});
     }
 }
 
 export const getAddProduct = (req: Request, res: Response) => {
     try {
-        res.render('admin/add-product_admin', {
+        const cats = JSON.parse(JSON.stringify(ProductModel.rawAttributes.category.type));
+        
+        res.render('admin/ad_product-add', {
             title: 'Add Product',
+            cats: cats.values,
+            user_info: res.locals.payload
         })
     }
     catch (err) {
@@ -162,7 +68,7 @@ export const postAddProduct = async (req: Request, res: Response) => {
         if (req.file){
             path = req.file.path.slice(5);
         }
-        await Product.create({
+        await ProductModel.create({
             name: req.body.name,
             price: req.body.price,
             category: req.body.category,
@@ -178,11 +84,14 @@ export const postAddProduct = async (req: Request, res: Response) => {
 
 export const getEditProduct = async (req: Request, res: Response) => {
     try {
-        const product = await Product.findOne({where: {id: req.params.pid}});
+        const cats = JSON.parse(JSON.stringify(ProductModel.rawAttributes.category.type));
+        const product = await ProductModel.findOne({where: {pid: req.params.pid}});
         if (product){
-            res.render('admin/edit-product_admin', {
+            res.render('admin/ad_product-edit', {
                 title: 'Edit Product',
                 product : product,
+                cats: cats.values,
+                user_info: res.locals.payload
             });
         }
         else{
@@ -202,22 +111,22 @@ export const putEditProduct = async (req: Request, res: Response) => {
             path = req.file.path.slice(5)
         }
         if (path) {
-            await Product.update({
+            await ProductModel.update({
                 name: req.body.name,
                 price: req.body.price,
                 category: req.body.category,
                 images: path
             }, {
-                where: {id: req.params.pid}
+                where: {pid: req.params.pid}
             })
         }
         else {
-            await Product.update({
+            await ProductModel.update({
                 name: req.body.name,
                 price: req.body.price,
                 category: req.body.category
             }, {
-                where: {id: req.params.pid}
+                where: {pid: req.params.pid}
             })
         }
         
@@ -231,7 +140,7 @@ export const putEditProduct = async (req: Request, res: Response) => {
 
 export const deleteProduct = async (req: Request, res: Response) => {
     try {
-        await Product.destroy({where: {id: req.body.pid}});
+        await ProductModel.destroy({where: {pid: req.body.pid}});
         res.status(200).json({'message' : 'Product deleted successfully!'});
     }
     catch (err) {
@@ -249,19 +158,20 @@ export const getAllProductsPage = async (req:Request, res:Response) => {
         
         const offset:number = (Number(req.params.page) - 1) * 12;
 
-        const total = await Product.count();
+        const total = await ProductModel.count();
 
-        const products = await Product.findAndCountAll({
+        const products = await ProductModel.findAndCountAll({
             offset : offset,
             limit : limit,
             raw: true
         });
 
         if (products.count > 0) {
-            res.render('admin/products_admin', {
+            res.render('admin/ad_products', {
                 title: 'Products',
                 numpage: Math.ceil(total / limit),
-                products: products.rows
+                products: products.rows,
+                user_info: res.locals.payload
             })
         }
         else {
@@ -292,10 +202,11 @@ export const getAllUsersPage = async (req:Request, res:Response) => {
         });
 
         if (users.count > 0) {
-            res.render('admin/users_admin', {
+            res.render('admin/ad_users', {
                 title: 'Users',
                 numpage: Math.ceil(total / limit),
-                users: users.rows
+                users: users.rows,
+                user_info: res.locals.payload
             })
         }
         else {
@@ -312,10 +223,11 @@ export const getRoomsPage = async (req:Request, res:Response) => {
         const rooms = await RoomModel.findAll({
             order: [['updatedAt', 'DESC']]
         });
-        res.render('admin/messages_admin', {
+        res.render('admin/ad_messages', {
             title: 'Messages',
             rooms: rooms,
-            displayMsg: false
+            displayMsg: false,
+            user_info: res.locals.payload
         });
     }
     catch(err){
@@ -330,8 +242,9 @@ export const getMessagesPage = async (req:Request, res:Response) => {
         });
 
         const room = await RoomModel.findOne({where: {uid: req.params.uid}});
+        const user = await UserModel.findOne({where: {uid: req.params.uid}});
 
-        if (room) {
+        if (room && user) {
             const messages = await MessageModel.findAll({
                 where: {roomId: room.getDataValue('rid')},
                 order: [['createdAt', 'DESC']],
@@ -342,18 +255,35 @@ export const getMessagesPage = async (req:Request, res:Response) => {
 
             await room.update({read: true});
 
-            res.render('admin/messages_admin', {
+            res.render('admin/ad_messages', {
                 title: 'Messages',
                 rooms: rooms,
                 displayMsg: true,
                 messages: messages.slice().reverse(),
-                uid: room.getDataValue('uid')
+                room: room,
+                user_info: res.locals.payload
+            });
+        }
+        else if (user) {
+            const newRoom = await RoomModel.create({
+                uid: user.getDataValue('uid'),
+                aid: res.locals.payload.uid,
+                username: user.getDataValue('username'),
+                lastMsg: '',
+                read: true
+            });
+            res.render('admin/ad_messages', {
+                title: 'Messages',
+                rooms: rooms,
+                displayMsg: true,
+                messages: [],
+                uid: newRoom.getDataValue('uid'),
+                user_info: res.locals.payload
             });
         }
         else {
-            res.status(404).json({message: 'todo'});
+            res.status(404).send({message: 'Given data is not found on server.'})
         }
-        
     }
     catch(err){
         res.status(500).json({'message': err.message});
