@@ -11,14 +11,14 @@ And create the database if it doesn't exist
     npm run dev
 
 #### Database
-##### Product
-##### User
+##### Products
+##### Users
+##### Messages
+##### Rooms
 
-##### Login As User
+##### Login
     http://locahost:3000/auth/login
 
-##### Login As Admin
-    http://locahost:3000/admin/login
 
 #### RestAPI
 ##### Public Routes
