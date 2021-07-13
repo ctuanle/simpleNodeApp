@@ -277,6 +277,7 @@ export const getMessagesPage = async (req:Request, res:Response) => {
                 rooms: rooms,
                 displayMsg: true,
                 messages: [],
+                room: newRoom,
                 uid: newRoom.getDataValue('uid'),
                 user_info: res.locals.payload
             });
