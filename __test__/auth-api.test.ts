@@ -11,7 +11,7 @@ afterAll(async () => {
     await sequelizeJTest.close();
 });
 
-test("POST /auth/sigup", async () => {
+test("POST /auth/signup", async () => {
     const res = await request(server).post("/auth/signup")
                 .send({username: "jtest", email: "", password: "azerty"});
     expect(res.statusCode).toBe(201);
