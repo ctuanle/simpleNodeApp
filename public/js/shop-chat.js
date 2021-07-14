@@ -8,7 +8,7 @@ const roomIdElem = document.getElementById("roomId");
 let us_info;
 
 (async () => {
-    const response = await fetch("/auth/info", {
+    const response = await fetch("/api/auth/info", {
         method: "GET",
         headers: {},
     });

@@ -10,7 +10,7 @@ if (login_form) {
         const password = document.querySelector("#auth_password").value;
 
         if (username && password) {
-            const res = await fetch("/auth/login", {
+            const res = await fetch("/api/auth/login", {
                 method: "POST",
                 body: JSON.stringify({
                     username: username,
@@ -34,7 +34,7 @@ if (signup_form) {
         const email = document.querySelector("#auth_email").value;
 
         if (username && password) {
-            const res = await fetch("/auth/signup", {
+            const res = await fetch("/api/auth/signup", {
                 method: "POST",
                 body: JSON.stringify({
                     username: username,
@@ -57,7 +57,7 @@ if (forgot_pwd_form) {
     forgot_pwd_form.addEventListener("submit", async function (e) {
         e.preventDefault();
         const email = document.querySelector("#email").value;
-        const res = await fetch("/auth/forgot", {
+        const res = await fetch("/api/auth/forgot", {
             method: "POST",
             body: JSON.stringify({ email: email }),
             headers: { "Content-Type": "application/json" },
@@ -74,7 +74,7 @@ if (reset_pwd_form) {
         const password = document.querySelector("#password").value;
 
         if (uid && token && password) {
-            const res = await fetch("/auth/reset", {
+            const res = await fetch("/api/auth/reset", {
                 method: "POST",
                 body: JSON.stringify({
                     uid: uid,

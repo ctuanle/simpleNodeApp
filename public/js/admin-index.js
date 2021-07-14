@@ -1,7 +1,7 @@
 let us_info;
 
 const logout_request = async () => {
-    const res = await fetch("/auth/logout", {
+    const res = await fetch("/api/auth/logout", {
         method: "POST",
         headers: {},
     });
@@ -82,7 +82,7 @@ switch (currentPage) {
 const socket = io("http://localhost:3000");
 
 (async () => {
-    const res = await fetch("/auth/info", {
+    const res = await fetch("/api/auth/info", {
         method: "GET",
         headers: {},
     });

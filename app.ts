@@ -11,6 +11,8 @@ import shopRouter from "./src/routes/shop.routes";
 import authRouter from "./src/routes/auth.routes";
 import adminRouter from "./src/routes/admin.routes";
 
+import authApi from "./src/api/auth.api";
+
 /**
  * App Variables
  */
@@ -34,14 +36,17 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }) as RequestHandler);
 app.use(express.static(path.join(__dirname, "..", "public")));
 
-// Server views engine
+// App views engine
 app.set("view engine", "ejs");
 app.set("views", "views");
 
-// Server Router
+// App Router
 app.use("/admin", adminRouter);
 app.use("/", shopRouter);
 app.use("/auth", authRouter);
 app.use("/resources", express.static(path.join(__dirname, "..", "data")));
+
+// App API
+app.use("/api/auth", authApi);
 
 export default server;
