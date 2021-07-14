@@ -1,7 +1,7 @@
 :root {
-    --main-color : #04AA6D;
-    --color-dard: #1D2231;
-    --text-grey: #8390A2;
+    --main-color: #04aa6d;
+    --color-dard: #1d2231;
+    --text-grey: #8390a2;
 }
 
 * {
@@ -10,7 +10,7 @@
     box-sizing: border-box;
     list-style-type: none;
     text-decoration: none;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
 }
 
 .sidebar {
@@ -106,7 +106,7 @@ header {
     position: fixed;
     left: 234px;
     width: calc(100% - 234px);
-    top : 0;
+    top: 0;
     z-index: 100;
     transition: left 300ms;
 }
@@ -120,7 +120,6 @@ header label span {
     padding-right: 1rem;
     cursor: pointer;
 }
-
 
 .user-wrapper {
     display: flex;
@@ -144,7 +143,7 @@ header label span {
 }
 
 main {
-    margin-top:  85px;
+    margin-top: 85px;
     padding: 2rem 1.5rem;
     background: #f1f5f9;
     min-height: calc(100vh - 90px);
@@ -202,8 +201,8 @@ main {
     background: var(--main-color);
     border-radius: 10px;
     color: #fff;
-    font-size: .8rem;
-    padding: .5rem 1rem;
+    font-size: 0.8rem;
+    padding: 0.5rem 1rem;
     border: 1px solid var(--main-color);
 }
 
@@ -217,7 +216,7 @@ table {
 
 thead tr {
     border-top: 1px solid #f0f0f0;
-    border-bottom: 1px solid #f0f0f0;   
+    border-bottom: 1px solid #f0f0f0;
 }
 
 thead td {
@@ -225,8 +224,8 @@ thead td {
 }
 
 td {
-    padding: .5rem 1rem;
-    font-size: .9rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
     color: #222;
 }
 
@@ -276,7 +275,7 @@ td .status {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding:  .5rem .7rem;
+    padding: 0.5rem 0.7rem;
 }
 
 .info {
@@ -290,7 +289,7 @@ td .status {
 }
 
 .info h4 {
-    font-size: .8rem;
+    font-size: 0.8rem;
     font-weight: 700;
     color: #222;
 }
@@ -311,7 +310,7 @@ td .status {
 .contact span {
     font-size: 1.2rem;
     display: inline-block;
-    margin-left:.5rem;
+    margin-left: 0.5rem;
     color: var(--main-color);
 }
 
@@ -365,7 +364,7 @@ td .status {
     }
 }
 
-@media only sreen and (max-width:  960px) {
+@media only sreen and (max-width: 960px) {
     .cards {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -375,7 +374,7 @@ td .status {
     }
 }
 
-@media only sreen and (max-width:  768px) {
+@media only sreen and (max-width: 768px) {
     .cards {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -413,7 +412,7 @@ td .status {
     }
 
     header h2 span {
-        text-align:  center;
+        text-align: center;
         padding-right: 0rem;
     }
 
@@ -440,7 +439,6 @@ td .status {
     }
 }
 
-
 /*
 Style for ADD PRODUCT FORM
 */
@@ -448,7 +446,6 @@ Style for ADD PRODUCT FORM
     text-align: center;
     color: var(--main-color);
 }
-
 
 /*
 Style for Messages Page
@@ -458,7 +455,6 @@ Style for Messages Page
     margin: 0;
     grid-template-columns: 30% auto;
 }
-
 
 .form_msg {
     background: #eee;
@@ -479,7 +475,7 @@ Style for Messages Page
 .msg_left {
     padding: 10px;
     background: #d4fad8;
-    margin:  10px 150px 10px 10px;
+    margin: 10px 150px 10px 10px;
     border-radius: 9px;
     position: relative;
 }
@@ -487,7 +483,7 @@ Style for Messages Page
 .msg_right {
     padding: 10px;
     background: #dff7f5;
-    margin:  10px 10px 10px 150px;
+    margin: 10px 10px 10px 150px;
     border-radius: 9px;
     position: relative;
 }

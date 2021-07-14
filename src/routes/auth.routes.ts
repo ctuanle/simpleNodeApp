@@ -1,5 +1,5 @@
-import express from 'express';
-import * as authController from '../controllers/auth.controllers';
+import express from "express";
+import * as authController from "../controllers/auth.controllers";
 
 const authRouter = express.Router();
 
@@ -7,38 +7,37 @@ const authRouter = express.Router();
  * Render HTML Page
  */
 // GET /auth/login : get login page
-authRouter.get('/login', authController.getLogin);
+authRouter.get("/login", authController.getLogin);
 
 // GET /auth/signup : get signup page
-authRouter.get('/signup', authController.getSignup);
+authRouter.get("/signup", authController.getSignup);
 
 // GET /auth/forgot : get forgot password page
-authRouter.get('/forgot', authController.getForgotPassword);
+authRouter.get("/forgot", authController.getForgotPassword);
 
 // GET /auth/:uid/:token : get reset password page
-authRouter.get('/reset/:uid/:token', authController.getResetPassword);
+authRouter.get("/reset/:uid/:token", authController.getResetPassword);
 
 /**
  * API
  */
 
 // POST /auth/signup : post a request to signup
-authRouter.post('/signup', authController.postSignup);
+authRouter.post("/signup", authController.postSignup);
 
 // POST /auth/login : post a request to login
-authRouter.post('/login', authController.postLogin);
+authRouter.post("/login", authController.postLogin);
 
 // POST /auth/logout : post a request to logout
-authRouter.post('/logout', authController.postLogout);
+authRouter.post("/logout", authController.postLogout);
 
 // GET /auth/info : post a request to check if user is logined
-authRouter.get('/info', authController.checkInfo);
+authRouter.get("/info", authController.checkInfo);
 
 // POST /auth/forgot : post a request to have the right to reset password
-authRouter.post('/forgot', authController.postForgotPassword);
+authRouter.post("/forgot", authController.postForgotPassword);
 
 // POST /auth/reset : post a request to reset password
-authRouter.post('/reset', authController.postResetPassword);
-
+authRouter.post("/reset", authController.postResetPassword);
 
 export default authRouter;

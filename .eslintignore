@@ -1,0 +1,15 @@
+# Dependency directories
+node_modules/
+
+# dotenv environment variables file
+.env
+.env.test
+
+# TS 
+dist/
+
+# Data - Resources
+data/
+
+# json config file
+*.json
