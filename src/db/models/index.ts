@@ -29,7 +29,7 @@ export const sequeSync = async (sequelize: Sequelize) => {
         await sequelize.authenticate();
         console.log("DATABASE_Authenticated: ", sequelize.getDatabaseName());
 
-        if (NODE_ENV === "TEST") {
+        if (NODE_ENV) {
             await sequelize.sync({ force: true });
         } else {
             await sequelize.sync({ alter: true });

@@ -10,16 +10,28 @@ afterAll(async () => {
     await sequelize.close();
 });
 
-test("POST /auth/signup", async () => {
+test("POST /api/auth/signup", async () => {
     const res = await request(server)
-        .post("/auth/signup")
+        .post("/api/auth/signup")
         .send({ username: "jtest", email: "", password: "azerty" });
     expect(res.statusCode).toBe(201);
 });
 
-test("POST /auth/login", async () => {
+let cookie:string;
+
+test("POST /api/auth/login", async () => {
     const res = await request(server)
-        .post("/auth/login")
-        .send({ username: "cole", password: "azerty" });
+        .post("/api/auth/login")
+        .send({ username: "jtest", password: "azerty" });
+    expect(res.headers["set-cookie"]).toBeTruthy();
+    cookie = (res.headers["set-cookie"]);
     expect(res.statusCode).toBe(200);
 });
+
+test("POST /api/auth/logout", async () => {
+    const res = await request(server)
+        .post("/api/auth/logout")
+        .set("Cookie", [cookie]);
+    expect(res.headers["set-cookie"]).toBeTruthy();
+    expect(res.statusCode).toBe(200);
+})
