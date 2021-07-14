@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.ts",
   "scripts": {
-    "test": "jest",
+    "test": "set NODE_ENV=TEST && jest --runInBand",
     "start": "tsc && node dist/server.js",
     "dev": "nodemon"
   },
