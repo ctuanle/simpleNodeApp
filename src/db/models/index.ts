@@ -22,14 +22,9 @@ export const sequelize = new Sequelize(db_name, db_user, db_pwd, {
     logging: false,
 });
 
-// Synchronizing all models at once
-(async () => {
-    try {
-        await sequelize.authenticate();
-        console.log("DATABASE_Authenticated");
-        await sequelize.sync({ alter: true });
-        console.log("DATABASE_Synchronized");
-    } catch (err) {
-        console.log(err);
-    }
-})();
+export const sequelizeJTest = new Sequelize("database_test", db_user, db_pwd, {
+    host: db_host,
+    port: 3306,
+    dialect: "mysql",
+    logging: false,
+});
