@@ -35,7 +35,7 @@ const deleteProduct = async (id) => {
     const ok = confirm("Are you sure you want to delete this product?");
     const pid = Number(id);
     if (ok) {
-        const response = await fetch("/admin/product/" + id, {
+        const response = await fetch("/api/product/" + id, {
             method: "DELETE",
             body: JSON.stringify({ pid: pid }),
             headers: {

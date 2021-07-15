@@ -21,7 +21,7 @@ async function addProduct(e) {
         formData.append("price", price);
         formData.append("category", category);
         formData.append("files", files.files[0]);
-        const response = await fetch("/admin/product/add", {
+        const response = await fetch("/api/product/add", {
             method: "POST",
             body: formData,
             headers: {},
@@ -54,7 +54,7 @@ async function updateProduct(e) {
         formData.append("price", price);
         formData.append("category", category);
         formData.append("files", files.files[0]);
-        const response = await fetch("/admin/product/" + pid, {
+        const response = await fetch("/api/product/" + pid, {
             method: "PUT",
             body: formData,
             headers: {},

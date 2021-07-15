@@ -3,7 +3,6 @@
 
 import express from "express";
 
-import upload from "../middlewares/multer";
 import { requireRoleAdmin } from "../middlewares/auth.middlewares";
 import * as adminController from "../controllers/admin.controllers";
 
@@ -19,34 +18,11 @@ adminRouter.get(
     adminController.getAddProduct
 );
 
-// POST /admin/product/add : add product
-adminRouter.post(
-    "/product/add",
-    requireRoleAdmin,
-    upload.single("files"),
-    adminController.postAddProduct
-);
-
 // GET /admin/product/:pid : get detail (edit) page of a product
 adminRouter.get(
     "/product/:pid",
     requireRoleAdmin,
     adminController.getEditProduct
-);
-
-// POST /admin/product/:pid : update a product
-adminRouter.put(
-    "/product/:pid",
-    requireRoleAdmin,
-    upload.single("files"),
-    adminController.putEditProduct
-);
-
-// DELETE /admin/product/:pid : delete a product
-adminRouter.delete(
-    "/product/:pid",
-    requireRoleAdmin,
-    adminController.deleteProduct
 );
 
 // GET /admin/products : get all-products-page

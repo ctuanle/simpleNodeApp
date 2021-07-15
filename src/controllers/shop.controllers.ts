@@ -1,8 +1,12 @@
+require("dotenv").config();
+import axios from "axios";
 import { Request, Response } from "express";
 import { ProductModel } from "../db/models/product.model";
 import { MessageModel } from "../db/models/message.model";
 import { RoomModel } from "../db/models/room.model";
 import { UserModel } from "../db/models/user.model";
+
+const HOST_URl = `http://${process.env.HOST}:${process.env.PORT}`;
 
 export const getHomePage = (req: Request, res: Response) => {
     try {
@@ -17,20 +21,18 @@ export const getHomePage = (req: Request, res: Response) => {
 
 export const getProductById = async (req: Request, res: Response) => {
     try {
-        const product = await ProductModel.findOne({
-            attributes: ["pid", "name", "price", "category", "images"],
-            where: { pid: req.params.pid },
-        });
+        const url = `${HOST_URl}/api/product/${req.params.pid}`;
+        const data = (await axios.get(url)).data;
 
-        if (product) {
-            res.render("shop/sh_product", {
-                title: product.get("name"),
-                product: product,
+        if (data) {
+            return res.render("shop/sh_product", {
+                title: data.name,
+                product: data,
                 user_info: res.locals.payload || null,
             });
-        } else {
-            res.status(404).json({ message: "Product not found" });
         }
+
+        res.status(404).json({ message: "Product not found" });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
@@ -38,33 +40,19 @@ export const getProductById = async (req: Request, res: Response) => {
 
 export const getNProducts = async (req: Request, res: Response) => {
     try {
-        const limit = 12;
+        const url = `${HOST_URl}/api/product/page/${req.params.page}`;
+        const data = (await axios.get(url)).data;
 
-        if (Number(req.params.page) <= 0) {
-            return res.status(500).json({ message: "Product not found" });
-        }
-
-        const offset: number = (Number(req.params.page) - 1) * 12;
-
-        const total = await ProductModel.count();
-
-        const products = await ProductModel.findAndCountAll({
-            attributes: ["pid", "name", "price", "category", "images"],
-            offset: offset,
-            limit: limit,
-            raw: true,
-        });
-
-        if (products.count > 0) {
-            res.render("shop/sh_products", {
+        if (data.numpage && data.products.length > 0) {
+            return res.render("shop/sh_products", {
                 title: "Products",
-                numpage: Math.ceil(total / limit),
-                products: products.rows,
+                numpage: data.numpage,
+                products: data.products,
                 user_info: res.locals.payload || null,
             });
-        } else {
-            res.status(404).json({ message: "Product not found" });
         }
+
+        res.status(404).json({ message: "Product not found" });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
@@ -72,20 +60,15 @@ export const getNProducts = async (req: Request, res: Response) => {
 
 export const getAllCategories = async (req: Request, res: Response) => {
     try {
-        const cats = JSON.parse(
-            JSON.stringify(ProductModel.rawAttributes.category.type)
-        );
+        const url = `${HOST_URl}/api/product/category/all`;
+        const data = (await axios.get(url)).data;
 
-        if (cats.values.length > 0) {
-            res.render("shop/sh_categories", {
-                title: "Categories",
-                categories: cats.values,
-                products: [],
-                user_info: res.locals.payload || null,
-            });
-        } else {
-            return res.status(404).json({ message: "No category!" });
-        }
+        res.render("shop/sh_categories", {
+            title: "Categories",
+            categories: data,
+            products: [],
+            user_info: res.locals.payload || null,
+        });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
@@ -93,26 +76,15 @@ export const getAllCategories = async (req: Request, res: Response) => {
 
 export const getProductsByCategory = async (req: Request, res: Response) => {
     try {
-        const cats = JSON.parse(
-            JSON.stringify(ProductModel.rawAttributes.category.type)
-        );
+        const url = `${HOST_URl}/api/product/category/${req.params.cat}`;
+        const data = (await axios.get(url)).data;
 
-        const products = await ProductModel.findAll({
-            where: {
-                category: req.params.cat,
-            },
+        res.render("shop/sh_categories", {
+            title: "Categories",
+            categories: data.cats,
+            products: data.products,
+            user_info: res.locals.payload || null,
         });
-
-        if (cats.values.length > 0) {
-            res.render("shop/sh_categories", {
-                title: "Categories",
-                categories: cats.values,
-                products: products,
-                user_info: res.locals.payload || null,
-            });
-        } else {
-            return res.status(404).json({ message: "No category!" });
-        }
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

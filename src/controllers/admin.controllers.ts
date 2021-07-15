@@ -66,24 +66,6 @@ export const getAddProduct = (req: Request, res: Response) => {
     }
 };
 
-export const postAddProduct = async (req: Request, res: Response) => {
-    try {
-        let path = undefined;
-        if (req.file) {
-            path = req.file.path.slice(5);
-        }
-        await ProductModel.create({
-            name: req.body.name,
-            price: req.body.price,
-            category: req.body.category,
-            images: path,
-        });
-        res.status(201).json({ message: "Product added successfully!" });
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-};
-
 export const getEditProduct = async (req: Request, res: Response) => {
     try {
         const cats = JSON.parse(
@@ -102,52 +84,6 @@ export const getEditProduct = async (req: Request, res: Response) => {
         } else {
             res.status(500).json({ message: "Product not found!" });
         }
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-};
-
-export const putEditProduct = async (req: Request, res: Response) => {
-    try {
-        let path = undefined;
-        if (req.file) {
-            path = req.file.path.slice(5);
-        }
-        if (path) {
-            await ProductModel.update(
-                {
-                    name: req.body.name,
-                    price: req.body.price,
-                    category: req.body.category,
-                    images: path,
-                },
-                {
-                    where: { pid: req.params.pid },
-                }
-            );
-        } else {
-            await ProductModel.update(
-                {
-                    name: req.body.name,
-                    price: req.body.price,
-                    category: req.body.category,
-                },
-                {
-                    where: { pid: req.params.pid },
-                }
-            );
-        }
-
-        res.status(200).json({ message: "Product updated successfully!" });
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-};
-
-export const deleteProduct = async (req: Request, res: Response) => {
-    try {
-        await ProductModel.destroy({ where: { pid: req.body.pid } });
-        res.status(200).json({ message: "Product deleted successfully!" });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
