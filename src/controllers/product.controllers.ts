@@ -137,3 +137,15 @@ export const putEditProduct = async (req: Request, res: Response) => {
         res.status(500).json({ message: err.message });
     }
 };
+
+
+export const getTotalNumberProducts = async (req:Request,  res:Response) => {
+    try {
+        const count = await ProductModel.count();
+        res.status(200).json({count: count});
+    }
+    catch(err) {
+        console.log(err);
+        res.status(500).json({ message: err.message });
+    }
+}

@@ -93,6 +93,13 @@ test("PUT /api/product/:pid", async () => {
     expect(res.statusCode).toBe(200);
 });
 
+test("GET /api/product/count", async () => {
+    const res = await request(server)
+        .get("/api/product/count/all")
+        .set("Cookie", [cookie]);
+    expect(res.body.count).toBe(2);
+});
+
 test("DELETE /api/product/:pid", async () => {
     const res = await request(server)
         .delete("/api/product/2")

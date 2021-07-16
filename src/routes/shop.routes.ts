@@ -8,10 +8,18 @@ import {
 const shopRouter = express.Router();
 
 //GET / : get home page
-shopRouter.get("/", requireNoThing, shopControllers.getHomePage);
+shopRouter.get(
+    "/",
+    requireNoThing,
+    shopControllers.getHomePage
+);
 
 //GET /product/:pid : get detail of a product
-shopRouter.get("/product/:pid", requireNoThing, shopControllers.getProductById);
+shopRouter.get(
+    "/product/:pid",
+    requireNoThing,
+    shopControllers.getProductById
+);
 
 //GET /page/:page : get (:page)th page of products
 shopRouter.get(
@@ -21,7 +29,11 @@ shopRouter.get(
 );
 
 // GET /category : get all the categories
-shopRouter.get("/category", requireNoThing, shopControllers.getAllCategories);
+shopRouter.get(
+    "/category", 
+    requireNoThing, 
+    shopControllers.getAllCategories
+);
 
 // GET /category/:cat : get all products of (:cat)
 shopRouter.get(

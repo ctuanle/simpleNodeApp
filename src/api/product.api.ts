@@ -37,4 +37,11 @@ productApi.put(
     productControllers.putEditProduct
 );
 
+// GET /api/product/count : count all products
+productApi.get(
+    "/count/all",
+    requireRoleAdmin,
+    productControllers.getTotalNumberProducts
+);
+
 export default productApi;
