@@ -13,7 +13,16 @@ roomApi.get("/all", requireRoleAdmin, roomControllers.getAllRooms);
 // GET /api/room/:uid : get room by uid
 roomApi.get("/:uid", requireRoleAdmin, roomControllers.getRoomByUid);
 
+// GET /api/room/id/:rid : get room by rid
+roomApi.get("/id/:rid", requireRoleAdmin, roomControllers.getRoomById);
+
 // POST /api/room : add a room
 roomApi.post("/add", requireRoleAdmin, roomControllers.postAddRoom);
+
+// PUT /api/room/update/read : update read status of room
+roomApi.put("/update/read", requireRoleAdmin, roomControllers.putUpdateRead);
+
+// PUT /api/room/update/lastMsg : update last message of room
+roomApi.put("/update/lastMsg", requireRoleAdmin, roomControllers.putUpdateLastMsg);
 
 export default roomApi;

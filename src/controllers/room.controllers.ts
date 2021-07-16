@@ -28,6 +28,21 @@ export const getAllRooms = async (req:Request, res:Response) => {
     }
 }
 
+export const getRoomById = async (req:Request, res:Response) => {
+    try {
+        const room = await RoomModel.findOne({
+            where: { rid: req.params.rid },
+        });
+        if (room) {
+            return res.status(200).send(room);
+        }
+        res.status(404).send("Room not found!");
+    }
+    catch(err){
+        res.status(500).json({ message: err.message });
+    }
+}
+
 export const getRoomByUid = async (req:Request, res:Response) => {
     try {
         const room = await RoomModel.findOne({
@@ -53,6 +68,39 @@ export const postAddRoom = async (req:Request, res:Response) => {
             read: true,
         });
         res.status(200).send(newRoom);
+    }
+    catch(err){
+        res.status(500).json({ message: err.message });
+    }
+}
+
+export const putUpdateRead = async (req:Request, res:Response) => {
+    try {
+        await RoomModel.update(
+            {read: true},
+            {where: {rid: req.body.rid}}
+        );
+        res.status(200).send("Room updated successfully!");
+    }
+    catch(err){
+        res.status(500).json({ message: err.message });
+    }
+}
+
+export const putUpdateLastMsg = async (req:Request, res:Response) => {
+    try {
+        await RoomModel.update(
+            {
+                read: req.body.read, 
+                lastMsg: req.body.lastMsg
+            },
+            {
+                where: {
+                    rid: req.body.rid
+                }
+            }
+        );
+        res.status(200).send("Room updated successfully!");
     }
     catch(err){
         res.status(500).json({ message: err.message });

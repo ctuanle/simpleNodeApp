@@ -51,6 +51,20 @@ test("GET /api/user/username/:username", async () => {
     uid = res.body.uid;
 });
 
+
+let aid: string;
+test("GET /api/user/username/:username", async () => {
+    const res = await request(server)
+        .get("/api/user/username/admin")
+        .set("Cookie", [cookie])
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.uid).toBeTruthy();
+    expect(res.body.username).toEqual("admin");
+    aid = res.body.uid;
+});
+
+
 test("POST /api/room/add", async () => {
     const res = await request(server)
         .post("/api/room/add")
@@ -62,30 +76,40 @@ test("POST /api/room/add", async () => {
     expect(res.body.rid).toBeTruthy();
 });
 
-test("GET /api/room/:uid", async () => {
+test("POST /api/message/add", async () => {
     const res = await request(server)
-        .get("/api/room/"+uid)
-        .set("Cookie", [cookie]);
+        .post("/api/message/add")
+        .set("Cookie", [cookie])
+        .send({sid: aid, rid: uid, message: "Hello", roomId: 1});
 
     expect(res.statusCode).toBe(200);
-    expect(res.body.uid).toEqual(uid);
-    expect(res.body.username).toEqual("user");
 });
 
-test("GET /api/room/all", async () => {
+test("GET /api/message/count", async () => {
     const res = await request(server)
-        .get("/api/room/all")
+        .get("/api/message/count")
         .set("Cookie", [cookie]);
-    
+
     expect(res.statusCode).toBe(200);
-    expect(res.body[0].uid).toEqual(uid);
+    expect(res.body.count).toBe(1);
 });
 
-test("GET /api/room/five", async () => {
+test("GET /api/messages/latest15", async () => {
     const res = await request(server)
-        .get("/api/room/five")
-        .set("Cookie", [cookie]);
-    
+        .get("/api/message/latest15")
+        .set("Cookie", [cookie])
+        .send({rid: 1});
+
     expect(res.statusCode).toBe(200);
-    expect(res.body[0].uid).toEqual(uid);
+    expect(res.body[0].message).toEqual("Hello");
+});
+
+test("GET /api/messages/next/:offset", async () => {
+    const res = await request(server)
+        .get("/api/message/next/2")
+        .set("Cookie", [cookie])
+        .send({rid: 1});
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.length).toBe(0);
 });

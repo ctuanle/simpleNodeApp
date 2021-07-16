@@ -15,6 +15,7 @@ import authApi from "./src/api/auth.api";
 import productApi from "./src/api/product.api";
 import userApi from "./src/api/user.api";
 import roomApi from "./src/api/room.api";
+import msgApi from "./src/api/message.api";
 
 /**
  * App Variables
@@ -54,5 +55,6 @@ app.use("/api/auth", authApi);
 app.use("/api/product", productApi);
 app.use("/api/user", userApi);
 app.use("/api/room", roomApi);
+app.use("/api/message", msgApi);
 
 export default server;
