@@ -1,0 +1,19 @@
+import express from "express";
+import * as roomControllers from "../controllers/room.controllers";
+import { requireRoleAdmin } from "../middlewares/auth.middlewares";
+
+const roomApi = express.Router();
+
+// GET /api/room/five : get first 5 rooms
+roomApi.get("/five", requireRoleAdmin, roomControllers.getFirst5Rooms);
+
+// GET /api/room/all : get all romms
+roomApi.get("/all", requireRoleAdmin, roomControllers.getAllRooms);
+
+// GET /api/room/:uid : get room by uid
+roomApi.get("/:uid", requireRoleAdmin, roomControllers.getRoomByUid);
+
+// POST /api/room : add a room
+roomApi.post("/add", requireRoleAdmin, roomControllers.postAddRoom);
+
+export default roomApi;

@@ -14,4 +14,7 @@ userApi.get("/count", requireRoleAdmin, userControllers.getTotalNumberUsers);
 // GET /api/user/:uid : get user by id
 userApi.get("/:uid", requireRoleAdmin, userControllers.getUserById);
 
+// GET /api/user/username/:username : get user by username
+userApi.get("/username/:username", requireRoleAdmin, userControllers.getUserByUsername);
+
 export default userApi;

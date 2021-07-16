@@ -61,5 +61,16 @@ test("GET /api/user/:uid", async () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body.uid).toEqual(uid);
-})
+});
+
+test("GET /api/user/username/:username", async () => {
+    const res = await request(server)
+        .get("/api/user/username/jtest")
+        .set("Cookie", [cookie]);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.uid).toEqual(uid);
+    expect(res.body.username).toEqual("jtest");
+});
+
 

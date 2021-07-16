@@ -1,9 +1,5 @@
-require("dotenv").config();
 import { Request, Response } from "express";
-
-import { MessageModel } from "../db/models/message.model";
 import { UserModel } from "../db/models/user.model";
-import { RoomModel } from "../db/models/room.model";
 
 export const get5User = async (req:Request, res:Response) => {
     try {
@@ -35,8 +31,26 @@ export const getUserById = async (req:Request, res:Response) => {
         const user = await UserModel.findOne({
             where: { uid: req.params.uid },
         });
-        res.status(200).send(user);
+        if (user) {
+            return res.status(200).send(user);
+        }
+        return res.status(404).send("User not found!");
+    }   
+    catch(err){
+        res.status(500).json({ message: err.message });
     }
+}
+
+export const getUserByUsername = async (req:Request, res:Response) => {
+    try {
+        const user = await UserModel.findOne({
+            where: { username: req.params.username },
+        });
+        if (user) {
+            return res.status(200).send(user);
+        }
+        return res.status(404).send("User not found!");
+    }   
     catch(err){
         res.status(500).json({ message: err.message });
     }
