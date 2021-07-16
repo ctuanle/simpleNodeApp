@@ -13,6 +13,7 @@ import adminRouter from "./src/routes/admin.routes";
 
 import authApi from "./src/api/auth.api";
 import productApi from "./src/api/product.api";
+import userApi from "./src/api/user.api";
 
 /**
  * App Variables
@@ -50,5 +51,6 @@ app.use("/resources", express.static(path.join(__dirname, "..", "data")));
 // App API
 app.use("/api/auth", authApi);
 app.use("/api/product", productApi);
+app.use("/api/user", userApi);
 
 export default server;

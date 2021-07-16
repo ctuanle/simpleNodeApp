@@ -24,7 +24,7 @@ export const getProductById = async (req: Request, res: Response) => {
         const url = `${HOST_URl}/api/product/${req.params.pid}`;
         const data = (await axios.get(url)).data;
 
-        if (data) {
+        if (data && data.name) {
             return res.render("shop/sh_product", {
                 title: data.name,
                 product: data,
