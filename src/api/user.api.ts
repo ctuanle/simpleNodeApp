@@ -8,6 +8,9 @@ const userApi = express.Router();
 // GET /api/user/five : get first 5 users
 userApi.get("/five", requireRoleAdmin, userControllers.get5User);
 
+// GET /api/user/all/:page : get users
+userApi.get("/all/:page", requireRoleAdmin, userControllers.getAllUsers);
+
 // GET /api/user/count : get number of users
 userApi.get("/count", requireRoleAdmin, userControllers.getTotalNumberUsers);
 
