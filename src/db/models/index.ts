@@ -11,9 +11,7 @@ const DB_HOST = process.env.DB_HOST;
 
 // Check database config
 if (!DB_NAME || !DB_USER || !DB_PWD || !DB_HOST) {
-    console.error(
-        "Please config your working environment first (file .env): DATABASE"
-    );
+    console.error("Please config your working environment first (file .env): DATABASE");
     process.exit();
 }
 

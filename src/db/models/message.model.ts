@@ -10,11 +10,9 @@ interface MessageAttributes {
     read: boolean;
 }
 
-interface MessageCreationAttributes
-    extends Optional<MessageAttributes, "mid"> {}
+interface MessageCreationAttributes extends Optional<MessageAttributes, "mid"> {}
 
-interface MessageInstance
-    extends Model<MessageAttributes, MessageCreationAttributes> {}
+interface MessageInstance extends Model<MessageAttributes, MessageCreationAttributes> {}
 
 export const MessageModel = sequelize.define<MessageInstance>(
     "Message",

@@ -9,12 +9,9 @@ interface ProductAttributes {
     images?: string;
 }
 
-interface ProductCreationAttributes
-    extends Optional<ProductAttributes, "pid"> {}
+interface ProductCreationAttributes extends Optional<ProductAttributes, "pid"> {}
 
-interface ProductInstance
-    extends Model<ProductAttributes, ProductCreationAttributes>,
-        ProductAttributes {}
+interface ProductInstance extends Model<ProductAttributes, ProductCreationAttributes>, ProductAttributes {}
 
 export const ProductModel = sequelize.define<ProductInstance>(
     "Product",

@@ -10,20 +10,17 @@ const usSockets: { [key: string]: string } = {};
 // TODO: gửi tới tất cả các socket có cùng uid thay vì chỉ 1
 
 export const socketHandler = (io: Server, socket: Socket) => {
-    if (socket.handshake.auth.role == "ADMIN") {
+    if (socket.handshake.auth.role === "ADMIN") {
         adSocket = socket.id;
-    } else if (socket.handshake.auth.role == "NORMAL_USER") {
+    } else if (socket.handshake.auth.role === "NORMAL_USER") {
         usSockets[socket.handshake.auth.uid] = socket.id;
     }
 
     socket.on("admin:send_msg", async (data) => {
         if (socket.handshake.auth.uid === data.sdid) {
             try {
-                //verify the validation of given token
-                jwt.verify(
-                    socket.handshake.auth.token,
-                    <jwt.Secret>process.env.TOKEN_SECRET_KEY
-                );
+                // verify the validation of given token
+                jwt.verify(socket.handshake.auth.token, <jwt.Secret>process.env.TOKEN_SECRET_KEY);
 
                 // Find the room with the given data
                 const room = await RoomModel.findOne({
@@ -32,7 +29,7 @@ export const socketHandler = (io: Server, socket: Socket) => {
                 const user = await UserModel.findOne({
                     where: { uid: data.rcid },
                 });
-                if (room && user && room.get("aid") == data.sdid) {
+                if (room && user && room.get("aid") === data.sdid) {
                     await MessageModel.create({
                         sid: room.getDataValue("aid"),
                         rid: room.getDataValue("uid"),
@@ -44,9 +41,7 @@ export const socketHandler = (io: Server, socket: Socket) => {
                         lastMsg: data.msg,
                         read: false,
                     });
-                    socket
-                        .to(usSockets[data.rcid])
-                        .emit("user:receive_msg", { ...data });
+                    socket.to(usSockets[data.rcid]).emit("user:receive_msg", { ...data });
                 }
             } catch (err) {
                 console.log(err.name, err.message);
@@ -61,11 +56,8 @@ export const socketHandler = (io: Server, socket: Socket) => {
                 where: { rid: data.roomId },
             });
             if (room && room.get("uid") === data.sid) {
-                //update room status
-                RoomModel.update(
-                    { lastMsg: data.msg, read: false },
-                    { where: { rid: room.get("rid") } }
-                );
+                // update room status
+                RoomModel.update({ lastMsg: data.msg, read: false }, { where: { rid: room.get("rid") } });
 
                 await MessageModel.create({
                     sid: data.sid,

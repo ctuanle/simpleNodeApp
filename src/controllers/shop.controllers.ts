@@ -1,12 +1,12 @@
-require("dotenv").config();
 import axios from "axios";
 import { Request, Response } from "express";
-import { ProductModel } from "../db/models/product.model";
 import { MessageModel } from "../db/models/message.model";
 import { RoomModel } from "../db/models/room.model";
 import { UserModel } from "../db/models/user.model";
 
-const HOST_URl = `http://${process.env.HOST}:${process.env.PORT}`;
+require("dotenv").config();
+
+const hostUrl = `http://${process.env.HOST}:${process.env.PORT}`;
 
 export const getHomePage = (req: Request, res: Response) => {
     try {
@@ -21,7 +21,7 @@ export const getHomePage = (req: Request, res: Response) => {
 
 export const getProductById = async (req: Request, res: Response) => {
     try {
-        const url = `${HOST_URl}/api/product/${req.params.pid}`;
+        const url = `${hostUrl}/api/product/${req.params.pid}`;
         const data = (await axios.get(url)).data;
 
         if (data && data.name) {
@@ -40,7 +40,7 @@ export const getProductById = async (req: Request, res: Response) => {
 
 export const getNProducts = async (req: Request, res: Response) => {
     try {
-        const url = `${HOST_URl}/api/product/page/${req.params.page}`;
+        const url = `${hostUrl}/api/product/page/${req.params.page}`;
         const data = (await axios.get(url)).data;
 
         if (data.numpage && data.products.length > 0) {
@@ -60,7 +60,7 @@ export const getNProducts = async (req: Request, res: Response) => {
 
 export const getAllCategories = async (req: Request, res: Response) => {
     try {
-        const url = `${HOST_URl}/api/product/category/all`;
+        const url = `${hostUrl}/api/product/category/all`;
         const data = (await axios.get(url)).data;
 
         res.render("shop/sh_categories", {
@@ -76,7 +76,7 @@ export const getAllCategories = async (req: Request, res: Response) => {
 
 export const getProductsByCategory = async (req: Request, res: Response) => {
     try {
-        const url = `${HOST_URl}/api/product/category/${req.params.cat}`;
+        const url = `${hostUrl}/api/product/category/${req.params.cat}`;
         const data = (await axios.get(url)).data;
 
         res.render("shop/sh_categories", {
@@ -92,17 +92,17 @@ export const getProductsByCategory = async (req: Request, res: Response) => {
 
 export const getMessagesPage = async (req: Request, res: Response) => {
     try {
-        //Check if the uid is valid
+        // Check if the uid is valid
         const user = await UserModel.findOne({
             where: { uid: req.params.uid },
         });
         if (user && user.get("role") === "NORMAL_USER") {
-            //Check if there is already a room for this user
+            // Check if there is already a room for this user
             const room = await RoomModel.findOne({
                 where: { uid: req.params.uid },
             });
             if (room) {
-                //Get the messages
+                // Get the messages
                 const messages = await MessageModel.findAll({
                     where: { roomId: room.get("rid") },
                 });
@@ -114,10 +114,10 @@ export const getMessagesPage = async (req: Request, res: Response) => {
                 });
             }
 
-            //Find an admin
+            // Find an admin
             const admin = await UserModel.findOne({ where: { role: "ADMIN" } });
             if (admin) {
-                //Create a room for this user
+                // Create a room for this user
                 const newRoom = await RoomModel.create({
                     uid: user.get("uid"),
                     aid: admin.get("uid"),

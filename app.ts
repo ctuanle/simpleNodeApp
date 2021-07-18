@@ -20,13 +20,11 @@ import msgApi from "./src/api/message.api";
 /**
  * App Variables
  */
-const app = express();
+const app: express.Application = express();
 const server = http.createServer(app);
 const PORT = process.env.PORT;
 if (!PORT) {
-    console.error(
-        "Please config your working environement first (file .env) : PORT"
-    );
+    console.error("Please config your working environement first (file .env) : PORT");
     process.exit();
 }
 

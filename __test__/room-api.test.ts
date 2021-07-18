@@ -24,9 +24,7 @@ test("BECOME ADMIN", async () => {
 
 let cookie: string;
 test("POST /api/auth/login", async () => {
-    const res = await request(server)
-        .post("/api/auth/login")
-        .send({ username: "admin", password: "azerty" });
+    const res = await request(server).post("/api/auth/login").send({ username: "admin", password: "azerty" });
     expect(res.headers["set-cookie"]).toBeTruthy();
     cookie = res.headers["set-cookie"];
     expect(res.statusCode).toBe(200);
@@ -41,9 +39,7 @@ test("POST /api/auth/signup", async () => {
 
 let uid: string;
 test("GET /api/user/username/:username", async () => {
-    const res = await request(server)
-        .get("/api/user/username/user")
-        .set("Cookie", [cookie])
+    const res = await request(server).get("/api/user/username/user").set("Cookie", [cookie]);
 
     expect(res.statusCode).toBe(200);
     expect(res.body.uid).toBeTruthy();
@@ -55,7 +51,7 @@ test("POST /api/room/add", async () => {
     const res = await request(server)
         .post("/api/room/add")
         .set("Cookie", [cookie])
-        .send({uid: uid, username: "user"});
+        .send({ uid: uid, username: "user" });
 
     expect(res.statusCode).toBe(200);
     expect(res.body.uid).toEqual(uid);
@@ -64,7 +60,7 @@ test("POST /api/room/add", async () => {
 
 test("GET /api/room/:uid", async () => {
     const res = await request(server)
-        .get("/api/room/"+uid)
+        .get("/api/room/" + uid)
         .set("Cookie", [cookie]);
 
     expect(res.statusCode).toBe(200);
@@ -73,19 +69,15 @@ test("GET /api/room/:uid", async () => {
 });
 
 test("GET /api/room/all", async () => {
-    const res = await request(server)
-        .get("/api/room/all")
-        .set("Cookie", [cookie]);
-    
+    const res = await request(server).get("/api/room/all").set("Cookie", [cookie]);
+
     expect(res.statusCode).toBe(200);
     expect(res.body[0].uid).toEqual(uid);
 });
 
 test("GET /api/room/five", async () => {
-    const res = await request(server)
-        .get("/api/room/five")
-        .set("Cookie", [cookie]);
-    
+    const res = await request(server).get("/api/room/five").set("Cookie", [cookie]);
+
     expect(res.statusCode).toBe(200);
     expect(res.body[0].uid).toEqual(uid);
 });

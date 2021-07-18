@@ -1,4 +1,3 @@
-require("dotenv").config();
 import bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
 
@@ -7,7 +6,9 @@ import { sendmail } from "./sendmail";
 import { SentMessageInfo } from "nodemailer";
 import { UserModel } from "../db/models/user.model";
 
-//--THESE ARE FOR RENDERING HTML PAGE
+require("dotenv").config();
+
+// --THESE ARE FOR RENDERING HTML PAGE
 
 /**
  * GET Login Page
@@ -89,9 +90,7 @@ export const postSignup = async (req: Request, res: Response) => {
             },
         });
         if (userWithUsername) {
-            return res
-                .status(500)
-                .json({ message: "Username is already taken!" });
+            return res.status(500).json({ message: "Username is already taken!" });
         }
 
         // Check if email is already taken
@@ -102,9 +101,7 @@ export const postSignup = async (req: Request, res: Response) => {
                 },
             });
             if (userWithEmail) {
-                return res
-                    .status(500)
-                    .json({ message: "Email is already taken!" });
+                return res.status(500).json({ message: "Email is already taken!" });
             }
         }
 
@@ -145,10 +142,7 @@ export const postLogin = async (req: Request, res: Response) => {
         }
 
         // Compare the passwords
-        const match = await bcrypt.compare(
-            req.body.password,
-            user.get("password")
-        );
+        const match = await bcrypt.compare(req.body.password, user.get("password"));
 
         if (!match) {
             // Case: incorrect password => return
@@ -166,11 +160,7 @@ export const postLogin = async (req: Request, res: Response) => {
         const URL = user.get("role") === "ADMIN" ? "/admin" : "/";
 
         // Create a token
-        const token = jwt.sign(
-            payload,
-            <jwt.Secret>process.env.TOKEN_SECRET_KEY,
-            { expiresIn: "1h" }
-        );
+        const token = jwt.sign(payload, <jwt.Secret>process.env.TOKEN_SECRET_KEY, { expiresIn: "1h" });
 
         // Login succesfully: set the cookie with the token created
         res.status(200)
@@ -190,10 +180,7 @@ export const checkInfo = (req: Request, res: Response) => {
     try {
         if (req.cookies.ctle_user_token) {
             const token: string = req.cookies.ctle_user_token;
-            const decodedToken = jwt.verify(
-                token,
-                <jwt.Secret>process.env.TOKEN_SECRET_KEY
-            );
+            const decodedToken = jwt.verify(token, <jwt.Secret>process.env.TOKEN_SECRET_KEY);
             const payload = <{ uid: number; role: string }>decodedToken;
             res.status(200).json({
                 uid: payload.uid,
@@ -239,11 +226,7 @@ export const postForgotPassword = async (req: Request, res: Response) => {
                 email: user.getDataValue("email"),
             };
 
-            const token: string = jwt.sign(
-                payload,
-                <jwt.Secret>user.getDataValue("password"),
-                { expiresIn: "15m" }
-            );
+            const token: string = jwt.sign(payload, <jwt.Secret>user.getDataValue("password"), { expiresIn: "15m" });
             const resetLink = `http://localhost:${process.env.PORT}/auth/reset/${payload.uid}/${token}`;
 
             const message = {
@@ -272,7 +255,7 @@ export const postForgotPassword = async (req: Request, res: Response) => {
                 }
             });
         } else {
-            //we do not tell the user that the email is not linked to any account
+            // we do not tell the user that the email is not linked to any account
             res.status(205).json();
         }
     } catch (err) {

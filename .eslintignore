@@ -13,3 +13,10 @@ data/
 
 # json config file
 *.json
+
+views
+public
+__test__
+LICENSE
+README.md
+sample.env

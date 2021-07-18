@@ -24,9 +24,7 @@ test("BECOME ADMIN", async () => {
 
 let cookie: string;
 test("POST /api/auth/login", async () => {
-    const res = await request(server)
-        .post("/api/auth/login")
-        .send({ username: "admin", password: "azerty" });
+    const res = await request(server).post("/api/auth/login").send({ username: "admin", password: "azerty" });
     expect(res.headers["set-cookie"]).toBeTruthy();
     cookie = res.headers["set-cookie"];
     expect(res.statusCode).toBe(200);
@@ -41,9 +39,7 @@ test("POST /api/auth/signup", async () => {
 
 let uid: string;
 test("GET /api/user/username/:username", async () => {
-    const res = await request(server)
-        .get("/api/user/username/user")
-        .set("Cookie", [cookie])
+    const res = await request(server).get("/api/user/username/user").set("Cookie", [cookie]);
 
     expect(res.statusCode).toBe(200);
     expect(res.body.uid).toBeTruthy();
@@ -51,12 +47,9 @@ test("GET /api/user/username/:username", async () => {
     uid = res.body.uid;
 });
 
-
 let aid: string;
 test("GET /api/user/username/:username", async () => {
-    const res = await request(server)
-        .get("/api/user/username/admin")
-        .set("Cookie", [cookie])
+    const res = await request(server).get("/api/user/username/admin").set("Cookie", [cookie]);
 
     expect(res.statusCode).toBe(200);
     expect(res.body.uid).toBeTruthy();
@@ -64,12 +57,11 @@ test("GET /api/user/username/:username", async () => {
     aid = res.body.uid;
 });
 
-
 test("POST /api/room/add", async () => {
     const res = await request(server)
         .post("/api/room/add")
         .set("Cookie", [cookie])
-        .send({uid: uid, username: "user"});
+        .send({ uid: uid, username: "user" });
 
     expect(res.statusCode).toBe(200);
     expect(res.body.uid).toEqual(uid);
@@ -80,35 +72,27 @@ test("POST /api/message/add", async () => {
     const res = await request(server)
         .post("/api/message/add")
         .set("Cookie", [cookie])
-        .send({sid: aid, rid: uid, message: "Hello", roomId: 1});
+        .send({ sid: aid, rid: uid, message: "Hello", roomId: 1 });
 
     expect(res.statusCode).toBe(200);
 });
 
 test("GET /api/message/count", async () => {
-    const res = await request(server)
-        .get("/api/message/count")
-        .set("Cookie", [cookie]);
+    const res = await request(server).get("/api/message/count").set("Cookie", [cookie]);
 
     expect(res.statusCode).toBe(200);
     expect(res.body.count).toBe(1);
 });
 
 test("GET /api/messages/latest15", async () => {
-    const res = await request(server)
-        .get("/api/message/latest15")
-        .set("Cookie", [cookie])
-        .send({rid: 1});
+    const res = await request(server).get("/api/message/latest15").set("Cookie", [cookie]).send({ rid: 1 });
 
     expect(res.statusCode).toBe(200);
     expect(res.body[0].message).toEqual("Hello");
 });
 
 test("GET /api/messages/next/:offset", async () => {
-    const res = await request(server)
-        .get("/api/message/next/2")
-        .set("Cookie", [cookie])
-        .send({rid: 1});
+    const res = await request(server).get("/api/message/next/2").set("Cookie", [cookie]).send({ rid: 1 });
 
     expect(res.statusCode).toBe(200);
     expect(res.body.length).toBe(0);

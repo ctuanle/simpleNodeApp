@@ -9,8 +9,7 @@ module.exports = {
                     username: "admin",
                     email: "admin@node.io",
                     isAdmin: true,
-                    password:
-                        "$2b$10$7PrTqZuLv5LI0fCEQ4lo4OJd4ycn.LW8kPekjdqIbJqRvGrdrSpE.", //azerty
+                    password: "$2b$10$7PrTqZuLv5LI0fCEQ4lo4OJd4ycn.LW8kPekjdqIbJqRvGrdrSpE.", // azerty
                     createdAt: new Date(),
                     updatedAt: new Date(),
                 },
@@ -18,8 +17,7 @@ module.exports = {
                     username: "user",
                     email: "user@node.io",
                     isAdmin: false,
-                    password:
-                        "$2b$10$7PrTqZuLv5LI0fCEQ4lo4OJd4ycn.LW8kPekjdqIbJqRvGrdrSpE.", //azerty
+                    password: "$2b$10$7PrTqZuLv5LI0fCEQ4lo4OJd4ycn.LW8kPekjdqIbJqRvGrdrSpE.", // azerty
                     createdAt: new Date(),
                     updatedAt: new Date(),
                 },
@@ -29,6 +27,6 @@ module.exports = {
     },
 
     down: async (queryInterface) => {
-        //await queryInterface.bulkDelete('User', null, {});
+        // await queryInterface.bulkDelete('User', null, {});
     },
 };

@@ -25,9 +25,7 @@ test("BECOME ADMIN", async () => {
 let cookie: string;
 
 test("POST /api/auth/login", async () => {
-    const res = await request(server)
-        .post("/api/auth/login")
-        .send({ username: "jtest", password: "azerty" });
+    const res = await request(server).post("/api/auth/login").send({ username: "jtest", password: "azerty" });
     expect(res.headers["set-cookie"]).toBeTruthy();
     cookie = res.headers["set-cookie"];
     expect(res.statusCode).toBe(200);
@@ -65,23 +63,13 @@ test("GET /api/product/page/1", async () => {
 test("GET /api/category/all", async () => {
     const res = await request(server).get("/api/product/category/all");
     expect(res.statusCode).toBe(200);
-    expect(res.body).toMatchObject([
-        "Uncategorized",
-        "Book",
-        "Phone",
-        "Laptop",
-    ]);
+    expect(res.body).toMatchObject(["Uncategorized", "Book", "Phone", "Laptop"]);
 });
 
 test("GET /api/category/:cat", async () => {
     const res = await request(server).get("/api/product/category/Phone");
     expect(res.statusCode).toBe(200);
-    expect(res.body.cats).toMatchObject([
-        "Uncategorized",
-        "Book",
-        "Phone",
-        "Laptop",
-    ]);
+    expect(res.body.cats).toMatchObject(["Uncategorized", "Book", "Phone", "Laptop"]);
     expect(res.body.products.length).toBe(1);
 });
 
@@ -94,16 +82,11 @@ test("PUT /api/product/:pid", async () => {
 });
 
 test("GET /api/product/count", async () => {
-    const res = await request(server)
-        .get("/api/product/count/all")
-        .set("Cookie", [cookie]);
+    const res = await request(server).get("/api/product/count/all").set("Cookie", [cookie]);
     expect(res.body.count).toBe(2);
 });
 
 test("DELETE /api/product/:pid", async () => {
-    const res = await request(server)
-        .delete("/api/product/2")
-        .set("Cookie", [cookie])
-        .send({ pid: 1 });
+    const res = await request(server).delete("/api/product/2").set("Cookie", [cookie]).send({ pid: 1 });
     expect(res.statusCode).toBe(200);
 });

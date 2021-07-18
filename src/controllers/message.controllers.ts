@@ -1,18 +1,16 @@
 import { Request, Response } from "express";
-import { RoomModel } from "../db/models/room.model";
 import { MessageModel } from "../db/models/message.model";
 
-export const getTotalNumberMessages = async (req:Request, res:Response) => {
+export const getTotalNumberMessages = async (req: Request, res: Response) => {
     try {
         const count = await MessageModel.count();
-        res.status(200).json({count: count});
-    }
-    catch(err) {
+        res.status(200).json({ count: count });
+    } catch (err) {
         res.status(500).json({ message: err.message });
     }
-}
+};
 
-export const get15LatestMessage = async (req:Request, res:Response) => {
+export const get15LatestMessage = async (req: Request, res: Response) => {
     try {
         const messages = await MessageModel.findAll({
             where: { roomId: req.body.rid },
@@ -23,13 +21,12 @@ export const get15LatestMessage = async (req:Request, res:Response) => {
         });
 
         res.status(200).send(messages);
-    }
-    catch(err) {
+    } catch (err) {
         res.status(500).json({ message: err.message });
     }
-}
+};
 
-export const getNext15Messages = async (req:Request, res:Response) => {
+export const getNext15Messages = async (req: Request, res: Response) => {
     try {
         const messages = await MessageModel.findAll({
             where: { roomId: req.body.rid },
@@ -40,13 +37,12 @@ export const getNext15Messages = async (req:Request, res:Response) => {
         });
 
         res.status(200).send(messages);
-    }
-    catch(err) {
+    } catch (err) {
         res.status(500).json({ message: err.message });
     }
-}
+};
 
-export const postMessage = async (req:Request, res:Response) => {
+export const postMessage = async (req: Request, res: Response) => {
     try {
         const msg = await MessageModel.create({
             sid: req.body.sid,
@@ -56,8 +52,7 @@ export const postMessage = async (req:Request, res:Response) => {
             read: false,
         });
         res.status(200).send(msg);
-    }
-    catch(err) {
+    } catch (err) {
         res.status(500).json({ message: err.message });
     }
-}
+};

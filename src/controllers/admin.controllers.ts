@@ -1,40 +1,43 @@
-require("dotenv").config();
 import axios from "axios";
 import { Request, Response } from "express";
+require("dotenv").config();
 
-import { ProductModel } from "../db/models/product.model";
-import { MessageModel } from "../db/models/message.model";
-import { UserModel } from "../db/models/user.model";
-import { RoomModel } from "../db/models/room.model";
-
-const HOST_URl = `http://${process.env.HOST}:${process.env.PORT}`;
+const hostUrl = `http://${process.env.HOST}:${process.env.PORT}`;
 
 export const getHomepageForAdmin = async (req: Request, res: Response) => {
     try {
-        const products = (await axios.get(`${HOST_URl}/api/product/page/1`)).data.products;
-        const users = (await axios.get(`${HOST_URl}/api/user/five`, {
-            headers: {
-                Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`
-            }
-        })).data; 
+        const products = (await axios.get(`${hostUrl}/api/product/page/1`)).data.products;
+        const users = (
+            await axios.get(`${hostUrl}/api/user/five`, {
+                headers: {
+                    Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`,
+                },
+            })
+        ).data;
 
-        const numProds = (await axios.get(`${HOST_URl}/api/product/count/all`, {
-            headers: {
-                Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`
-            }
-        })).data.count;
+        const numProds = (
+            await axios.get(`${hostUrl}/api/product/count/all`, {
+                headers: {
+                    Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`,
+                },
+            })
+        ).data.count;
 
-        const numUsers = (await axios.get(`${HOST_URl}/api/user/count`, {
-            headers: {
-                Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`
-            }
-        })).data.count;
+        const numUsers = (
+            await axios.get(`${hostUrl}/api/user/count`, {
+                headers: {
+                    Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`,
+                },
+            })
+        ).data.count;
 
-        const numMsgs = (await axios.get(`${HOST_URl}/api/message/count`, {
-            headers: {
-                Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`
-            }
-        })).data.count;
+        const numMsgs = (
+            await axios.get(`${hostUrl}/api/message/count`, {
+                headers: {
+                    Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`,
+                },
+            })
+        ).data.count;
 
         const stats = {
             numProds: numProds,
@@ -42,11 +45,13 @@ export const getHomepageForAdmin = async (req: Request, res: Response) => {
             numMsgs: numMsgs,
         };
 
-        const rooms = (await axios.get(`${HOST_URl}/api/room/five`, {
-            headers: {
-                Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`
-            }
-        })).data;
+        const rooms = (
+            await axios.get(`${hostUrl}/api/room/five`, {
+                headers: {
+                    Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`,
+                },
+            })
+        ).data;
 
         res.render("admin/ad_index", {
             title: "Admin Board",
@@ -63,7 +68,7 @@ export const getHomepageForAdmin = async (req: Request, res: Response) => {
 
 export const getAddProduct = async (req: Request, res: Response) => {
     try {
-        const cats = (await axios.get(`${HOST_URl}/api/product/category/all`)).data;
+        const cats = (await axios.get(`${hostUrl}/api/product/category/all`)).data;
 
         res.render("admin/ad_product-add", {
             title: "Add Product",
@@ -77,9 +82,9 @@ export const getAddProduct = async (req: Request, res: Response) => {
 
 export const getEditProduct = async (req: Request, res: Response) => {
     try {
-        const cats = (await axios.get(`${HOST_URl}/api/product/category/all`)).data;
+        const cats = (await axios.get(`${hostUrl}/api/product/category/all`)).data;
 
-        const product = (await axios.get(`${HOST_URl}/api/product/${req.params.pid}`)).data;
+        const product = (await axios.get(`${hostUrl}/api/product/${req.params.pid}`)).data;
 
         if (product) {
             res.render("admin/ad_product-edit", {
@@ -98,7 +103,7 @@ export const getEditProduct = async (req: Request, res: Response) => {
 
 export const getAllProductsPage = async (req: Request, res: Response) => {
     try {
-        const data = (await axios.get(`${HOST_URl}/api/product/page/${req.params.page}`)).data;
+        const data = (await axios.get(`${hostUrl}/api/product/page/${req.params.page}`)).data;
 
         res.render("admin/ad_products", {
             title: "Products",
@@ -113,11 +118,13 @@ export const getAllProductsPage = async (req: Request, res: Response) => {
 
 export const getAllUsersPage = async (req: Request, res: Response) => {
     try {
-        const data = (await axios.get(`${HOST_URl}/api/user/all/${req.params.page}`, {
-            headers: {
-                Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`
-            }
-        })).data;
+        const data = (
+            await axios.get(`${hostUrl}/api/user/all/${req.params.page}`, {
+                headers: {
+                    Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`,
+                },
+            })
+        ).data;
 
         res.render("admin/ad_users", {
             title: "Users",
@@ -132,11 +139,13 @@ export const getAllUsersPage = async (req: Request, res: Response) => {
 
 export const getRoomsPage = async (req: Request, res: Response) => {
     try {
-        const data = (await axios.get(`${HOST_URl}/api/room/all`, {
-            headers: {
-                Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`
-            }
-        })).data;
+        const data = (
+            await axios.get(`${hostUrl}/api/room/all`, {
+                headers: {
+                    Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`,
+                },
+            })
+        ).data;
         res.render("admin/ad_messages", {
             title: "Messages",
             rooms: data,
@@ -150,35 +159,43 @@ export const getRoomsPage = async (req: Request, res: Response) => {
 
 export const getMessagesPage = async (req: Request, res: Response) => {
     try {
-        const rooms = (await axios.get(`${HOST_URl}/api/room/all`, {
-            headers: {
-                Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`
-            }
-        })).data;
+        const rooms = (
+            await axios.get(`${hostUrl}/api/room/all`, {
+                headers: {
+                    Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`,
+                },
+            })
+        ).data;
 
-        const room = (await axios.get(`${HOST_URl}/api/room/${req.params.uid}`, {
-            headers: {
-                Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`
-            }
-        })).data;
+        const room = (
+            await axios.get(`${hostUrl}/api/room/${req.params.uid}`, {
+                headers: {
+                    Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`,
+                },
+            })
+        ).data;
 
-        const user = (await axios.get(`${HOST_URl}/api/user/${req.params.uid}`, {
-            headers: {
-                Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`
-            }
-        })).data;
+        const user = (
+            await axios.get(`${hostUrl}/api/user/${req.params.uid}`, {
+                headers: {
+                    Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`,
+                },
+            })
+        ).data;
 
         if (room && user) {
-            const messages = (await axios.get(`${HOST_URl}/api/message/latest15`, {
-                headers: {
-                    Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`
-                },
-                data: {
-                    rid: room.rid
-                }
-            })).data;
+            const messages = (
+                await axios.get(`${hostUrl}/api/message/latest15`, {
+                    headers: {
+                        Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`,
+                    },
+                    data: {
+                        rid: room.rid,
+                    },
+                })
+            ).data;
 
-            // await axios.put(`${HOST_URl}/api/room/update/read`, {
+            // await axios.put(`${hostUrl}/api/room/update/read`, {
             //     headers: {
             //         Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`
             //     }
@@ -201,15 +218,17 @@ export const getMessagesPage = async (req: Request, res: Response) => {
             //     read: true,
             // });
 
-            const newRoom = (await axios.post(`${HOST_URl}/api/room/add`, {
-                headers: {
-                    Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`
-                },
-                data: {
-                    uid: user.uid,
-                    username: user.username,
-                }
-            })).data;
+            const newRoom = (
+                await axios.post(`${hostUrl}/api/room/add`, {
+                    headers: {
+                        Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`,
+                    },
+                    data: {
+                        uid: user.uid,
+                        username: user.username,
+                    },
+                })
+            ).data;
 
             res.render("admin/ad_messages", {
                 title: "Messages",
@@ -232,22 +251,25 @@ export const getMessagesPage = async (req: Request, res: Response) => {
 
 export const getNextMessages = async (req: Request, res: Response) => {
     try {
-
-        const room = (await axios.get(`${HOST_URl}/api/room/${req.params.uid}`, {
-            headers: {
-                Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`
-            }
-        })).data;
+        const room = (
+            await axios.get(`${hostUrl}/api/room/${req.params.uid}`, {
+                headers: {
+                    Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`,
+                },
+            })
+        ).data;
 
         if (room) {
-            const messages = (await axios.get(`${HOST_URl}/api/message/next/${req.params.offset}`, {
-                headers: {
-                    Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`
-                },
-                data: {
-                    rid : room.rid
-                }
-            })).data;
+            const messages = (
+                await axios.get(`${hostUrl}/api/message/next/${req.params.offset}`, {
+                    headers: {
+                        Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`,
+                    },
+                    data: {
+                        rid: room.rid,
+                    },
+                })
+            ).data;
 
             // await room.update({ read: true });
 

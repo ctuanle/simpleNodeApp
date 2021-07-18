@@ -47,9 +47,7 @@ export const getNProduct = async (req: Request, res: Response) => {
 
 export const getAllCategories = async (req: Request, res: Response) => {
     try {
-        const cats = JSON.parse(
-            JSON.stringify(ProductModel.rawAttributes.category.type)
-        );
+        const cats = JSON.parse(JSON.stringify(ProductModel.rawAttributes.category.type));
         res.status(200).send(cats.values);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -58,9 +56,7 @@ export const getAllCategories = async (req: Request, res: Response) => {
 
 export const getProductsByCategory = async (req: Request, res: Response) => {
     try {
-        const cats = JSON.parse(
-            JSON.stringify(ProductModel.rawAttributes.category.type)
-        );
+        const cats = JSON.parse(JSON.stringify(ProductModel.rawAttributes.category.type));
 
         const products = await ProductModel.findAll({
             where: {
@@ -76,7 +72,7 @@ export const getProductsByCategory = async (req: Request, res: Response) => {
 
 export const postAddProduct = async (req: Request, res: Response) => {
     try {
-        let path = undefined;
+        let path;
         if (req.file) {
             path = req.file.path.slice(5);
         }
@@ -103,7 +99,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
 
 export const putEditProduct = async (req: Request, res: Response) => {
     try {
-        let path = undefined;
+        let path;
         if (req.file) {
             path = req.file.path.slice(5);
         }
@@ -138,14 +134,12 @@ export const putEditProduct = async (req: Request, res: Response) => {
     }
 };
 
-
-export const getTotalNumberProducts = async (req:Request,  res:Response) => {
+export const getTotalNumberProducts = async (req: Request, res: Response) => {
     try {
         const count = await ProductModel.count();
-        res.status(200).json({count: count});
-    }
-    catch(err) {
+        res.status(200).json({ count: count });
+    } catch (err) {
         console.log(err);
         res.status(500).json({ message: err.message });
     }
-}
+};

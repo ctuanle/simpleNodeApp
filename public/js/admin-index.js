@@ -50,29 +50,19 @@ const currentPage = window.location.href.split("/")[4];
 
 switch (currentPage) {
     case "products":
-        document
-            .getElementById("sidebar_products")
-            .setAttribute("class", "active");
+        document.getElementById("sidebar_products").setAttribute("class", "active");
         break;
     case "product":
-        document
-            .getElementById("sidebar_add_product")
-            .setAttribute("class", "active");
+        document.getElementById("sidebar_add_product").setAttribute("class", "active");
         break;
     case "users":
-        document
-            .getElementById("sidebar_users")
-            .setAttribute("class", "active");
+        document.getElementById("sidebar_users").setAttribute("class", "active");
         break;
     case "categories":
-        document
-            .getElementById("sidebar_categories")
-            .setAttribute("class", "active");
+        document.getElementById("sidebar_categories").setAttribute("class", "active");
         break;
     case "messages":
-        document
-            .getElementById("sidebar_messages")
-            .setAttribute("class", "active");
+        document.getElementById("sidebar_messages").setAttribute("class", "active");
         break;
     default:
         document.getElementById("sidebar_home").setAttribute("class", "active");

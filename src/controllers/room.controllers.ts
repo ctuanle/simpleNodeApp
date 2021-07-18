@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { RoomModel } from "../db/models/room.model";
 
-export const getFirst5Rooms = async (req:Request, res:Response) => {
+export const getFirst5Rooms = async (req: Request, res: Response) => {
     try {
         const rooms = await RoomModel.findAll({
             order: [["updatedAt", "DESC"]],
@@ -10,25 +10,23 @@ export const getFirst5Rooms = async (req:Request, res:Response) => {
             raw: true,
         });
         res.status(200).send(rooms);
-    }
-    catch(err){
+    } catch (err) {
         res.status(500).json({ message: err.message });
     }
-}
+};
 
-export const getAllRooms = async (req:Request, res:Response) => {
+export const getAllRooms = async (req: Request, res: Response) => {
     try {
         const rooms = await RoomModel.findAll({
             order: [["updatedAt", "DESC"]],
         });
         res.status(200).send(rooms);
-    }
-    catch(err){
+    } catch (err) {
         res.status(500).json({ message: err.message });
     }
-}
+};
 
-export const getRoomById = async (req:Request, res:Response) => {
+export const getRoomById = async (req: Request, res: Response) => {
     try {
         const room = await RoomModel.findOne({
             where: { rid: req.params.rid },
@@ -37,13 +35,12 @@ export const getRoomById = async (req:Request, res:Response) => {
             return res.status(200).send(room);
         }
         res.status(404).send("Room not found!");
-    }
-    catch(err){
+    } catch (err) {
         res.status(500).json({ message: err.message });
     }
-}
+};
 
-export const getRoomByUid = async (req:Request, res:Response) => {
+export const getRoomByUid = async (req: Request, res: Response) => {
     try {
         const room = await RoomModel.findOne({
             where: { uid: req.params.uid },
@@ -52,13 +49,12 @@ export const getRoomByUid = async (req:Request, res:Response) => {
             return res.status(200).send(room);
         }
         res.status(404).send("Room not found!");
-    }
-    catch(err){
+    } catch (err) {
         res.status(500).json({ message: err.message });
     }
-}
+};
 
-export const postAddRoom = async (req:Request, res:Response) => {
+export const postAddRoom = async (req: Request, res: Response) => {
     try {
         const newRoom = await RoomModel.create({
             uid: req.body.uid,
@@ -68,41 +64,35 @@ export const postAddRoom = async (req:Request, res:Response) => {
             read: true,
         });
         res.status(200).send(newRoom);
-    }
-    catch(err){
+    } catch (err) {
         res.status(500).json({ message: err.message });
     }
-}
+};
 
-export const putUpdateRead = async (req:Request, res:Response) => {
+export const putUpdateRead = async (req: Request, res: Response) => {
     try {
-        await RoomModel.update(
-            {read: true},
-            {where: {rid: req.body.rid}}
-        );
+        await RoomModel.update({ read: true }, { where: { rid: req.body.rid } });
         res.status(200).send("Room updated successfully!");
-    }
-    catch(err){
+    } catch (err) {
         res.status(500).json({ message: err.message });
     }
-}
+};
 
-export const putUpdateLastMsg = async (req:Request, res:Response) => {
+export const putUpdateLastMsg = async (req: Request, res: Response) => {
     try {
         await RoomModel.update(
             {
-                read: req.body.read, 
-                lastMsg: req.body.lastMsg
+                read: req.body.read,
+                lastMsg: req.body.lastMsg,
             },
             {
                 where: {
-                    rid: req.body.rid
-                }
+                    rid: req.body.rid,
+                },
             }
         );
         res.status(200).send("Room updated successfully!");
-    }
-    catch(err){
+    } catch (err) {
         res.status(500).json({ message: err.message });
     }
-}
+};
