@@ -6,6 +6,7 @@
   "scripts": {
     "test": "set NODE_ENV=TEST && jest --runInBand",
     "start": "tsc && node dist/server.js",
+    "start1": "npm run prettier && npm run eslint && tsc && node dist/server.js",
     "dev": "nodemon",
     "prettier": "npx prettier --config .prettierrc.json --write .",
     "eslint": "npx eslint ./**/*",

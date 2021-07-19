@@ -7,15 +7,8 @@ import cookieParser from "cookie-parser";
 import http from "http";
 import path from "path";
 
-import shopRouter from "./src/routes/shop.routes";
-import authRouter from "./src/routes/auth.routes";
-import adminRouter from "./src/routes/admin.routes";
-
-import authApi from "./src/api/auth.api";
-import productApi from "./src/api/product.api";
-import userApi from "./src/api/user.api";
-import roomApi from "./src/api/room.api";
-import msgApi from "./src/api/message.api";
+import router from "./src/routes";
+import api from "./src/api";
 
 /**
  * App Variables
@@ -43,16 +36,16 @@ app.set("view engine", "ejs");
 app.set("views", "views");
 
 // App Router
-app.use("/admin", adminRouter);
-app.use("/", shopRouter);
-app.use("/auth", authRouter);
+app.use("/admin", router.adminRouter);
+app.use("/", router.shopRouter);
+app.use("/auth", router.authRouter);
 app.use("/resources", express.static(path.join(__dirname, "..", "data")));
 
 // App API
-app.use("/api/auth", authApi);
-app.use("/api/product", productApi);
-app.use("/api/user", userApi);
-app.use("/api/room", roomApi);
-app.use("/api/message", msgApi);
+app.use("/api/auth", api.authApi);
+app.use("/api/product", api.productApi);
+app.use("/api/user", api.userApi);
+app.use("/api/room", api.roomApi);
+app.use("/api/message", api.msgApi);
 
 export default server;
