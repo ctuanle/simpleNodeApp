@@ -1,83 +1,80 @@
 import server from "../app";
 import request from "supertest";
 import { sequelize, sequeSync } from "../src/db/models";
-import { UserModel } from "../src/db/models/user.model";
+
+let cookie: string;
+let uid: string;
 
 beforeAll(async () => {
     await sequeSync(sequelize);
+    const res = await request(server).post("/api/auth/login").send({ username: "admin", password: "azerty" });
+    cookie = res.headers["set-cookie"];
+    const user = await request(server).get("/api/user/username/user").set("Cookie", [cookie]);
+    uid = user.body.data.uid;
 });
 
 afterAll(async () => {
     await sequelize.close();
 });
 
-test("POST /api/auth/signup", async () => {
-    const res = await request(server)
-        .post("/api/auth/signup")
-        .send({ username: "admin", email: "", password: "azerty" });
-    expect(res.statusCode).toBe(201);
-});
+describe("Room API Testing", () => {
 
-test("BECOME ADMIN", async () => {
-    await UserModel.update({ role: "ADMIN" }, { where: { username: "admin" } });
-});
+    // Create a room for user
+    // It should return a 200 OK code
+    // and json data {data : room}
+    test("POST /api/room/add", async () => {
+        const res = await request(server)
+            .post("/api/room/add")
+            .set("Cookie", [cookie])
+            .send({ uid: uid, username: "user" });
+    
+        expect(res.status).toBe(200);
+        expect(res.body.data.uid).toEqual(uid);
+        expect(res.body.data.rid).toBeTruthy();
+    });
+    
+    // Get a room a uid
+    // It should return a 200 OK code
+    // and json data {data : room}
+    test("GET /api/room/:uid", async () => {
+        const res = await request(server)
+            .get("/api/room/" + uid)
+            .set("Cookie", [cookie]);
+    
+        expect(res.status).toBe(200);
+        expect(res.body.data.uid).toEqual(uid);
+        expect(res.body.data.username).toEqual("user");
+    });
 
-let cookie: string;
-test("POST /api/auth/login", async () => {
-    const res = await request(server).post("/api/auth/login").send({ username: "admin", password: "azerty" });
-    expect(res.headers["set-cookie"]).toBeTruthy();
-    cookie = res.headers["set-cookie"];
-    expect(res.statusCode).toBe(200);
-});
-
-test("POST /api/auth/signup", async () => {
-    const res = await request(server)
-        .post("/api/auth/signup")
-        .send({ username: "user", email: "", password: "azerty" });
-    expect(res.statusCode).toBe(201);
-});
-
-let uid: string;
-test("GET /api/user/username/:username", async () => {
-    const res = await request(server).get("/api/user/username/user").set("Cookie", [cookie]);
-
-    expect(res.statusCode).toBe(200);
-    expect(res.body.uid).toBeTruthy();
-    expect(res.body.username).toEqual("user");
-    uid = res.body.uid;
-});
-
-test("POST /api/room/add", async () => {
-    const res = await request(server)
-        .post("/api/room/add")
-        .set("Cookie", [cookie])
-        .send({ uid: uid, username: "user" });
-
-    expect(res.statusCode).toBe(200);
-    expect(res.body.uid).toEqual(uid);
-    expect(res.body.rid).toBeTruthy();
-});
-
-test("GET /api/room/:uid", async () => {
-    const res = await request(server)
-        .get("/api/room/" + uid)
-        .set("Cookie", [cookie]);
-
-    expect(res.statusCode).toBe(200);
-    expect(res.body.uid).toEqual(uid);
-    expect(res.body.username).toEqual("user");
-});
-
-test("GET /api/room/all", async () => {
-    const res = await request(server).get("/api/room/all").set("Cookie", [cookie]);
-
-    expect(res.statusCode).toBe(200);
-    expect(res.body[0].uid).toEqual(uid);
-});
-
-test("GET /api/room/five", async () => {
-    const res = await request(server).get("/api/room/five").set("Cookie", [cookie]);
-
-    expect(res.statusCode).toBe(200);
-    expect(res.body[0].uid).toEqual(uid);
+    // Get a room with a wrong uid
+    // It should return a 404 Not Found code
+    // and a message "Room not found!"
+    test("GET /api/room/:uid", async () => {
+        const res = await request(server)
+            .get("/api/room/skdjfhskdjf")
+            .set("Cookie", [cookie]);
+    
+        expect(res.status).toBe(404);
+        expect(res.body.message).toEqual("Room not found!");
+    });
+    
+    // GET all rooms
+    // It should return a 200 OK code
+    // and json data {data: rooms}
+    test("GET /api/room/all", async () => {
+        const res = await request(server).get("/api/room/all").set("Cookie", [cookie]);
+    
+        expect(res.status).toBe(200);
+        expect(res.body.data[0].uid).toEqual(uid);
+    });
+    
+    // GET 5 rooms
+    // It should return a 200 OK code
+    // and json data {data : rooms}
+    test("GET /api/room/five", async () => {
+        const res = await request(server).get("/api/room/five").set("Cookie", [cookie]);
+    
+        expect(res.status).toBe(200);
+        expect(res.body.data[0].uid).toEqual(uid);
+    });
 });
