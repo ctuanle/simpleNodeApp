@@ -44,3 +44,7 @@ And create the database if it doesn't exist
 -   PUT => /products/id _=> Update a product_
 
 -   DELETE => /products _=> Delete a product_
+
+##### Unit Tests
+
+    npm run test
