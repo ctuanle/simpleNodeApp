@@ -9,7 +9,7 @@ export const get5User = async (req: Request, res: Response) => {
             attributes: ["uid", "username"],
             raw: true,
         });
-        res.status(200).json({data: users});
+        res.status(200).json({ data: users });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
@@ -30,9 +30,9 @@ export const getUserById = async (req: Request, res: Response) => {
             where: { uid: req.params.uid },
         });
         if (user) {
-            return res.status(200).json({data: user});
+            return res.status(200).json({ data: user });
         }
-        return res.status(404).json({message: "User not found!"});
+        return res.status(404).json({ message: "User not found!" });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
@@ -44,7 +44,7 @@ export const getUserByUsername = async (req: Request, res: Response) => {
             where: { username: req.params.username },
         });
         if (user) {
-            return res.status(200).json({data: user});
+            return res.status(200).json({ data: user });
         }
         return res.status(404).send("User not found!");
     } catch (err) {

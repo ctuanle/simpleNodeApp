@@ -15,7 +15,6 @@ afterAll(async () => {
 });
 
 describe("Product API Testing: GET Request", () => {
-
     // Get a product by its pid
     // It should return a 200 OK http code,
     // and send the product
@@ -75,7 +74,6 @@ describe("Product API Testing: GET Request", () => {
 });
 
 describe("Product API Testing: POST/PUT Request", () => {
-
     // Add a product
     // It should return a 201 Created http code
     // and a message "Product added successfully!"
@@ -109,6 +107,3 @@ describe("Product API Testing: POST/PUT Request", () => {
         expect(res.body.message).toEqual("Product deleted successfully!");
     });
 });
-
-
-

@@ -27,7 +27,6 @@ afterAll(async () => {
 });
 
 describe("Message API Testing", () => {
-
     // Push a message
     // It should return a 200 OK code
     // and the message itself
@@ -36,38 +35,38 @@ describe("Message API Testing", () => {
             .post("/api/message/add")
             .set("Cookie", [cookie])
             .send({ sid: aid, rid: uid, message: "Hello", roomId: 1 });
-    
+
         expect(res.status).toBe(200);
         expect(res.body.data.roomId).toBe(1);
         expect(res.body.data.message).toEqual("Hello");
     });
-    
+
     // Get number of messages
     // It should return a 200 OK code
     // and json data {count: number}
     test("GET /api/message/count", async () => {
         const res = await request(server).get("/api/message/count").set("Cookie", [cookie]);
-    
+
         expect(res.status).toBe(200);
         expect(res.body.count).toBeTruthy();
     });
-    
+
     // Get 15 latest messages
     // It should return a 200 OK code
     // and json data {data: messages}
     test("GET /api/messages/latest15", async () => {
         const res = await request(server).get("/api/message/latest15").set("Cookie", [cookie]).send({ rid: 1 });
-    
+
         expect(res.status).toBe(200);
         expect(res.body.data[0].message).toEqual("Hello");
     });
-    
+
     // Get 15 next messages
     // It should return a 200 OK code
     // and json data {data: messages}
     test("GET /api/messages/next/:offset", async () => {
         const res = await request(server).get("/api/message/next/2").set("Cookie", [cookie]).send({ rid: 1 });
-    
+
         expect(res.status).toBe(200);
         expect(res.body.data.length).toBe(0);
     });
