@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.ts",
   "scripts": {
-    "test": "set NODE_ENV=TEST && jest --runInBand",
+    "test": "set NODE_ENV=TEST&& npx sequelize-cli db:seed:all && jest --runInBand",
     "start": "tsc && node dist/server.js",
     "start1": "npm run prettier && npm run eslint && tsc && node dist/server.js",
     "dev": "nodemon",

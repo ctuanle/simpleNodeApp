@@ -2,9 +2,9 @@ import * as dotenv from "dotenv";
 import { Sequelize } from "sequelize";
 dotenv.config();
 
-const NODE_ENV = process.env.NODE_ENV;
+const NODE_ENV = process.env.NODE_ENV || "DEV";
 
-const DB_NAME = NODE_ENV ? process.env.DB_TEST_NAME : process.env.DB_DEV_NAME;
+const DB_NAME = NODE_ENV === "TEST" ? process.env.DB_TEST_NAME : process.env.DB_DEV_NAME;
 const DB_USER = process.env.DB_USER;
 const DB_PWD = process.env.DB_PWD;
 const DB_HOST = process.env.DB_HOST;
@@ -27,9 +27,9 @@ export const sequeSync = async (sequelize: Sequelize) => {
         await sequelize.authenticate();
         console.log("DATABASE_Authenticated: ", sequelize.getDatabaseName());
 
-        if (NODE_ENV) {
-            await sequelize.sync({ force: true });
-        } else {
+        if (NODE_ENV === "TEST") {
+            await sequelize.sync({ alter: true });
+        } else if (NODE_ENV === "DEV") {
             await sequelize.sync({ alter: true });
         }
 

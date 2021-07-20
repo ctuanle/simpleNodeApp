@@ -2,13 +2,14 @@
 
 module.exports = {
     up: async (queryInterface) => {
+        await queryInterface.bulkDelete("products", {}, { truncate: true });
         await queryInterface.bulkInsert(
             "products",
             [
                 {
                     name: "Product1",
                     price: 19,
-                    category: "book",
+                    category: "Book",
                     images: "",
                     createdAt: new Date(),
                     updatedAt: new Date(),
@@ -16,7 +17,7 @@ module.exports = {
                 {
                     name: "Product2",
                     price: 299,
-                    category: "phone",
+                    category: "Phone",
                     images: "",
                     createdAt: new Date(),
                     updatedAt: new Date(),
@@ -24,7 +25,7 @@ module.exports = {
                 {
                     name: "Product3",
                     price: 1999,
-                    category: "laptop",
+                    category: "Laptop",
                     images: "",
                     createdAt: new Date(),
                     updatedAt: new Date(),
