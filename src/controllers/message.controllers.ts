@@ -20,8 +20,9 @@ export const get15LatestMessage = async (req: Request, res: Response) => {
             raw: true,
         });
 
-        res.status(200).send(messages);
+        res.status(200).json({data: messages});
     } catch (err) {
+        console.log(err);
         res.status(500).json({ message: err.message });
     }
 };
@@ -36,7 +37,7 @@ export const getNext15Messages = async (req: Request, res: Response) => {
             raw: true,
         });
 
-        res.status(200).send(messages);
+        res.status(200).json({data: messages});
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
@@ -51,7 +52,7 @@ export const postMessage = async (req: Request, res: Response) => {
             roomId: req.body.roomId,
             read: false,
         });
-        res.status(200).send(msg);
+        res.status(200).json({data: msg});
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

@@ -56,9 +56,9 @@ export const getHomepageForAdmin = async (req: Request, res: Response) => {
         res.render("admin/ad_index", {
             title: "Admin Board",
             products: products,
-            users: users,
+            users: users.data,
             stats: stats,
-            rooms: rooms,
+            rooms: rooms.data,
             user_info: res.locals.payload,
         });
     } catch (err) {
@@ -72,7 +72,7 @@ export const getAddProduct = async (req: Request, res: Response) => {
 
         res.render("admin/ad_product-add", {
             title: "Add Product",
-            cats: cats,
+            cats: cats.data,
             user_info: res.locals.payload,
         });
     } catch (err) {
@@ -86,11 +86,11 @@ export const getEditProduct = async (req: Request, res: Response) => {
 
         const product = (await axios.get(`${hostUrl}/api/product/${req.params.pid}`)).data;
 
-        if (product) {
+        if (product.data) {
             res.render("admin/ad_product-edit", {
                 title: "Edit Product",
-                product: product,
-                cats: cats,
+                product: product.data,
+                cats: cats.data,
                 user_info: res.locals.payload,
             });
         } else {
@@ -148,7 +148,7 @@ export const getRoomsPage = async (req: Request, res: Response) => {
         ).data;
         res.render("admin/ad_messages", {
             title: "Messages",
-            rooms: data,
+            rooms: data.data,
             displayMsg: false,
             user_info: res.locals.payload,
         });
@@ -165,7 +165,7 @@ export const getMessagesPage = async (req: Request, res: Response) => {
                     Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`,
                 },
             })
-        ).data;
+        ).data.data;
 
         const room = (
             await axios.get(`${hostUrl}/api/room/${req.params.uid}`, {
@@ -173,7 +173,7 @@ export const getMessagesPage = async (req: Request, res: Response) => {
                     Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`,
                 },
             })
-        ).data;
+        ).data.data;
 
         const user = (
             await axios.get(`${hostUrl}/api/user/${req.params.uid}`, {
@@ -181,7 +181,7 @@ export const getMessagesPage = async (req: Request, res: Response) => {
                     Cookie: `ctle_user_token=${req.cookies.ctle_user_token}`,
                 },
             })
-        ).data;
+        ).data.data;
 
         if (room && user) {
             const messages = (
@@ -193,7 +193,7 @@ export const getMessagesPage = async (req: Request, res: Response) => {
                         rid: room.rid,
                     },
                 })
-            ).data;
+            ).data.data;
 
             // await axios.put(`${hostUrl}/api/room/update/read`, {
             //     headers: {

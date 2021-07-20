@@ -24,10 +24,10 @@ export const getProductById = async (req: Request, res: Response) => {
         const url = `${hostUrl}/api/product/${req.params.pid}`;
         const data = (await axios.get(url)).data;
 
-        if (data && data.name) {
+        if (data && data.data.name) {
             return res.render("shop/sh_product", {
                 title: data.name,
-                product: data,
+                product: data.data,
                 user_info: res.locals.payload || null,
             });
         }
@@ -65,7 +65,7 @@ export const getAllCategories = async (req: Request, res: Response) => {
 
         res.render("shop/sh_categories", {
             title: "Categories",
-            categories: data,
+            categories: data.data,
             products: [],
             user_info: res.locals.payload || null,
         });

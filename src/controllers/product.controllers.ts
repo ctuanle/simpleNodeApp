@@ -10,9 +10,9 @@ export const getProductById = async (req: Request, res: Response) => {
             raw: true,
         });
         if (prod) {
-            return res.status(200).send(prod);
+            return res.status(200).json({data: prod});
         }
-        res.status(404).send("Product not found!");
+        res.status(404).json({message: "Product not found!"});
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
@@ -48,7 +48,7 @@ export const getNProduct = async (req: Request, res: Response) => {
 export const getAllCategories = async (req: Request, res: Response) => {
     try {
         const cats = JSON.parse(JSON.stringify(ProductModel.rawAttributes.category.type));
-        res.status(200).send(cats.values);
+        res.status(200).json({data: cats.values});
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
