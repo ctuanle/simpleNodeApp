@@ -1,4 +1,5 @@
-### Simple App
+### WorkShop
+Fullstack application web that allows users to manage theirs products and to communicate with their customers.
 
 #### Installation
 
@@ -13,38 +14,6 @@ And create the database if it doesn't exist
 
     npm run dev
 
-#### Database
-
-##### Products
-
-##### Users
-
-##### Messages
-
-##### Rooms
-
-##### Login
-
-    http://locahost:3000/auth/login
-
-#### RestAPI
-
-##### Public Routes
-
--   GET => /products _=> Get all the products_
-
--   GET => /products/:id _=> Get product by id_
-
--   GET => /categories/:category _=> Get all the products of a category_
-
-##### Protected Routes
-
--   POST => /products _=> Add a new product_
-
--   PUT => /products/id _=> Update a product_
-
--   DELETE => /products _=> Delete a product_
-
-##### Unit Tests
+##### Run Unit Tests
 
     npm run test
