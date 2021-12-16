@@ -1,5 +1,5 @@
 ### WorkShop
-Fullstack application web that allows users to manage theirs products and to communicate with their customers.
+Fullstack application web that allows users to manage their products and to communicate with their customers.
 
 #### Installation
 
