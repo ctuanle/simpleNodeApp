@@ -8,16 +8,17 @@ const DB_NAME = NODE_ENV === "TEST" ? process.env.DB_TEST_NAME : process.env.DB_
 const DB_USER = process.env.DB_USER;
 const DB_PWD = process.env.DB_PWD;
 const DB_HOST = process.env.DB_HOST;
+const DB_PORT = process.env.DB_PORT;
 
 // Check database config
-if (!DB_NAME || !DB_USER || !DB_PWD || !DB_HOST) {
+if (!DB_NAME || !DB_USER || !DB_PWD || !DB_HOST || !DB_PORT) {
     console.error("Please config your working environment first (file .env): DATABASE");
     process.exit();
 }
 
 export const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PWD, {
     host: DB_HOST,
-    port: 3306,
+    port: parseInt(DB_PORT),
     dialect: "mysql",
     logging: false,
 });

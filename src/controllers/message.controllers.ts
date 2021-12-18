@@ -5,7 +5,7 @@ export const getTotalNumberMessages = async (req: Request, res: Response) => {
     try {
         const count = await MessageModel.count();
         res.status(200).json({ count: count });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -21,7 +21,7 @@ export const get15LatestMessage = async (req: Request, res: Response) => {
         });
 
         res.status(200).json({ data: messages });
-    } catch (err) {
+    } catch (err: any) {
         console.log(err);
         res.status(500).json({ message: err.message });
     }
@@ -38,7 +38,7 @@ export const getNext15Messages = async (req: Request, res: Response) => {
         });
 
         res.status(200).json({ data: messages });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -53,7 +53,7 @@ export const postMessage = async (req: Request, res: Response) => {
             read: false,
         });
         res.status(200).json({ data: msg });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };

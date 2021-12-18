@@ -61,7 +61,7 @@ export const getHomepageForAdmin = async (req: Request, res: Response) => {
             rooms: rooms.data,
             user_info: res.locals.payload,
         });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -75,7 +75,7 @@ export const getAddProduct = async (req: Request, res: Response) => {
             cats: cats.data,
             user_info: res.locals.payload,
         });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -96,7 +96,7 @@ export const getEditProduct = async (req: Request, res: Response) => {
         } else {
             res.status(500).json({ message: "Product not found!" });
         }
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -111,7 +111,7 @@ export const getAllProductsPage = async (req: Request, res: Response) => {
             products: data.products,
             user_info: res.locals.payload,
         });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -132,7 +132,7 @@ export const getAllUsersPage = async (req: Request, res: Response) => {
             users: data.users,
             user_info: res.locals.payload,
         });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -152,7 +152,7 @@ export const getRoomsPage = async (req: Request, res: Response) => {
             displayMsg: false,
             user_info: res.locals.payload,
         });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -244,7 +244,7 @@ export const getMessagesPage = async (req: Request, res: Response) => {
                 message: "Given data is not found on server.",
             });
         }
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -277,7 +277,7 @@ export const getNextMessages = async (req: Request, res: Response) => {
         } else {
             res.status(404).json({ message: "todo" });
         }
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };

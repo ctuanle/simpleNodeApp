@@ -20,7 +20,7 @@ export const getLogin = (req: Request, res: Response) => {
         res.render("auth/login", {
             title: "Login",
         });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).send({ message: err.message });
     }
 };
@@ -35,7 +35,7 @@ export const getSignup = (req: Request, res: Response) => {
         res.render("auth/signup", {
             title: "Signup",
         });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).send({ message: err.message });
     }
 };
@@ -50,7 +50,7 @@ export const getForgotPassword = (req: Request, res: Response) => {
         res.render("auth/forgot-password", {
             title: "Reset Password",
         });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).send({ message: err.message });
     }
 };
@@ -69,7 +69,7 @@ export const getResetPassword = (req: Request, res: Response) => {
             uid: uid,
             token: token,
         });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).send({ message: err.message });
     }
 };
@@ -117,7 +117,7 @@ export const postSignup = async (req: Request, res: Response) => {
 
         // Response with success.
         res.status(201).json({ message: "User account successfully created." });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -171,7 +171,7 @@ export const postLogin = async (req: Request, res: Response) => {
                 sameSite: "strict",
             })
             .send({ newURL: URL });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -190,7 +190,7 @@ export const checkInfo = (req: Request, res: Response) => {
         } else {
             res.status(202).send();
         }
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -203,7 +203,7 @@ export const postLogout = (req: Request, res: Response) => {
             path: "/",
             sameSite: "strict",
         }).send();
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -258,7 +258,7 @@ export const postForgotPassword = async (req: Request, res: Response) => {
             // we do not tell the user that the email is not linked to any account
             res.status(205).json();
         }
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -288,7 +288,7 @@ export const postResetPassword = async (req: Request, res: Response) => {
         } else {
             res.status(500).json({ message: "Token not found!" });
         }
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };

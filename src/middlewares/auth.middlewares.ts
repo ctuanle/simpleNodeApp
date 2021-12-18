@@ -24,7 +24,7 @@ function verifyToken(req: Request, res: Response, next: NextFunction, role: stri
             }
             res.status(401).json({ message: "Unauthorized" });
         }
-    } catch (err) {
+    } catch (err: any) {
         if (err.name === "TokenExpiredError") {
             return res.status(401).json({ message: err.message, error: err });
         }

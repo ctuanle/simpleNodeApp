@@ -10,7 +10,7 @@ export const get5User = async (req: Request, res: Response) => {
             raw: true,
         });
         res.status(200).json({ data: users });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -19,7 +19,7 @@ export const getTotalNumberUsers = async (req: Request, res: Response) => {
     try {
         const count = await UserModel.count();
         res.status(200).json({ count: count });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -33,7 +33,7 @@ export const getUserById = async (req: Request, res: Response) => {
             return res.status(200).json({ data: user });
         }
         return res.status(404).json({ message: "User not found!" });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -47,7 +47,7 @@ export const getUserByUsername = async (req: Request, res: Response) => {
             return res.status(200).json({ data: user });
         }
         return res.status(404).send("User not found!");
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -74,7 +74,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
             numpage: Math.ceil(total / limit),
             users: users,
         });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };

@@ -10,7 +10,7 @@ export const getFirst5Rooms = async (req: Request, res: Response) => {
             raw: true,
         });
         res.status(200).json({ data: rooms });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -21,7 +21,7 @@ export const getAllRooms = async (req: Request, res: Response) => {
             order: [["updatedAt", "DESC"]],
         });
         res.status(200).json({ data: rooms });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -35,7 +35,7 @@ export const getRoomById = async (req: Request, res: Response) => {
             return res.status(200).json({ data: room });
         }
         res.status(404).json({ message: "Room not found!" });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -49,7 +49,7 @@ export const getRoomByUid = async (req: Request, res: Response) => {
             return res.status(200).json({ data: room });
         }
         res.status(404).json({ message: "Room not found!" });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -64,7 +64,7 @@ export const postAddRoom = async (req: Request, res: Response) => {
             read: true,
         });
         res.status(200).json({ data: newRoom });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -73,7 +73,7 @@ export const putUpdateRead = async (req: Request, res: Response) => {
     try {
         await RoomModel.update({ read: true }, { where: { rid: req.body.rid } });
         res.status(200).json({ message: "Room updated successfully!" });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -92,7 +92,7 @@ export const putUpdateLastMsg = async (req: Request, res: Response) => {
             }
         );
         res.status(200).json({ message: "Room updated successfully!" });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };

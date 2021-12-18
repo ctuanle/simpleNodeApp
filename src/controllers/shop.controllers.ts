@@ -14,7 +14,7 @@ export const getHomePage = (req: Request, res: Response) => {
             title: "Home Page",
             user_info: res.locals.payload || null,
         });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -33,7 +33,7 @@ export const getProductById = async (req: Request, res: Response) => {
         }
 
         res.status(404).json({ message: "Product not found" });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -53,7 +53,7 @@ export const getNProducts = async (req: Request, res: Response) => {
         }
 
         res.status(404).json({ message: "Product not found" });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -69,7 +69,7 @@ export const getAllCategories = async (req: Request, res: Response) => {
             products: [],
             user_info: res.locals.payload || null,
         });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -85,7 +85,7 @@ export const getProductsByCategory = async (req: Request, res: Response) => {
             products: data.products,
             user_info: res.locals.payload || null,
         });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -104,7 +104,7 @@ export const getMessagesPage = async (req: Request, res: Response) => {
             if (room) {
                 // Get the messages
                 const messages = await MessageModel.findAll({
-                    where: { roomId: room.get("rid") },
+                    where: { roomId: room.get("rid") as number },
                 });
                 return res.render("shop/sh_us_messages", {
                     title: "Message",
@@ -134,7 +134,7 @@ export const getMessagesPage = async (req: Request, res: Response) => {
             }
             res.status(500).json({ message: "No admin available" });
         }
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).send({ message: err.message });
     }
 };

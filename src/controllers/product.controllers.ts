@@ -13,7 +13,7 @@ export const getProductById = async (req: Request, res: Response) => {
             return res.status(200).json({ data: prod });
         }
         res.status(404).json({ message: "Product not found!" });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -40,7 +40,7 @@ export const getNProduct = async (req: Request, res: Response) => {
             numpage: Math.ceil(total / limit),
             products: products,
         });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -49,7 +49,7 @@ export const getAllCategories = async (req: Request, res: Response) => {
     try {
         const cats = JSON.parse(JSON.stringify(ProductModel.rawAttributes.category.type));
         res.status(200).json({ data: cats.values });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -65,7 +65,7 @@ export const getProductsByCategory = async (req: Request, res: Response) => {
         });
 
         res.status(200).json({ cats: cats.values, products: products });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -83,7 +83,7 @@ export const postAddProduct = async (req: Request, res: Response) => {
             images: path,
         });
         res.status(201).json({ message: "Product added successfully!" });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -92,7 +92,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
     try {
         await ProductModel.destroy({ where: { pid: req.body.pid } });
         res.status(200).json({ message: "Product deleted successfully!" });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -129,7 +129,7 @@ export const putEditProduct = async (req: Request, res: Response) => {
         }
 
         res.status(200).json({ message: "Product updated successfully!" });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -138,7 +138,7 @@ export const getTotalNumberProducts = async (req: Request, res: Response) => {
     try {
         const count = await ProductModel.count();
         res.status(200).json({ count: count });
-    } catch (err) {
+    } catch (err: any) {
         console.log(err);
         res.status(500).json({ message: err.message });
     }

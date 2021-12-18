@@ -43,7 +43,7 @@ export const socketHandler = (io: Server, socket: Socket) => {
                     });
                     socket.to(usSockets[data.rcid]).emit("user:receive_msg", { ...data });
                 }
-            } catch (err) {
+            } catch (err: any) {
                 console.log(err.name, err.message);
             }
         }
@@ -57,7 +57,7 @@ export const socketHandler = (io: Server, socket: Socket) => {
             });
             if (room && room.get("uid") === data.sid) {
                 // update room status
-                RoomModel.update({ lastMsg: data.msg, read: false }, { where: { rid: room.get("rid") } });
+                RoomModel.update({ lastMsg: data.msg, read: false }, { where: { rid: room.get("rid") as number } });
 
                 await MessageModel.create({
                     sid: data.sid,

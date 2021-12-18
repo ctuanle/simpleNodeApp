@@ -1,5 +1,5 @@
 ### WorkShop
-Fullstack application web that allows users to manage their products and to communicate with their customers.
+Fullstack application web that allows users to manage their products and to communicate with their clients.
 
 #### Installation
 
@@ -7,13 +7,14 @@ Fullstack application web that allows users to manage their products and to comm
 
 #### Config your .env
 
-There is a sample at sample.env
-And create the database if it doesn't exist
+There is a sample at sample.env and create the database if it doesn't exist.
 
-#### Deploy on localhost:3000
+#### Deploy on localhost
 
-    npm run dev
+    npm start
 
-##### Run Unit Tests
+By default, there aren't any admin users. Sign up a new normal user, and then update their role interacting directly with your database.
+
+#### Run Unit Tests
 
     npm run test
