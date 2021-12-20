@@ -1,0 +1,17 @@
+node_modules
+src
+__test__
+.husky
+data
+*.ts
+.eslint*
+*prettier*
+.sequelizerc
+jest.config.js
+nodemon.json
+tsconfig.json
+.git
+.gitignore
+.dockerignore
+Dockerfile
+sample.env

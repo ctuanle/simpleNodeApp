@@ -37,5 +37,6 @@ export const sequeSync = async (sequelize: Sequelize) => {
         console.log("DATABASE_Synchronized");
     } catch (err) {
         console.log(err);
+        process.exit(1);
     }
 };
