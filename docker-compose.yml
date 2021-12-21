@@ -1,0 +1,29 @@
+version: "3.7"
+
+services:
+  app:
+    image: node:12-alpine
+    command: sh -c "npm install && npm run dev"
+    ports:
+      - 3000:3000
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PWD: superrandompassword
+      DB_DEV_NAME: workshop-db
+
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - workshop-mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: superrandompassword
+      MYSQL_DATABASE: workshop-db
+
+volumes:
+  workshop-mysql-data:

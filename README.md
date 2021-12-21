@@ -1,5 +1,5 @@
 ### WorkShop
-Fullstack application web that allows users to manage their products and to communicate with their clients.
+Web application that allows users to manage their products and to communicate with their clients.
 
 #### Installation
 
@@ -28,5 +28,9 @@ By default, there aren't any admin users. Sign up a new normal user, and then up
 or with Docker (in my case: in node:12-alpine and on port 3000)
 
     docker run -dp 3000:3000 -w /app -v "$(pwd):/app" node:12-alpine sh -c "npm install && npm run dev"
+
+or with docker-compose (change env var in docker-compose.yml if necessary):
+
+    docker-compose up -d
 
 In case you might need, inside a docker, you can use "host.docker.internal" to refer to your host machine's localhost.
